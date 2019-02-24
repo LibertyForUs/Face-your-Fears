@@ -34,8 +34,8 @@
 
 .animation-walk-left {
 	
-	width: 400px;
-  height: 400px;
+	width: 800px;
+  height: 800px;
   position: absolute;
   animation-name: walkleft;
   animation-duration: 5s;
@@ -46,8 +46,8 @@
 }
 .animation-walk-right {
 	
-	width: 400px;
-  height: 400px;
+	width: 800px;
+  height: 800px;
   position: absolute;
   
   animation-name: walkright;
