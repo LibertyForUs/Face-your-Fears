@@ -1,0 +1,52 @@
+.crop-container div {
+		position: relative;
+		xleft: 200px;
+		xtop: 200px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    object-fit: cover;
+    border-width: 5px;
+    border-style: solid;
+    border-color: blue;
+}
+.crop-container img {
+
+		width: 20%;
+		height: 20%;
+    margin-top: -10px;
+    margin-left: -20px;
+}
+.rotate-experiment {
+	position: relative; 
+	left: 50px; 
+	top: 100px;  
+	transform: 
+	rotate(20deg);
+}
+.crop {
+ 	object-fit: cover;
+  object-position: -30% -5;
+
+  width: 300px;
+  height: 337px;
+}
+
+
+img {
+	-webkit-animation-name: walker; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+  animation-name: walker;
+  animation-duration: 4s;
+}
+
+@-webkit-keyframes walker {
+  from {left: 0px;}
+  to {left: 500px;}
+}
+
+/* Standard syntax */
+@keyframes walker {
+  from {left: 0px;}
+  to {left: 500px;}
+}
