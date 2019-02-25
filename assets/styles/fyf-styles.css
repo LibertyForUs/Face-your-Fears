@@ -1,4 +1,106 @@
+.crop-container div {
+		position: relative;
+		xleft: 200px;
+		xtop: 200px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    object-fit: cover;
+    border-width: 5px;
+    border-style: solid;
+    border-color: blue;
+}
+.crop-container img {
 
+		width: 20%;
+		height: 20%;
+    margin-top: -10px;
+    margin-left: -20px;
+}
+.rotate-experiment {
+	position: relative; 
+	left: 50px; 
+	top: 100px;  
+	transform-origin: 
+	rotate(20deg);
+}
+.crop {
+ 	object-fit: cover;
+  object-position: -30% -5;
+
+  width: 300px;
+  height: 337px;
+}
+
+
+.image-standard {
+	width: 200px;
+  height: auto;
+  position: absolute;
+
+}
+
+
+.image-animated {
+  animation-duration: 13s;
+  animation-iteration-count: infinite;  
+  animation-timing-function: linear;	
+}
+
+.animation-walk-left {
+	
+  animation-name: walkleft;
+  
+}
+.animation-walk-right {
+	
+  animation-name: walkright;
+  
+}
+
+@keyframes walkboth {
+	0%			{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-1.png") }
+	7.14%		{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-2.png") }	
+	14.29%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-3.png") }	
+	21.43%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-4.png") }	
+	28.57%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-5.png") }	
+	35.71%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-6.png") }	
+	42.86%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-right-7.png") }	
+	50.00%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-1.png") }	
+	57.14%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-2.png") }	
+	64.29%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-3.png") }	
+	71.43%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-4.png") }	
+	78.57%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-5.png") }	
+	85.71%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-6.png") }	
+	92.86%	{content: url("/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-left-7.png") }	
+
+
+	0%   {left:0px;}
+  50%  {left: 200px;}
+  100% {left:0px;}
+
+
+}
+
+@keyframes walk-forward {
+	0%			{  width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -0 -0;}
+	14.29%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -163 -0;}
+	28.57%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -326 -0;}
+	42.86%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -489 -0;}
+	57.14%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -652 -0;}
+	71.43%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -815 -0;}
+	85.71%	{ width: 163px; height: 275px;
+    background: url('/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png') -978 -0;}
+	
+
+
+}
 
 @keyframes walk-container {
 	0%   {left:0px;}
@@ -68,7 +170,10 @@
   
   background-repeat: no-repeat;
   animation: play 1s steps(7) infinite;
-
+  xanimation-name: walk-forward;
+  xanimation-duration: 1s;
+  xanimation-iteration-count: infinite;  
+  xanimation-timing-function: linear;	
 }
 
 .xbg {
