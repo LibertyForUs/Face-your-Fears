@@ -62,7 +62,7 @@
 	height: 275px;
 	background-repeat: no-repeat;
 
-  background: url(assets/images/walk/occultatum-sprite.png) left center;	
+  background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png) left center;	
   
   display: inline-block;
   
@@ -77,7 +77,7 @@
 	background-position: -400px;
 	background-attachment: fixed;
 	z-index: 100;
-	background: url(assets/images/background.jpg);
+	background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/background.jpg);
 	background-size: cover;
 	
 }
