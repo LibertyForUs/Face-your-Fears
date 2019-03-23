@@ -1,3 +1,8 @@
+html, body {
+  overflow: hidden;
+}
+
+
 .crop-container div {
 		position: relative;
 		xleft: 200px;
@@ -59,10 +64,11 @@
 }
 
 
-@keyframes walk-container {
-	0%   {left:0px;}
-  50%  {left: 200px;}
-  100% {left:0px;}
+
+@keyframes back-and-forth {
+	0%   {left:200px;}
+  50%  {left: 400px;}
+  100% {left:200px;}
 
 	0% {
 		transform: scaleX(1);
@@ -96,18 +102,30 @@
 
 
 
-.walk-container {
+.walk-right {
+  animation: play 1s steps(7) infinite;
+  top:400px;
+  
+  animation-name: walk-right;
+  animation-duration: 12s;
+  animation-iteration-count: infinite;  
+  animation-timing-function: linear;  
+  
+  position: absolute;
+  
+}
+
+
+.auto-walk-container {
 	
 	top:400px;
 	
-	animation-name: walk-container;
+	animation-name: back-and-forth;
   animation-duration: 12s;
   animation-iteration-count: infinite;  
   animation-timing-function: linear;	
   
   position: absolute;
-  transform-origin: center;
-  align-content: left top;
   
 }
 
@@ -115,35 +133,50 @@
    100% { background-position: -1141px; }
 }
 .image-occultatum {
+  position: absolute;
+  top: 400px;
+  left: 200px;
 	width: 163px; 
 	height: 275px;
 	background-repeat: no-repeat;
 
-  background: url(/assets/images/walk/occultatum-sprite.png) left center;	
+  background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png) left center;	
   
   display: inline-block;
   
   background-repeat: no-repeat;
-  animation: play 1s steps(7) infinite;
-  xanimation-name: walk-forward;
-  xanimation-duration: 1s;
-  xanimation-iteration-count: infinite;  
-  xanimation-timing-function: linear;	
+  
+ 
 }
 
-.xbg {
-	width: 100vw;
-	height: 100vh;
-	background-position: -400px;
-	background-attachment: fixed;
+.walk-movement {
+  animation: play 1s steps(7) infinite;
+}
+
+.turn-around {
+  transform: scaleX(-1);
+}
+
+.bg {
+  position: absolute;
+	width: 110%;
+	height: 110%;
+  top: -5px;
+  left: -5px;
+	border-style: solid;
+  border-width: 2px;
+  border-color: black;
+	
 	z-index: 100;
-	background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/background.jpg);
+	background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/background-grass.png);
+  background-position: -10px -10px;
 	background-size: cover;
+  background-repeat: no-repeat;
 	
 }
 
 
-body {
+.body-dynamic-gradient {
 	height: 100vh;
 	width: 100vw;
 	background: transparent radial-gradient(at calc(var(--mouse-x, 0) * 100%) calc(var(--mouse-y, 0) * 100%), red, orange) no-repeat 0 0;
