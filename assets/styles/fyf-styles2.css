@@ -111,7 +111,7 @@ html, body {
 	height: 275px;
 	background-repeat: no-repeat;
 
-  background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/walk/occultatum-sprite.png) left center;	
+  background: url(/assets/images/walk/occultatum-sprite.png) left center;	
   
   display: inline-block;
   
@@ -139,7 +139,7 @@ html, body {
   border-color: black;
 	
 	z-index: 100;
-	background: url(/Users/cortfritz/apps/poc/face-your-fears/assets/images/background-grass.png);
+	background: url(/assets/images/background-grass.png);
   background-position: -10px -10px;
 	background-size: cover;
   background-repeat: no-repeat;
