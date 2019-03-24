@@ -130,8 +130,8 @@ html, body {
 
 .bg {
   position: absolute;
-	width: 110%;
-	height: 110%;
+	width: 1700px;
+	height: 920px;
   top: -5px;
   left: -5px;
 	border-style: solid;
