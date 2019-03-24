@@ -32,10 +32,11 @@
 
   oc.style.left = 200;
 
-  var w = window.innerWidth - 100;
+  
 
 	function safeX(x) {  
-	    return x < 0 ? 0 : x > w ? w : x;
+		var w = window.innerWidth - 100;
+    return x < 0 ? 0 : x > w ? w : x;
 	}
 
 
