@@ -8,7 +8,7 @@
 	<meta name="msapplication-config" content="/assets/icons/browserconfig.xml">
 	<meta name="theme-color" content="#ffffff">
 </head>
-<body onload="init()">
+<body >
 	<div id="bg" class="bg">
 		<div class="walk-container">
 		 	<div id="oc" class="image-occultatum"/>
@@ -18,27 +18,7 @@
   <div id="pointerzone"></div>
 </body>
 <script>
-	function init() {
-    // Get a reference to our pointer div
-    var pointerzone = document.getElementById("pointerzone");
-    // Add an event handler for the pointerdown event
-    pointerzone.addEventListener("pointerdown", pointerHandler, false);
-	}
-	function pointerHandler(event) {
-    // Get a reference to our coordinates div
-    var coords = document.getElementById("coords");
-    // Write the coordinates of the pointer to the div
-    coords.innerHTML = 'x: ' + event.pageX + ', y: ' + event.pageY;
-  }
-	const root = document.documentElement;
- 
-	document.addEventListener('mousemove', evt => {
-	  let x = evt.clientX / innerWidth;
-	  let y = evt.clientY / innerHeight;
-	 
-	  root.style.setProperty('--mouse-x', x);
-	  root.style.setProperty('--mouse-y', y);
-	});
+	
 
 
 	// animation code
