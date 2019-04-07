@@ -1,6 +1,8 @@
 html, body {
   overflow: hidden;
+
 }
+
 
 
 .crop-container div {
@@ -112,6 +114,7 @@ html, body {
 }
 
 .shape-sky {
+  position: absolute;
   background-color: white;
   width: 100%;
   top: 0px;
@@ -119,7 +122,7 @@ html, body {
 }
 
 .image-sun {
-  position: absolute;
+  position: fixed;
   top: 0.2in;
   left: 0.4in;
   width: 2.2in; 
@@ -127,7 +130,7 @@ html, body {
   
 
   background: url(/images/background/sun.png);  
-  display: inline-block;
+  
   
   background-repeat: no-repeat;
   animation: sun 0.5s steps(3) infinite;
@@ -150,6 +153,14 @@ html, body {
   background-repeat: no-repeat;
   
  
+}
+
+.debug-messages {
+  position: fixed;
+  z-index: 10000;
+  top: 400px;
+  left: 400px;
+  color: black;
 }
 
 .walk-movement {

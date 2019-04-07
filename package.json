@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/libertyforus/face-your-fears#readme",
   "dependencies": {
+    "body-scroll-lock": "^2.6.1",
     "express": "^4.16.4"
   }
 }

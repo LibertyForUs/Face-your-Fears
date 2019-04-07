@@ -3,57 +3,71 @@
 	<title>OCCULTATUM</title>
 
   <link rel="stylesheet" href="/styles/fyf-styles.css">
-
+  
+  <meta name="viewport" content="width=device-width, height=device-height, minimnum-scale=1.0, target-densitydpi=device-dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
 </head>
-<body onload="init()">
+<body scroll="no" style="overflow: hidden">
 	<div id="bg" class="bg">
 		<div class="walk-container">
-			<div id="messages"/>
 			<div id="sky" class="shape-sky"/>
+			
+			
 			<div id="sun" class="image-sun"/>
 		 	<div id="oc" class="image-occultatum"/>
-
+			<div id="messages" class="debug-messages"/>
 		</div>
 	</div>	
 	 <div id="coords"></div>
   <div id="pointerzone"></div>
 </body>
+
+<script src='https://cdn.jsdelivr.net/npm/body-scroll-lock@2.6.1/lib/bodyScrollLock.min.js'></script>
 <script>
+	
+	const disableBodyScroll = bodyScrollLock.disableBodyScroll;
+	
+
+	const lockOn = document.getElementById("bg");
+	disableBodyScroll(lockOn);
+
+	document.ontouchmove = function(event){
+    event.preventDefault();
+	}
+	document.ontouchend = (e) => {
+    e.preventDefault();
+	};
+	
+
 	window.addEventListener('touchstart', function onFirstTouch(event) {
-	  // we could use a class
-	  document.body.classList.add('user-is-touching');
-	  document.getElementById("messages").innerHTML = "touch";
-
-	  // or set some global variable
-	  window.USER_IS_TOUCHING = true;
-
+		var oc = document.getElementById("oc");
+		var ocX = parseInt(oc.style.left,10);
+		var firstTouchX = event.touches[0].screenX;
+		var delta = firstTouchX - ocX - 150;
+		if (delta < 0){
+			moveLeft(oc);
+		}
+	  else if(delta > 0){
+	  	moveRight(oc)
+	  }
 	  
-	  // we only need to know once that a human touched the screen, so we can stop listening now
-	  window.removeEventListener('touchstart', onFirstTouch, false);
+	  
+	  // document.getElementById("messages").innerHTML =  delta;
+	 
 	}, false);
 
 
-	function init() {
-    // Get a reference to our pointer div
-    var pointerzone = document.getElementById("pointerzone");
-    // Add an event handler for the pointerdown event
-    pointerzone.addEventListener("pointerdown", pointerHandler, false);
-	}
-	function pointerHandler(event) {
-    // Get a reference to our coordinates div
-    var coords = document.getElementById("coords");
-    // Write the coordinates of the pointer to the div
-    coords.innerHTML = 'x: ' + event.pageX + ', y: ' + event.pageY;
-  }
+	window.addEventListener('touchend', function onFirstTouch(event) {
+	  document.getElementById("oc").classList.remove('walk-movement');
+		dx = 0;
+	 
+	}, false);
+
+	
+	
 	const root = document.documentElement;
  
-	document.addEventListener('mousemove', evt => {
-	  let x = evt.clientX / innerWidth;
-	  let y = evt.clientY / innerHeight;
-	 
-	  root.style.setProperty('--mouse-x', x);
-	  root.style.setProperty('--mouse-y', y);
-	});
+
 
 
 	// animation code
@@ -63,7 +77,7 @@
     dx = 0,
     skip = 10,
     timer;
-    
+  
 
   oc.style.left = 200;
 
@@ -114,6 +128,17 @@
 		dx = 0;
 	});
 
+	function moveLeft(oc){
+		oc.classList.add('walk-movement');
+    oc.classList.add('turn-around');
+    dx = skip * -1;
+	}
+
+	function moveRight(oc){
+		oc.classList.add('walk-movement');
+    oc.classList.remove('turn-around');
+    dx = skip;
+	}
 
 
 	
