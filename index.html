@@ -2,19 +2,37 @@
 <head>
 	<title>OCCULTATUM</title>
 
-  <link rel="stylesheet" href="./assets/styles/fyf-styles.css">
+  <link rel="stylesheet" href="/styles/fyf-styles.css">
 
 </head>
 <body onload="init()">
 	<div id="bg" class="bg">
 		<div class="walk-container">
+			<div id="messages"/>
+			<div id="sky" class="shape-sky"/>
+			<div id="sun" class="image-sun"/>
 		 	<div id="oc" class="image-occultatum"/>
+
 		</div>
 	</div>	
 	 <div id="coords"></div>
   <div id="pointerzone"></div>
 </body>
 <script>
+	window.addEventListener('touchstart', function onFirstTouch(event) {
+	  // we could use a class
+	  document.body.classList.add('user-is-touching');
+	  document.getElementById("messages").innerHTML = "touch";
+
+	  // or set some global variable
+	  window.USER_IS_TOUCHING = true;
+
+	  
+	  // we only need to know once that a human touched the screen, so we can stop listening now
+	  window.removeEventListener('touchstart', onFirstTouch, false);
+	}, false);
+
+
 	function init() {
     // Get a reference to our pointer div
     var pointerzone = document.getElementById("pointerzone");
