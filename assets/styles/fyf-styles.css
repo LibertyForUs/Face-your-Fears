@@ -113,7 +113,7 @@ html, body {
   }
 }
 
-.shape-sky {
+.xshape-sky {
   position: absolute;
   background-color: white;
   width: 100%;
@@ -128,7 +128,7 @@ html, body {
   width: 2.2in; 
   height: 2.5in;
   
-
+  z-index: 20;
   background: url(/images/background/sun.png);  
   
   
@@ -140,10 +140,13 @@ html, body {
 
 .image-occultatum {
   position: absolute;
-  top: 400px;
-  left: 200px;
+  
 	width: 163px; 
 	height: 275px;
+
+  top: 500px;
+  left: 10%;
+  z-index: 10;
 	background-repeat: no-repeat;
 
   background: url(/images/walk/occultatum-sprite-blacken.png) left center;	
@@ -173,15 +176,17 @@ html, body {
 
 .bg {
   position: absolute;
-	width: 1700px;
-	height: 920px;
+	xwidth: 1700px;
+	xheight: 920px;
+  width: 101%;
+  height: 101%;
   top: -5px;
   left: -5px;
 	border-style: solid;
   border-width: 2px;
   border-color: black;
 	
-	z-index: 100;
+	z-index: 0;
 	background: url(/images/background/background-grass.png);
   background-position: -10px -10px;
 	background-size: cover;
@@ -189,3 +194,32 @@ html, body {
 	
 }
 
+.grass-patch-01  {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 520px;
+  left: 1.8in;
+  opacity: 0.0;
+  background: url(/images/background/grass-patch-01.png) left top no-repeat;  
+}
+.grass-patch-02  {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 530px;
+  left: 2.8in;
+  opacity: 0.0;
+  background: url(/images/background/grass-patch-02.png) left top no-repeat;  
+}
+
+.grass-patch-03 {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 5.53in;
+  left: 3in;
+  opacity: 0.0;
+  z-index: 1000;
+  background: url(/images/background/grass-patch-03.png) left top no-repeat;  
+}
