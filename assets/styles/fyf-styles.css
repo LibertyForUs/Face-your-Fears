@@ -105,13 +105,9 @@ html, body {
 }
 
 
-@keyframes sun {
-  
-  100% { 
-    
-    background-position: -6.7in; 
-  }
-}
+
+
+
 
 .xshape-sky {
   position: absolute;
@@ -121,11 +117,18 @@ html, body {
   height: 50%;
 }
 
+@keyframes sun {
+  
+  100% { 
+    
+    background-position: -6.7in; 
+  }
+}
 .image-sun {
   position: fixed;
   top: 0.2in;
   left: 0.4in;
-  width: 2.2in; 
+  width: 2in; 
   height: 2.5in;
   
   z-index: 20;
@@ -138,6 +141,36 @@ html, body {
  
 }
 
+
+
+@keyframes dog {
+  
+  100% { 
+    
+    background-position: -4.95in; 
+  }
+
+
+
+}
+
+.npc-dog {
+  position: fixed;
+  top: 5in;
+  left: 5in;
+  width: 1.6in; 
+  height: 1.2in;
+  
+  z-index: 1;
+  background: url(/images/dog/dog-sprite.png);  
+  
+  
+  background-repeat: no-repeat;
+  animation: dog 0.3s steps(3) infinite;
+  
+ 
+}
+
 .image-occultatum {
   position: absolute;
   
@@ -146,7 +179,7 @@ html, body {
 
   top: 500px;
   left: 10%;
-  z-index: 10;
+  z-index: 100;
 	background-repeat: no-repeat;
 
   background: url(/images/walk/occultatum-sprite-blacken.png) left center;	
@@ -198,28 +231,30 @@ html, body {
   position: absolute;
   height: 0.54in;
   width: 0.31in;
-  top: 520px;
-  left: 1.8in;
-  opacity: 0.0;
-  background: url(/images/background/grass-patch-01.png) left top no-repeat;  
+  top: 5.95in;
+  left: 5.6in;
+  z-index: 20;
+  opacity: 0.4; 
+  background: url(/images/background/grass/grass-patch-01.png) left top no-repeat;  
 }
 .grass-patch-02  {
   position: absolute;
   height: 0.54in;
   width: 0.31in;
-  top: 530px;
-  left: 2.8in;
-  opacity: 0.0;
-  background: url(/images/background/grass-patch-02.png) left top no-repeat;  
+  top: 5.5px;
+  left: 5.6in;
+  z-index: 21;
+  opacity: 1.0;
+  background: url(/images/background/grass/grass-patch-02.png) left top no-repeat;  
 }
 
 .grass-patch-03 {
   position: absolute;
   height: 0.54in;
   width: 0.31in;
-  top: 5.53in;
-  left: 3in;
-  opacity: 0.0;
-  z-index: 1000;
-  background: url(/images/background/grass-patch-03.png) left top no-repeat;  
+  top: 5.5px;
+  left: 5.6in;
+  z-index: 21;
+  opacity: 1.0;
+  background: url(/images/background/grass/grass-patch-03.png) left top no-repeat;  
 }

@@ -20,7 +20,9 @@
 		<div id="grass-patch-02-top" class="grass-patch-02"></div>
 		<div id="grass-patch-03-top" class="grass-patch-03"></div>
 	</div>
-	<div id="oc" class="image-occultatum"></div>		
+	<div id="npc-dog" class="npc-dog"></div>
+	<div id="oc" class="image-occultatum"></div>	
+
 	 		
 	 	
  
@@ -59,25 +61,37 @@
 
 	
 	function getImageURL(){
-		return "/images/background/grass-patch-0" + getImageNumber() + ".png"
+		return "/images/background/grass/grass-patch-" + getImageNumber() + ".png"
 	}
 	function getImageID(section = "bottom"){
-		return "grass-patch-0" + getImageNumber() + "-" + section
+		return "grass-patch-" + getImageNumber(3) + "-" + section
 	}
-	function getImageNumber(){
-		return Math.floor(Math.random() * 3 + 1)
+	function getImageNumber(limit){
+		limit = limit < 10 ? limit : 10
+		index = Math.ceil(
+				Math.random() * limit
+			)
+		const num = index.toString()
+			.padStart(2, '0')
+		
+		return num
 	}
 
 	function getPatchesUnderOC(ocPosition, walkLine, cellSize, columns, lawn, manipulate){
 		const row = walkLine / cellSize
 		const column = ocPosition / cellSize
-		const index = (row * columns) + column
+		const index = Math.floor((row * columns) + column -55)
+		
 		var patches = []
-		for (r = -2; r < 3; r++){
-			for (c = -4; c < 5; c++){
+		for (r = -1; r < 2; r++){
+			for (c = -1; c < 2; c++){
 				var i = index + (r*columns) + c
-				patches.push(lawn[i])
-				manipulate(lawn[i])
+
+				if(lawn[i]){
+					patches.push(lawn[i])	
+					manipulate(lawn[i])	
+				}
+				
 				
 			}
 		}
@@ -101,6 +115,9 @@
 		patch.style.zIndex = z 
 
 		var target = document.getElementById("grass-area-" + section)
+		const rustleWindow = 1000 * 60 * 5
+		const url = "url(" + getImageURL() + ")"
+		setInterval((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
 		target.appendChild(patch);
 		//patch.appendChild(document.createTextNode("________" + Math.floor(grassTop) ))
 		return patch
@@ -116,13 +133,14 @@
 	const topRows = range / cellSize
 	const backZ = 1
 	var lawn = []
+	var patch 
 	
 	
 	for(r=0; r < topRows; r++){
 		rowY = horizon + (r * cellSize)
 		for(c=0; c < columns; c++){
 			
-			var patch = placeGrassPatch(c * cellSize, rowY, backZ, "top", range, horizon, bottom)
+			patch = placeGrassPatch(c * cellSize, rowY, backZ, "top", range, horizon, bottom)
 			lawn.push(patch)
 
 		}
@@ -131,13 +149,13 @@
 	const nextRow = walkLine + (cellSize/2);
 	range = bottom - nextRow;
 	const bottomRows = range / cellSize
-	const frontZ = 100
+	const frontZ = 200
 
 	for(r=0; r < bottomRows; r++){
 		rowY = nextRow + (r * cellSize)
 		for(c=0; c < columns; c++){
 			
-			placeGrassPatch(c * cellSize, rowY, frontZ, "bottom", range, horizon, bottom)
+			patch = placeGrassPatch(c * cellSize, rowY, frontZ, "bottom", range, horizon, bottom)
 			lawn.push(patch)
 		}
 	}	
@@ -210,7 +228,7 @@
 
 	timer = setInterval(function() {
 		//alert(parseInt(oc.style.left, 10) + dx + "px");
-	  oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) + "px";
+	  oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) //+ "px";
 	  
 	  // clear the timer at 400px to stop the animation
 	  if ( oc.style.left > 400 ) {
@@ -223,17 +241,21 @@
 	    
 	    switch (key) {
 		    case "ArrowLeft":
+		    	moveLeft(oc)
+		    /*
 	        oc.classList.add('walk-movement');
 	        oc.classList.add('turn-around');
 	        dx = skip * -1;
-
+*/
 	        
 	        break;
 		    case "ArrowRight":
+		    	moveRight(oc)
+		    /*
 	        oc.classList.add('walk-movement');
 	        oc.classList.remove('turn-around');
 	        dx = skip;
-	        
+	        */
 	        
 	        break;
 
@@ -247,15 +269,28 @@
 	});
 
 	function rustlePatch(patch){
-		alert(getImageURL())
-		patch.style.backgroundImage="url(" + getImageURL() + ")"
+		const url = "url(" + getImageURL() + ")"
+		const rustleWindow = 200
+		if(patch){
+			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
+			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
+			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
+		}
+		
+
+		//patch.style.opacity = Math.random()
+
 	}
 
 	function moveLeft(oc){
+    var left = parseInt(oc.style.left,10);
+
+    getPatchesUnderOC(left, walkLine - horizon, cellSize, columns, lawn, rustlePatch)
+
+		
 		oc.classList.add('walk-movement');
     oc.classList.add('turn-around');
     dx = skip * -1;
-    getPatchesUnderOC(oc.style.left, walkLine, cellSize, columns, lawn, rustlePatch)
 
 	}
 
@@ -263,7 +298,8 @@
 		oc.classList.add('walk-movement');
     oc.classList.remove('turn-around');
     dx = skip;
-    getPatchesUnderOC(oc.style.left, walkLine, cellSize, columns, lawn, rustlePatch)
+    var left = parseInt(oc.style.left,10);
+    getPatchesUnderOC(left, walkLine - horizon, cellSize, columns, lawn, rustlePatch)
 	}
 
 
