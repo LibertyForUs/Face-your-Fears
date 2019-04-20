@@ -241,10 +241,10 @@ html, body {
   position: absolute;
   height: 0.54in;
   width: 0.31in;
-  top: 5.5px;
-  left: 5.6in;
+  top: 5.7in;
+  left: 6.3in;
   z-index: 21;
-  opacity: 1.0;
+  opacity: 0.3;
   background: url(/images/background/grass/grass-patch-02.png) left top no-repeat;  
 }
 
@@ -252,9 +252,9 @@ html, body {
   position: absolute;
   height: 0.54in;
   width: 0.31in;
-  top: 5.5px;
-  left: 5.6in;
+  top: 6in;
+  left: 6in;
   z-index: 21;
-  opacity: 1.0;
+  opacity: 0.4;
   background: url(/images/background/grass/grass-patch-03.png) left top no-repeat;  
 }
