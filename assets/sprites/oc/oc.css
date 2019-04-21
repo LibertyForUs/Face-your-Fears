@@ -29,7 +29,7 @@
 }
 
 .walk-movement {
-  animation: walk-key 0.3s steps(7) infinite;
+  animation: walk-key 0.25s steps(7) infinite;
 }
 
 .turn-around {

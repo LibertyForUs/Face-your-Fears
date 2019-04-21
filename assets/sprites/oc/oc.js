@@ -3,7 +3,7 @@
 var oc = document.getElementById("oc"),
 	d = {},
   dx = 0,
-  skip = 5,
+  skip = 3.5,
   timer;
 
 

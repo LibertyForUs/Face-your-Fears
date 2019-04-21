@@ -42,7 +42,7 @@ function getLawnPatchesAtPosition(ocPosition, walkLine, cellSize, columns, lawn,
 
 function rustlePatch(patch){
 	const url = "url(" + getRandLawnURL() + ")"
-	const rustleWindow = 200
+	const rustleWindow = 40
 	if(patch){
 		setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
 		setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
