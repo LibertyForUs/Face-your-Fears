@@ -3,8 +3,7 @@
 var oc = document.getElementById("oc"),
 	d = {},
   dx = 0,
-  skip = 3.5,
-  timer;
+  skip = 3.5;
 
 
 oc.style.left = 200;
@@ -40,7 +39,7 @@ function moveRight(oc){
 
 
 
-timer = setInterval(function() {
+var timer = setInterval(function() {
 	//alert(parseInt(oc.style.left, 10) + dx + "px");
   oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) //+ "px";
   
