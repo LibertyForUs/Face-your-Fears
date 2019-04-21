@@ -1,0 +1,32 @@
+
+.grass-patch-01  {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 5.95in;
+  left: 5.6in;
+  z-index: 20;
+  opacity: 0.4; 
+  background: url(/images/background/grass/grass-patch-01.png) left top no-repeat;  
+}
+.grass-patch-02  {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 5.7in;
+  left: 6.3in;
+  z-index: 21;
+  opacity: 0.3;
+  background: url(/images/background/grass/grass-patch-02.png) left top no-repeat;  
+}
+
+.grass-patch-03 {
+  position: absolute;
+  height: 0.54in;
+  width: 0.31in;
+  top: 6in;
+  left: 6in;
+  z-index: 21;
+  opacity: 0.4;
+  background: url(/images/background/grass/grass-patch-03.png) left top no-repeat;  
+}

@@ -1,0 +1,29 @@
+
+
+.image-occultatum {
+  position: absolute;
+  
+	width: 163px; 
+	height: 275px;
+
+  top: 500px;
+  left: 10%;
+  z-index: 100;
+	background-repeat: no-repeat;
+
+  background: url(/images/walk/occultatum-sprite-blacken.png) left center;	
+  
+  display: inline-block;
+  
+  background-repeat: no-repeat;
+  
+ 
+}
+
+.walk-movement {
+  animation: walk-key 1s steps(7) infinite;
+}
+
+.turn-around {
+  transform: scaleX(-1);
+}

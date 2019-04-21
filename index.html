@@ -3,11 +3,15 @@
 	<title>OCCULTATUM</title>
 
   <link rel="stylesheet" href="/styles/fyf-styles.css">
+  <link rel="stylesheet" href="/sprites/dog/dog.css">
+  <link rel="stylesheet" href="/sprites/lawn/lawn.css">
+  <link rel="stylesheet" href="/sprites/oc/oc.css">
+  <link rel="stylesheet" href="/sprites/sun/sun.css">
   
   <meta name="viewport" content="width=device-width, height=device-height, minimnum-scale=1.0, target-densitydpi=device-dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
 </head>
-<body scroll="no" style="overflow: hidden">
+<body id="bg" scroll="no" style="overflow: hidden">
 
 	
 		
@@ -38,272 +42,14 @@
 	<div id="messages" class="debug-messages"></div>
 </body>
 
+<script src='/js/util.js'></script>
+
+<script src='/sprites/oc/oc.js'></script>
+<script src='/sprites/lawn/lawn.js'></script>
+<script src='/js/input.js'></script>
+
 <script src='https://cdn.jsdelivr.net/npm/body-scroll-lock@2.6.1/lib/bodyScrollLock.min.js'></script>
-<script>
-	function getWidth() {
-	  return Math.max(
-	    document.body.scrollWidth,
-	    document.documentElement.scrollWidth,
-	    document.body.offsetWidth,
-	    document.documentElement.offsetWidth,
-	    document.documentElement.clientWidth
-	  );
-	}
+<script src='/js/environment.js'></script>
 
-	function getHeight(){
-		return Math.max( 
-			document.body.scrollHeight, 
-			document.body.offsetHeight, 
-      document.documentElement.clientHeight, 
-      document.documentElement.scrollHeight, 
-      document.documentElement.offsetHeight );
-	}
-
-	
-	function getImageURL(){
-		return "/images/background/grass/grass-patch-" + getImageNumber() + ".png"
-	}
-	function getImageID(section = "bottom"){
-		return "grass-patch-" + getImageNumber(3) + "-" + section
-	}
-	function getImageNumber(limit){
-		limit = limit < 10 ? limit : 10
-		index = Math.ceil(
-				Math.random() * limit
-			)
-		const num = index.toString()
-			.padStart(2, '0')
-		
-		return num
-	}
-
-	function getPatchesUnderOC(ocPosition, walkLine, cellSize, columns, lawn, manipulate){
-		const row = walkLine / cellSize
-		const column = ocPosition / cellSize
-		const index = Math.floor((row * columns) + column -55)
-		
-		var patches = []
-		for (r = -1; r < 2; r++){
-			for (c = -1; c < 2; c++){
-				var i = index + (r*columns) + c
-
-				if(lawn[i]){
-					patches.push(lawn[i])	
-					manipulate(lawn[i])	
-				}
-				
-				
-			}
-		}
-		return patches
-
-	}
-
-	function placeGrassPatch(left,top,z,section,range,horizon,bottom){
-		const absoluteRange = bottom-horizon
-
-		
-		var template = document.getElementById(getImageID(section));
-		
-		var patch = template.cloneNode(true);
-		patch.style.left = Math.random() * cellSize + left
-		var grassTop = Math.random() * cellSize + top
-		patch.style.top = grassTop
-		const percentOfRange = (grassTop - horizon) / absoluteRange 
-		patch.style.opacity = percentOfRange * 1.2
-
-		patch.style.zIndex = z 
-
-		var target = document.getElementById("grass-area-" + section)
-		const rustleWindow = 1000 * 60 * 5
-		const url = "url(" + getImageURL() + ")"
-		setInterval((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-		target.appendChild(patch);
-		//patch.appendChild(document.createTextNode("________" + Math.floor(grassTop) ))
-		return patch
-	}
-	var grassTemplate 
-	const maxWidth = getWidth();
-	const bottom = getHeight();
-	const horizon = 440
-	const walkLine = 718
-	var range = walkLine - horizon
-	const cellSize = 15
-	const columns = maxWidth / cellSize
-	const topRows = range / cellSize
-	const backZ = 1
-	var lawn = []
-	var patch 
-	
-	
-	for(r=0; r < topRows; r++){
-		rowY = horizon + (r * cellSize)
-		for(c=0; c < columns; c++){
 			
-			patch = placeGrassPatch(c * cellSize, rowY, backZ, "top", range, horizon, bottom)
-			lawn.push(patch)
-
-		}
-	}
-
-	const nextRow = walkLine + (cellSize/2);
-	range = bottom - nextRow;
-	const bottomRows = range / cellSize
-	const frontZ = 200
-
-	for(r=0; r < bottomRows; r++){
-		rowY = nextRow + (r * cellSize)
-		for(c=0; c < columns; c++){
-			
-			patch = placeGrassPatch(c * cellSize, rowY, frontZ, "bottom", range, horizon, bottom)
-			lawn.push(patch)
-		}
-	}	
-	
-
-	const disableBodyScroll = bodyScrollLock.disableBodyScroll;
-	
-
-	const lockOn = document.getElementById("bg");
-	disableBodyScroll(lockOn);
-
-	document.ontouchmove = function(event){
-    event.preventDefault();
-	}
-	document.ontouchend = (e) => {
-    e.preventDefault();
-	};
-	
-
-	window.addEventListener('touchstart', function onFirstTouch(event) {
-		var oc = document.getElementById("oc");
-		var ocX = parseInt(oc.style.left,10);
-		var firstTouchX = event.touches[0].screenX;
-		var delta = firstTouchX - ocX - 150;
-		if (delta < 0){
-			moveLeft(oc);
-		}
-	  else if(delta > 0){
-	  	moveRight(oc)
-	  }
-	  
-	  
-	  // document.getElementById("messages").innerHTML =  delta;
-	 
-	}, false);
-
-
-	window.addEventListener('touchend', function onFirstTouch(event) {
-	  document.getElementById("oc").classList.remove('walk-movement');
-		dx = 0;
-	 
-	}, false);
-
-	
-	
-	const root = document.documentElement;
- 
-
-
-
-	// animation code
-	var bg = document.getElementById("bg"),
-		oc = document.getElementById("oc"),
-		d = {},
-    dx = 0,
-    skip = 10,
-    timer;
-  
-
-  oc.style.left = 200;
-
-  
-
-	function safeX(x) {  
-			var w = window.innerWidth - 100;
-	    return x < 0 ? 0 : x > w ? w : x;
-	}
-
-
-
-	timer = setInterval(function() {
-		//alert(parseInt(oc.style.left, 10) + dx + "px");
-	  oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) //+ "px";
-	  
-	  // clear the timer at 400px to stop the animation
-	  if ( oc.style.left > 400 ) {
-	    clearInterval( timer );
-	  }
-	}, 20);
-	
-	document.addEventListener('keydown', function(event) {
-	    const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-	    
-	    switch (key) {
-		    case "ArrowLeft":
-		    	moveLeft(oc)
-		    /*
-	        oc.classList.add('walk-movement');
-	        oc.classList.add('turn-around');
-	        dx = skip * -1;
-*/
-	        
-	        break;
-		    case "ArrowRight":
-		    	moveRight(oc)
-		    /*
-	        oc.classList.add('walk-movement');
-	        oc.classList.remove('turn-around');
-	        dx = skip;
-	        */
-	        
-	        break;
-
-			}
-	});
-
-	document.addEventListener('keyup', function(event) {
-		
-		document.getElementById("oc").classList.remove('walk-movement');
-		dx = 0;
-	});
-
-	function rustlePatch(patch){
-		const url = "url(" + getImageURL() + ")"
-		const rustleWindow = 200
-		if(patch){
-			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-			setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-		}
-		
-
-		//patch.style.opacity = Math.random()
-
-	}
-
-	function moveLeft(oc){
-    var left = parseInt(oc.style.left,10);
-
-    getPatchesUnderOC(left, walkLine - horizon, cellSize, columns, lawn, rustlePatch)
-
-		
-		oc.classList.add('walk-movement');
-    oc.classList.add('turn-around');
-    dx = skip * -1;
-
-	}
-
-	function moveRight(oc){
-		oc.classList.add('walk-movement');
-    oc.classList.remove('turn-around');
-    dx = skip;
-    var left = parseInt(oc.style.left,10);
-    getPatchesUnderOC(left, walkLine - horizon, cellSize, columns, lawn, rustlePatch)
-	}
-
-
-	
-
-</script>				
 </html>

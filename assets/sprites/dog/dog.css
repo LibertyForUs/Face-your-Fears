@@ -1,0 +1,30 @@
+
+
+
+@keyframes dog {
+  
+  100% { 
+    
+    background-position: -4.95in; 
+  }
+
+
+
+}
+
+.npc-dog {
+  position: fixed;
+  top: 5in;
+  left: 5in;
+  width: 1.6in; 
+  height: 1.2in;
+  
+  z-index: 1;
+  background: url(/images/dog/dog-sprite.png);  
+  
+  
+  background-repeat: no-repeat;
+  animation: dog 0.3s steps(3) infinite;
+  
+ 
+}
