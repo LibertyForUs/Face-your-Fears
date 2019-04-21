@@ -8,7 +8,10 @@
 
 
 @keyframes pulse {
-  100% { background-position: -648px 0px ; }
+  100% { 
+    background-position: -648px 0px ; 
+
+  }
 }
 
 .image-sun {
@@ -25,6 +28,9 @@
 
   background: url(/sprites/sun/sun.png);  
   background-repeat: no-repeat;
+  -webkit-transition: background-position 1s ease-in-out;
+  transition: background-position 1s ease-in-out;
+
   animation: spin 120s steps(2880) infinite, pulse 3.5s steps(3) infinite;
   //
   
