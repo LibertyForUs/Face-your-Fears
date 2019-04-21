@@ -2,8 +2,8 @@
 function getRandLawnURL(){
 	return "/sprites/lawn/grass/grass-patch-" + getRandLawnNumber() + ".png"
 }
-function getRandStarterLawnElementID(section = "bottom"){
-	return "grass-patch-" + getRandLawnNumber(3) + "-" + section
+function getRandStarterLawnElementID(){
+	return "grass-patch-" + getRandLawnNumber(3) 
 }
 function getRandLawnNumber(limit){
 	limit = limit < 10 ? limit : 10
@@ -51,11 +51,11 @@ function rustlePatch(patch){
 }
 
 
-function placeGrassPatch(left,top,z,section,range,horizon,bottom){
+function placeGrassPatch(left,top,z,range,horizon,bottom){
 	const absoluteRange = bottom-horizon
 
 	
-	var template = document.getElementById(getRandStarterLawnElementID(section));
+	var template = document.getElementById(getRandStarterLawnElementID());
 	
 	var patch = template.cloneNode(true);
 	patch.style.left = Math.random() * cellSize + left
@@ -66,25 +66,27 @@ function placeGrassPatch(left,top,z,section,range,horizon,bottom){
 
 	patch.style.zIndex = z 
 
-	var target = document.getElementById("grass-area-" + section)
+	var target = document.getElementById("lawn")
 	const rustleWindow = 1000 * 60 * 5
 	const url = "url(" + getRandLawnURL() + ")"
 	setInterval((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
 	target.appendChild(patch);
-	//patch.appendChild(document.createTextNode("________" + Math.floor(grassTop) ))
+	
 	return patch
 }
+
+
 
 var grassTemplate 
 const maxWidth = getWidth();
 const bottom = getHeight();
 const horizon = 440
 const walkLine = 718
-var range = walkLine - horizon
+var range = bottom - horizon
 const cellSize = 15
 const columns = maxWidth / cellSize
 const topRows = range / cellSize
-const backZ = 1
+const lawnZ = 1
 var lawn = []
 var patch 
 
@@ -93,22 +95,12 @@ for(r=0; r < topRows; r++){
 	rowY = horizon + (r * cellSize)
 	for(c=0; c < columns; c++){
 		
-		patch = placeGrassPatch(c * cellSize, rowY, backZ, "top", range, horizon, bottom)
+		patch = placeGrassPatch(c * cellSize, rowY, lawnZ, range, horizon, bottom)
 		lawn.push(patch)
 
 	}
 }
 
-const nextRow = walkLine + (cellSize/2);
-range = bottom - nextRow;
-const bottomRows = range / cellSize
-const frontZ = 200
 
-for(r=0; r < bottomRows; r++){
-	rowY = nextRow + (r * cellSize)
-	for(c=0; c < columns; c++){
-		
-		patch = placeGrassPatch(c * cellSize, rowY, frontZ, "bottom", range, horizon, bottom)
-		lawn.push(patch)
-	}
-}	
+
+

@@ -13,11 +13,6 @@
   
 }
 
-@keyframes walk-key {
-   100% { background-position: -1141px; }
-}
-
-
 
 @keyframes back-and-forth {
   0%   {left:200px;}

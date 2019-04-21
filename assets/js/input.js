@@ -38,24 +38,17 @@ document.addEventListener('keydown', function(event) {
     
     switch (key) {
 	    case "ArrowLeft":
-	    	moveLeft(oc)
-	    /*
-        oc.classList.add('walk-movement');
-        oc.classList.add('turn-around');
-        dx = skip * -1;
-*/
-        
+	    	ocMoveLeft(oc)
         break;
 	    case "ArrowRight":
-	    	moveRight(oc)
-	    /*
-        oc.classList.add('walk-movement');
-        oc.classList.remove('turn-around');
-        dx = skip;
-        */
-        
+	    	ocMoveRight(oc)
         break;
-
+      case "ArrowDown":
+      	worldGoBelow()
+      	break;
+      case "ArrowUp":
+      	worldGoAbove()
+      	break;
 		}
 });
 

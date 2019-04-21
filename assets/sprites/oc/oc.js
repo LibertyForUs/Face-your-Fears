@@ -17,7 +17,7 @@ function safeX(x) {
 
 
 
-function moveLeft(oc){
+function ocMoveLeft(oc){
   var left = parseInt(oc.style.left,10);
 
   getLawnPatchesAtPosition(left, walkLine - horizon, cellSize, columns, lawn, rustlePatch)
@@ -29,7 +29,7 @@ function moveLeft(oc){
 
 }
 
-function moveRight(oc){
+function ocMoveRight(oc){
 	oc.classList.add('walk-movement');
   oc.classList.remove('turn-around');
   dx = skip;
@@ -40,7 +40,7 @@ function moveRight(oc){
 
 
 var timer = setInterval(function() {
-	//alert(parseInt(oc.style.left, 10) + dx + "px");
+	
   oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) //+ "px";
   
   // clear the timer at 400px to stop the animation

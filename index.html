@@ -3,6 +3,7 @@
 	<title>OCCULTATUM</title>
 
   <link rel="stylesheet" href="/styles/fyf-styles.css">
+  <link rel="stylesheet" href="/sprites/world/world.css">
   <link rel="stylesheet" href="/sprites/dog/dog.css">
   <link rel="stylesheet" href="/sprites/lawn/lawn.css">
   <link rel="stylesheet" href="/sprites/oc/oc.css">
@@ -12,37 +13,31 @@
 </head>
 <body scroll="no" style="overflow: hidden">
 	<div id="prevent-scroll"></div>
-	
+	<div id="world" class="above">
 		
-	
-	
-	
-	<div id="sun" class="image-sun">		</div>
-	<div id="grass-area-top">
-		<div id="grass-patch-01-top" class="grass-patch-01"></div>
-		<div id="grass-patch-02-top" class="grass-patch-02"></div>
-		<div id="grass-patch-03-top" class="grass-patch-03"></div>
+			
+		
+		
+		
+		<div id="sun" class="image-sun">		</div>
+		<div id="lawn">
+			
+			<div id="grass-patch-01" class="grass-patch-01"></div>
+			<div id="grass-patch-02" class="grass-patch-02"></div>
+			<div id="grass-patch-03" class="grass-patch-03"></div>
+			
+		
+		</div>
+		<div id="dog" class="dog"></div>
+		
 	</div>
-	<div id="dog" class="dog"></div>
 	<div id="oc" class="image-occultatum"></div>	
-
-	 		
-	 	
- 
-	
- 	
-  
-	<div id="grass-area-bottom">
-		<div id="grass-patch-01-bottom" class="grass-patch-01"></div>
-		<div id="grass-patch-02-bottom" class="grass-patch-02"></div>
-		<div id="grass-patch-03-bottom" class="grass-patch-03"></div>
-	</div>
 	<div id="pointerzone"></div>
 	<div id="messages" class="debug-messages"></div>
 </body>
 
 <script src='/js/util.js'></script>
-
+<script src='/sprites/world/world.js'></script>
 <script src='/sprites/oc/oc.js'></script>
 <script src='/sprites/dog/dog.js'></script>
 <script src='/sprites/lawn/lawn.js'></script>
