@@ -1,6 +1,6 @@
 
 function getRandLawnURL(){
-	return "/images/background/grass/grass-patch-" + getRandLawnNumber() + ".png"
+	return "/sprites/lawn/grass/grass-patch-" + getRandLawnNumber() + ".png"
 }
 function getRandStarterLawnElementID(section = "bottom"){
 	return "grass-patch-" + getRandLawnNumber(3) + "-" + section

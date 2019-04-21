@@ -1,4 +1,9 @@
 
+@keyframes walk-key {
+   100% { background-position: -1141px; }
+}
+
+
 
 .image-occultatum {
   position: absolute;
@@ -11,7 +16,7 @@
   z-index: 100;
 	background-repeat: no-repeat;
 
-  background: url(/images/walk/occultatum-sprite-blacken.png) left center;	
+  background: url(/sprites/oc/occultatum-sprite.png) left center;	
   
   display: inline-block;
   
@@ -21,7 +26,7 @@
 }
 
 .walk-movement {
-  animation: walk-key 1s steps(7) infinite;
+  animation: walk-key 0.3s steps(7) infinite;
 }
 
 .turn-around {

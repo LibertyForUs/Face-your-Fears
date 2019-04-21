@@ -7,7 +7,7 @@
   left: 5.6in;
   z-index: 20;
   opacity: 0.4; 
-  background: url(/images/background/grass/grass-patch-01.png) left top no-repeat;  
+  background: url(/sprites/lawn/grass/grass-patch-01.png) left top no-repeat;  
 }
 .grass-patch-02  {
   position: absolute;
@@ -17,7 +17,7 @@
   left: 6.3in;
   z-index: 21;
   opacity: 0.3;
-  background: url(/images/background/grass/grass-patch-02.png) left top no-repeat;  
+  background: url(/sprites/lawn/grass/grass-patch-02.png) left top no-repeat;  
 }
 
 .grass-patch-03 {
@@ -28,5 +28,5 @@
   left: 6in;
   z-index: 21;
   opacity: 0.4;
-  background: url(/images/background/grass/grass-patch-03.png) left top no-repeat;  
+  background: url(/sprites/lawn/grass/grass-patch-03.png) left top no-repeat;  
 }
