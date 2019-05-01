@@ -5,7 +5,7 @@
   position: fixed;
   height: 0.54in;
   width: 0.31in;
-  top: 658px;
+  top: 660px;
   left: 900px;
   z-index: 20;
   opacity: 0.3; 
@@ -17,7 +17,7 @@
   position: fixed;
   height: 0.54in;
   width: 0.31in;
-  top: 658px;
+  top: 660px;
   left: 860px;
   z-index: 21;
   opacity: 0.5;
@@ -30,10 +30,17 @@
   position: fixed;
   height: 0.54in;
   width: 0.31in;
-  top: 668px;
+  top: 660px;
   left: 885px;
   z-index: 21;
   opacity: 0.4;
   background: url(/sprites/lawn/grass/grass-patch-03.png) left top no-repeat;  
 }
 
+.lawn-default {
+  position: absolute;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  top: 440;
+}

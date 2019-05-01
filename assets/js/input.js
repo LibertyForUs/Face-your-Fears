@@ -8,15 +8,31 @@ document.ontouchend = (e) => {
 
 window.addEventListener('touchstart', function onFirstTouch(event) {
 	var oc = document.getElementById("oc");
-	var ocX = parseInt(oc.style.left,10);
+	var ocStyle = window.getComputedStyle(oc, null);
+	var ocX = parseInt(ocStyle.left,10);
+	var ocY = parseInt(ocStyle.top,10);
+	var ocH = parseInt(ocStyle.height,10);
 	var firstTouchX = event.touches[0].screenX;
-	var delta = firstTouchX - ocX - 150;
-	if (delta < 0){
-		moveLeft(oc);
+	var firstTouchY = event.touches[0].screenY;
+	var deltaX = firstTouchX - ocX - 150;
+	var deltaY = firstTouchY - ocY;
+	var touchIsBelow = deltaY - ocH > 0;
+	console.log(firstTouchY + " " + ocY + " " + deltaY + " " + ocH)
+	if (deltaX < 0){
+		ocMoveLeft(oc);
 	}
-  else if(delta > 0){
-  	moveRight(oc)
+  else if(deltaX > 0){
+  	ocMoveRight(oc)
   }
+
+  if(touchIsBelow){
+  	worldGoBelow();
+  }
+  else{
+  	worldGoAbove();
+  }
+
+
   
   
   // document.getElementById("messages").innerHTML =  delta;

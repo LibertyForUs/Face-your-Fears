@@ -8,24 +8,15 @@
 .image-occultatum {
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
-
   position: fixed;
-  
 	width: 163px; 
 	height: 275px;
-
   top: 500px;
-  left: 10%;
+  left: 100px;
   z-index: 100;
 	background-repeat: no-repeat;
-
   background: url(/sprites/oc/occultatum-sprite.png) left center;	
-  
   display: inline-block;
-  
-  background-repeat: no-repeat;
-  
- 
 }
 
 .walk-movement {

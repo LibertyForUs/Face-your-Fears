@@ -1,3 +1,7 @@
+:root {
+  --horizon: 440;
+}
+
 html, body {
   overflow: hidden;
 
@@ -20,3 +24,11 @@ html, body {
   color: black;
 }
 
+
+.universe{
+	transform: scale(1.0);
+	background-color: black;
+	z-index: 0;
+	height: 100%;
+	width: auto;
+}

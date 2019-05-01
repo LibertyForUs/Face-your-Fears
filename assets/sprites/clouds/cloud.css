@@ -1,0 +1,52 @@
+
+
+.cloud-default {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+
+  position: fixed;
+  
+  left: 101%;
+  width: 877px; 
+  height: 307px;
+  
+  
+
+    transform-origin: center center;
+
+  background-repeat: no-repeat;
+  
+ 
+}
+
+.cloud-image-01{
+  background: url(/sprites/clouds/cloud01.png);  
+}
+
+.cloud-image-02{
+  background: url(/sprites/clouds/cloud02.png);  
+}
+
+
+.cloud-near {
+  top: 5px;
+  transform: scale(0.1);
+  animation: cloud-float 100s steps(2400) infinite;
+  z-index: 60;
+  opacity: 0.8;
+}
+
+.cloud-far {
+  top: 50px;
+  transform: scale(0.05);
+  animation: cloud-float 200s steps(4800) infinite;
+  z-index: 59;
+  opacity: 0.4;
+}
+
+@keyframes cloud-float {
+  
+
+  100% {transform: translate3d(-300%,0,0);}
+
+}

@@ -8,32 +8,39 @@
   <link rel="stylesheet" href="/sprites/lawn/lawn.css">
   <link rel="stylesheet" href="/sprites/oc/oc.css">
   <link rel="stylesheet" href="/sprites/sun/sun.css">
+  <link rel="stylesheet" href="/sprites/clouds/cloud.css">
+
   <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
 </head>
-<body scroll="no" style="overflow: hidden">
-	<div id="prevent-scroll"></div>
-	<div id="world" class="above">
+<body scroll="no" style="overflow: hidden" >
+	<div id="prevent-scroll" ></div>
+		<div id="universe" class="universe">
 		
+		<div id="cloud01" class="cloud-default cloud-image-01 cloud-near" ></div>
+		<div id="cloud02" class="cloud-default cloud-image-02 cloud-far" ></div>
+
+
+		<div id="world" class="white-background" >
 			
-		
-		
-		
-		<div id="sun" class="image-sun">		</div>
-		<div id="lawn">
+			<div id="lawn" class="lawn-default" >
+				
+				<div id="grass-patch-01" class="grass-patch-01 lives-above"></div>
+				<div id="grass-patch-02" class="grass-patch-02 lives-above"></div>
+				<div id="grass-patch-03" class="grass-patch-03 lives-above"></div>
+				
 			
-			<div id="grass-patch-01" class="grass-patch-01"></div>
-			<div id="grass-patch-02" class="grass-patch-02"></div>
-			<div id="grass-patch-03" class="grass-patch-03"></div>
+			</div>
+			<div id="dog" class="dog lives-above" ></div>
 			
-		
 		</div>
-		<div id="dog" class="dog"></div>
-		
+		<div id="sun" class="sun-default sun-spin lives-above" ></div>
+		<div id="the-void" class="black-background"></div>
+		<div id="oc" class="image-occultatum"></div>	
+
+		<div id="pointerzone"></div>
+		<div id="messages" class="debug-messages"></div>
 	</div>
-	<div id="oc" class="image-occultatum"></div>	
-	<div id="pointerzone"></div>
-	<div id="messages" class="debug-messages"></div>
 </body>
 
 <script src='/js/util.js'></script>

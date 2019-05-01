@@ -8,6 +8,7 @@
   z-index: 1;
   background: url(/sprites/dog/dog-sprite.png);  
   background-repeat: no-repeat;
+  
 }
 
 @keyframes dog-wag {

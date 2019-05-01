@@ -1,14 +1,48 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+}
 
 .below {
-  perspective: 400px;
-  transform: rotateX(60deg);
   transform-style: preserve-3d;
+  transform-origin: center top;
+  transform: rotateX(60deg);
   transition: all 1s;
 }
 
+.stay-above{
+	transform: rotateX(-60deg);
+	transition: all 1s;
+}
+
 .above {
-  perspective: 0px;
   transform: rotateX(0deg);
-  transform-style: preserve-3d;
   transition: all 1s;
+
+}
+
+.lives-above {
+	transform-origin: center bottom;
+}
+
+
+
+.default {
+
+	overflow: hidden;
+}
+
+.white-background {
+	perspective: 500;
+	xoverflow: hidden;
+	height: 100%;
+	background-color: white;
+	z-index: 1;
+
+}
+.xblack-background {
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	z-index: 0;
 }
