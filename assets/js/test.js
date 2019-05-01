@@ -1,7 +1,7 @@
 function worldGoBelow(){
 
 	var p = document.getElementById("plate");
-	var t = document.getElementById("tower");
+	var t = document.getElementById("dog");
 
 	
 	//t.classList.remove("return-above");
@@ -17,7 +17,7 @@ function worldGoBelow(){
 
 function worldGoAbove(){
 	var p = document.getElementById("plate");
-	var t = document.getElementById("tower");
+	var t = document.getElementById("dog");
 
 	
 	p.classList.remove("below");

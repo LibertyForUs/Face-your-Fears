@@ -84,7 +84,7 @@ html, body {
 }
 
 
-.tower {
+.dog {
 
 	transform: rotateX(-20deg);
   position: fixed;
@@ -125,11 +125,3 @@ html, body {
 }
 
 
-
-<div id="sun" class="sun"></div>
-	<div id="cloud" class="cloud"></div>
-	<div id="world" class="world">
-		<div id="land" class="land"></div>
-		<div id="tower" class="tower"></div>
-		<div id="person" class="person"></div>
-		<div id="grass" class="grass"></div>
