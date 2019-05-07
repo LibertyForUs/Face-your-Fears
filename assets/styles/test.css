@@ -2,6 +2,7 @@
   --horizon: 240px;
   --perspectiveOffset: -20deg;
   --rotationBelow: 80deg;
+  --transitionSpeed: 0.8s;
 }
 
 html, body {
@@ -73,7 +74,7 @@ html, body {
   transform-origin: top center;
   	z-index: 2002;
   	  transform: rotateX(20deg);
-  	transition: all 1s;
+  	transition: all var(--transitionSpeed);
 }
 .land {
   
@@ -100,28 +101,70 @@ html, body {
 }
 
 
+.dog2 {
+
+	transform: rotateX(-20deg);
+  position: fixed;
+  transform-origin: bottom center;
+  top: 130px;
+  left: 30%;
+  width: 158px; 
+  height: 85px;
+  
+  background: url(/sprites/dog/dog-sprite.png);  
+  background-repeat: no-repeat;
+  
+}
+
+.oc {
+	transform: rotateX(-20deg);
+  position: fixed;
+	width: 163px; 
+	height: 275px;
+  top: 120px;
+  left: 20%;
+  transform-origin: bottom center;
+	background-repeat: no-repeat;
+  background: url(/sprites/oc/occultatum-sprite.png) left center;	
+  
+}
+
+
 .below {
   
   
   transform: rotateX(88deg);
-  transition: all 1s;
+  transition: all var(--transitionSpeed);
 }
 
 .above {
   transform: rotateX(20deg);
-  transition: all 1s;
+  transition: all var(--transitionSpeed);
 
 }
 .stay-above{
 	
 	transform: rotateX(-88deg);
-	transition:  1s;
+	transition:  var(--transitionSpeed);
 }
 
 .return-above{
 	transform: rotateX(-20deg);
-	transition:  1s;
+	transition:  var(--transitionSpeed);
 
 }
+
+
+/* OC animation */
+@keyframes walk-key {
+   100% { background-position: -1141px; }
+}
+.walk-movement {
+  animation: walk-key 0.25s steps(7) infinite;
+}
+.turn-around {
+  transform: scaleX(-1);
+}
+
 
 

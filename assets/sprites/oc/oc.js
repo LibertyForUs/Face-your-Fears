@@ -3,7 +3,8 @@
 var oc = document.getElementById("oc"),
 	d = {},
   dx = 0,
-  skip = 3.5;
+  skip = 3;
+
 
 
 oc.style.left = 200;

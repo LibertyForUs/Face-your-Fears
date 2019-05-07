@@ -1,6 +1,9 @@
 
 @keyframes walk-key {
-   100% { background-position: -1141px; }
+   100% { 
+    xbackground-position: -1141px; 
+    background-position: 840px; 
+   }
 }
 
 
@@ -9,18 +12,22 @@
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
   position: fixed;
-	width: 163px; 
-	height: 275px;
+  xwidth: 163px; 
+  xheight: 275px;
+  width: 105px; 
+  height: 280px;
   top: 500px;
   left: 100px;
-  z-index: 100;
+  z-index: 3000;
 	background-repeat: no-repeat;
-  background: url(/sprites/oc/occultatum-sprite.png) left center;	
+  xbackground: url(/sprites/oc/occultatum-sprite.png) left center;	
+  background: url(/sprites/oc/ocsharp.png) left center; 
   display: inline-block;
 }
 
 .walk-movement {
-  animation: walk-key 0.25s steps(7) infinite;
+  xanimation: walk-key 0.25s steps(7) infinite;
+  animation: walk-key 1.31s steps(8) infinite;
 }
 
 .turn-around {
