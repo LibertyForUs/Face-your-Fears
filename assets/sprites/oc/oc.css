@@ -1,9 +1,13 @@
 
 @keyframes walk-key {
-   100% { 
-    xbackground-position: -1141px; 
-    background-position: 840px; 
-   }
+  12.5% { background-position: 105px; }
+  25% { background-position: 210px; }
+  37.5% { background-position: 315px; }
+  50% { background-position: 420px; }
+  62.5% { background-position: 525px; }
+  75% { background-position: 630px; }
+  87.5% { background-position: 735px; }
+  100% { background-position: 840px; }
 }
 
 
@@ -27,7 +31,7 @@
 
 .walk-movement {
   xanimation: walk-key 0.25s steps(7) infinite;
-  animation: walk-key 1.31s steps(8) infinite;
+  animation: walk-key 1.31s steps(1) infinite;
 }
 
 .turn-around {
