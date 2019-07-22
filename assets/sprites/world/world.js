@@ -1,4 +1,4 @@
-function worldGoBelow(){
+function worldGoBelowx(){
 	
 
 	var d = document.getElementById("dog");
@@ -32,7 +32,7 @@ function worldGoBelow(){
 
 }
 
-function worldGoAbove(){
+function worldGoAbovex(){
 
 	var w = document.getElementById("world");
 	w.classList.remove("below");

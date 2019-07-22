@@ -2,14 +2,14 @@ function worldGoBelow(){
 
 	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("below")[0]){
 		var p = document.getElementById("plate");
-		var t = document.getElementById("dog");
+		var d = document.getElementById("dog");
 
 	
 		p.classList.add("shifting");
 		setTimeout(function(){ p.classList.remove("shifting") }, 800);
 
-		t.classList.add("stay-above");
-		t.classList.remove("return-above");
+		d.classList.add("stay-above");
+		d.classList.remove("return-above");
 		p.classList.add("below");
 		p.classList.remove("above");
 	}	
@@ -19,13 +19,13 @@ function worldGoBelow(){
 function worldGoAbove(){
 	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("above")[0]){
 		var p = document.getElementById("plate");
-		var t = document.getElementById("dog");
+		var d = document.getElementById("dog");
 		p.classList.add("shifting");
 		setTimeout(function(){ p.classList.remove("shifting") }, 800);
 		p.classList.remove("below");
 		p.classList.add("above");
-		t.classList.add("return-above");
-		t.classList.remove("stay-above");
+		d.classList.add("return-above");
+		d.classList.remove("stay-above");
 
 	}
 	
@@ -58,3 +58,4 @@ document.addEventListener('keydown', function(event) {
       	break;
 		}
 });
+

@@ -1,9 +1,11 @@
 
 function getRandLawnURL(){
-	return "/sprites/lawn/grass/grass-patch-" + getRandLawnNumber() + ".png"
+	//return "/sprites/lawn/grass/grass-patch-" + getRandLawnNumber() + ".png"
+	return "/sprites/lawn/grass/grass-strip.png"
 }
 function getRandStarterLawnElementID(){
-	return "grass-patch-" + getRandLawnNumber(3) 
+	//return "grass-patch-" + getRandLawnNumber(3) 
+	return "grass-strip";
 }
 function getRandLawnNumber(limit){
 	limit = limit < 10 ? limit : 10
@@ -18,58 +20,30 @@ function getRandLawnNumber(limit){
 
 
 
-function getLawnPatchesAtPosition(ocPosition, walkLine, cellSize, columns, lawn, manipulate){
-	const row = walkLine / cellSize
-	const column = ocPosition / cellSize
-	const index = Math.floor((row * columns) + column -55)
-	
-	var patches = []
-	for (r = -1; r < 2; r++){
-		for (c = -1; c < 2; c++){
-			var i = index + (r*columns) + c
-
-			if(lawn[i]){
-				patches.push(lawn[i])	
-				if(manipulate) manipulate(lawn[i])	
-			}
-			
-			
-		}
-	}
-	return patches
-
-}
-
-function rustlePatch(patch){
-	const url = "url(" + getRandLawnURL() + ")"
-	const rustleWindow = 40
-	if(patch){
-		setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-		setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-		setTimeout((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
-	}
-}
-
 
 function placeGrassPatch(left,top,z,range,horizon,bottom){
-	const absoluteRange = bottom-horizon
+	const absoluteRange = bottom-horizon;
+	const horizontalVariation = 20;
+	const verticalVariation = 0;
 
 	
 	var template = document.getElementById(getRandStarterLawnElementID());
+
 	
 	var patch = template.cloneNode(true);
-	patch.style.left = Math.random() * cellSize + left
-	var grassTop = Math.random() * cellSize + top
+
+	patch.style.left = Math.random() * horizontalVariation + left
+	var grassTop = Math.random() * verticalVariation + top
 	patch.style.top = grassTop
 	const percentOfRange = (grassTop - horizon) / absoluteRange 
-	patch.style.opacity = percentOfRange * 1.2
+	patch.style.opacity = percentOfRange * 4 + 0.1
 
 	patch.style.zIndex = z 
 
 	var target = document.getElementById("lawn")
-	const rustleWindow = 1000 * 60 * 5
-	const url = "url(" + getRandLawnURL() + ")"
-	setInterval((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
+	//const rustleWindow = 1000 * 60 * 5
+	//const url = "url(" + getRandLawnURL() + ")"
+	//setInterval((u)=>{patch.style.backgroundImage=u}, Math.floor(Math.random() * rustleWindow), url)
 	target.appendChild(patch);
 	
 	return patch
@@ -77,29 +51,39 @@ function placeGrassPatch(left,top,z,range,horizon,bottom){
 
 
 
-var grassTemplate 
-const maxWidth = getWidth();
-const bottom = getHeight();
-const horizon = 440
-const walkLine = 718
-var range = bottom - horizon
-const cellSize = 15
-const columns = maxWidth / cellSize
-const topRows = range / cellSize
+
+const maxWidth = getWidth() ;
+console.log(maxWidth)
+const bottom = getHeight(); //* 1.4;
+console.log(bottom)
+const horizon = -20 //440
+var range = bottom - horizon - 500;
+
+const cellSize = 790 //20
+const cellWidth = 400;
+const cellHeight = 22;
+const density = 1;
+
+
+const columns = maxWidth / cellWidth  
+const topRows = range / cellHeight 
 const lawnZ = 1
 var lawn = []
 var patch 
 
+var count = 0
 
-for(r=0; r < topRows; r++){
-	rowY = horizon + (r * cellSize)
-	for(c=0; c < columns; c++){
+for(r=0; r < topRows ; r++){
+	rowY = horizon + (r * cellHeight / density)
+	for(c=-100 + (Math.random() * 60); c < columns; c++){
 		
 		patch = placeGrassPatch(c * cellSize, rowY, lawnZ, range, horizon, bottom)
 		lawn.push(patch)
+		count++;
 
 	}
 }
+console.log(count)
 
 
 
