@@ -14,7 +14,7 @@
   }
 }
 
-.sun-default {
+.sun {
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
 
@@ -38,18 +38,3 @@
   animation: spin 120s steps(2880) infinite, pulse 3.5s steps(3) infinite;
   transform-origin: center center;
  }
-
-.sun-rise {
-  
-  transform: translateY(-100px);;
-  
-  
-  
-}
-
-.sun-fall {
-
-  transition: 1s;
-  transform: translate(0px, 0px);
-  
-}

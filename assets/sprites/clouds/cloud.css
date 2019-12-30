@@ -1,6 +1,6 @@
 
 
-.cloud-default {
+.cloud {
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
 
@@ -12,23 +12,18 @@
   
   
 
-    transform-origin: center center;
+  transform-origin: center center;
 
   background-repeat: no-repeat;
   
  
 }
 
-.cloud-image-01{
-  background: url(/sprites/clouds/cloud01.png);  
-}
 
-.cloud-image-02{
-  background: url(/sprites/clouds/cloud02.png);  
-}
 
 
 .cloud-near {
+  background: url(/sprites/clouds/cloud01.png);  
   top: 5px;
   transform: scale(0.1);
   animation: cloud-float 100s steps(2400) infinite;
@@ -37,6 +32,7 @@
 }
 
 .cloud-far {
+  background: url(/sprites/clouds/cloud02.png);  
   top: 50px;
   transform: scale(0.05);
   animation: cloud-float 200s steps(4800) infinite;

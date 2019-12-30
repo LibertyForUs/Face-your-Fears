@@ -5,15 +5,19 @@ var dog = document.getElementById("dog")
 function dogWatch(object){
 	if(!object) return
 
-	
+
+
 	setInterval(function() {
 		objectX = parseInt(object.style.left,10);
+
 	}, 100);
 }
+
 
 function dogIsNearObject(){
 	const dogloc = dogX()
 	const isNear = Math.abs(objectX - dogloc) < 500
+
 	return isNear
 }
 
@@ -58,3 +62,8 @@ var timer = setInterval(function() {
 	}
 }, 100);
 
+
+
+var oc = document.getElementById("oc");
+
+dogWatch(oc);

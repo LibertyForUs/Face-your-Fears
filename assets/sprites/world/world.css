@@ -30,12 +30,12 @@ html, body {
 }
 
 .sky{
-	background-color: lightblue;
+	background-color: white;
 	z-index: 1000;
 	height: 420px;
 	width: auto;
 }
-.sun{
+/*.sun{
 	position: fixed;
 	z-index: 1001;
 	top: 80px;
@@ -44,9 +44,9 @@ html, body {
 	width: 80px;
 	height: 80px;
 	border-radius: 50%;
-}
+}*/
 
-.cloud{
+/*.cloud{
 	position: fixed;
 	z-index: 1010;
 	top: 200px;
@@ -55,7 +55,7 @@ html, body {
 	width: 300px;
 	height: 100px;
 	border-radius: 70%;
-}
+}*/
 
 .world{
 	perspective: 2000px;
