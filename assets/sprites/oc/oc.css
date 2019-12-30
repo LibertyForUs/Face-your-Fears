@@ -10,30 +10,74 @@
   100% { background-position: 840px; }
 }
 
+@keyframes sink-key {
+  100% { background-position: -1500px; }
+}
+@keyframes rise-key {
+  100% { background-position: -1000px}
+}
+
+
 
 
 .oc {
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+  transform: rotateX(-15deg) translateY(-15px); /* translateY(20px); /* translateY(-20px);*/
+
   position: fixed;
-  xwidth: 163px; 
-  xheight: 275px;
-  width: 105px; 
-  height: 280px;
-  top: 500px;
-  left: 100px;
-  z-index: 3000;
+  transform-origin: bottom center;
+  
+  top: 20%;
+  z-index: 31;
 	background-repeat: no-repeat;
-  xbackground: url(/sprites/oc/occultatum-sprite.png) left center;	
-  background: url(/sprites/oc/ocsharp.png) left center; 
-  display: inline-block;
+  
+ 
 }
 
+.oc-above {
+ width: 105px; 
+  height: 280px;
+  background: url(/sprites/oc/ocsharp.png) left center; 
+}
+
+.oc-below{
+  transform: rotateX(-88deg) translateY(-240px);
+}
+
+.oc-sink {
+  width: 100px; 
+  height: 300px;
+
+  background: url(/sprites/oc/sink-small.png) left center; 
+  animation: sink-key 0.8s steps(15); 
+  
+}
+
+
+.oc-rise {
+  width: 100px; 
+  height: 210px;
+  /*xtransform: rotateX(-15deg) translateY(-15px);*/
+  background: url(/sprites/oc/oc-rise.png); 
+  animation: rise-key 0.8s steps(10);
+/*  animation-timing-function: linear;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+*/
+}
 .walk-movement {
-  xanimation: walk-key 0.25s steps(7) infinite;
+  
   animation: walk-key 1.31s steps(1) infinite;
 }
 
 .turn-around {
-  transform: scaleX(-1);
+  transform: scaleX(-1) rotateX(-20deg); 
+  
+  /*rotateX(-60deg);*/
 }
+
+
+
+

@@ -95,18 +95,13 @@ html, body {
 
 }
 .stay-above{
-	transform: rotateX(-88deg) !important;
+	transform: rotateX(-88deg);
 	transition:  var(--transitionSpeed);
 }
 
-.go-below{
-	transform: rotateX(-88deg) translateY(240px) !important;*/
-	transition: all var(--transitionSpeed);
-}
-
 .return-above{
-	transform: rotateX(-15deg) translateY(-15px) !important;
-	transition: all var(--transitionSpeed);	
+	transform: rotateX(-200deg) translateY(-15px);
+	transition:  var(--transitionSpeed);
 }
 
 

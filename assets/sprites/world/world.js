@@ -1,49 +1,69 @@
-function worldGoBelowx(){
+
+
+function worldGoBelow(){
+	ocSink();
+
+	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("below")[0]){
+		var p = document.getElementById("plate");
+		var d = document.getElementById("dog");
+		
 	
+		
+		
 
-	var d = document.getElementById("dog");
-	d.classList.add("stay-above")
-	switchWag('dog-wag-fast');
-	
-	setTimeout((d)=>{
-		switchWag('dog-wag');
-	}, 800, d)
-	setTimeout((d)=>{		
-		switchWag();
-	}, 1200, d)
-
-	var s = document.getElementById("sun");
-	s.classList.add("sun-rise")
-	
-
-
-	var g
-	g = document.getElementById("grass-patch-01");
-	g.classList.add("stay-above");
-	g = document.getElementById("grass-patch-02");
-	g.classList.add("stay-above");
-	g = document.getElementById("grass-patch-03");
-	g.classList.add("stay-above");
-
-	var w = document.getElementById("world");
-	w.classList.remove("above")
-	w.classList.add("below")
-
-
-}
-
-function worldGoAbovex(){
-
-	var w = document.getElementById("world");
-	w.classList.remove("below");
-	w.classList.add("above");
-
-	var d = document.getElementById("dog");
-	d.classList.remove("stay-above");
-
-	var s = document.getElementById("sun");
-	s.classList.remove("sun-rise")
-
-
+		d.classList.add("stay-above");
+		d.classList.remove("return-above");
+		p.classList.add("below");
+		p.classList.remove("above");
+	}	
 	
 }
+
+function worldGoAbove(){
+	ocRise();
+	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("above")[0]){
+		var p = document.getElementById("plate");
+		var d = document.getElementById("dog");
+		
+
+		p.classList.add("shifting");
+		setTimeout(function(){ p.classList.remove("shifting") }, 800);
+		p.classList.remove("below");
+		p.classList.add("above");
+		d.classList.add("return-above");
+		d.classList.remove("stay-above");
+
+	}
+
+
+	
+
+
+	//p.classList.add("above");
+	//w.classList.remove("below");
+
+	
+	
+	//t.classList.add("return-above");
+	
+}
+
+document.addEventListener('keydown', function(event) {
+    const key = event.key; 
+    
+    switch (key) {
+	    case "ArrowLeft":
+	    	
+        break;
+	    case "ArrowRight":
+	    	
+        break;
+      case "ArrowDown":
+      	worldGoBelow()
+      	break;
+      case "ArrowUp":
+      	worldGoAbove()
+      	break;
+		}
+});
+

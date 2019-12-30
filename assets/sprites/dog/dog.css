@@ -1,11 +1,13 @@
 
 .dog {
+  transform: rotateX(-20deg) translateY(-15px);
   position: fixed;
-  top: 600px;
-  left: 800px;
+  transform-origin: bottom center;
+  top: 120px;
+  left: 50%;
   width: 158px; 
   height: 85px;
-  z-index: 1;
+  z-index: 30;
   background: url(/sprites/dog/dog-sprite.png);  
   background-repeat: no-repeat;
   

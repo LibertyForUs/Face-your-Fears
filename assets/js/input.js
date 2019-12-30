@@ -65,6 +65,11 @@ document.addEventListener('keydown', function(event) {
       case "ArrowUp":
       	worldGoAbove()
       	break;
+      case "Esc":
+      case "Escape":
+      	ocRise()
+      	break;
+
 		}
 });
 

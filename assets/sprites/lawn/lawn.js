@@ -52,10 +52,9 @@ function placeGrassPatch(left,top,z,range,horizon,bottom){
 
 
 
-const maxWidth = getWidth() ;
-console.log(maxWidth)
+//const maxWidth = getWidth() ;
+const maxWidth = document.getElementById('universe').clientWidth;
 const bottom = getHeight(); //* 1.4;
-console.log(bottom)
 const horizon = -20 //440
 var range = bottom - horizon - 500;
 
@@ -65,7 +64,7 @@ const cellHeight = 22;
 const density = 1;
 
 
-const columns = maxWidth / cellWidth  
+const columns = maxWidth /1.3/ cellWidth 
 const topRows = range / cellHeight 
 const lawnZ = 1
 var lawn = []
@@ -75,7 +74,8 @@ var count = 0
 
 for(r=0; r < topRows ; r++){
 	rowY = horizon + (r * cellHeight / density)
-	for(c=-100 + (Math.random() * 60); c < columns; c++){
+	for(c=0.5 + (Math.random() * 0.5); c < columns; c++){
+		
 		
 		patch = placeGrassPatch(c * cellSize, rowY, lawnZ, range, horizon, bottom)
 		lawn.push(patch)
@@ -83,7 +83,7 @@ for(r=0; r < topRows ; r++){
 
 	}
 }
-console.log(count)
+//console.log(count)
 
 
 
