@@ -4,7 +4,7 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 app.use(express.static('assets'))
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/test.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/new-physics.html')));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
