@@ -30,7 +30,7 @@ html, body {
 }
 
 .sky{
-	background-color: lightblue;
+	background-color: white;
 	z-index: 1000;
 	height: 420px;
 	width: auto;
