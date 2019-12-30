@@ -1,3 +1,5 @@
+
+
 document.ontouchmove = function(event){
   event.preventDefault();
 }
@@ -8,6 +10,7 @@ document.ontouchend = (e) => {
 
 window.addEventListener('touchstart', function onFirstTouch(event) {
 	var oc = document.getElementById("oc");
+
 	var ocStyle = window.getComputedStyle(oc, null);
 	var ocX = parseInt(ocStyle.left,10);
 	var ocY = parseInt(ocStyle.top,10);
@@ -17,7 +20,7 @@ window.addEventListener('touchstart', function onFirstTouch(event) {
 	var deltaX = firstTouchX - ocX - 150;
 	var deltaY = firstTouchY - ocY;
 	var touchIsBelow = deltaY - ocH > 0;
-	console.log(firstTouchY + " " + ocY + " " + deltaY + " " + ocH)
+
 	if (deltaX < 0){
 		ocMoveLeft(oc);
 	}
