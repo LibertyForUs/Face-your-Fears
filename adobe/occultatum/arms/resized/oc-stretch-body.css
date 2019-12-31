@@ -1,0 +1,22 @@
+/* -----------------------------------------------------
+   created with https://www.codeandweb.com/texturepacker 
+   -----------------------------------------------------
+   $TexturePacker:SmartUpdate:3f33d26f34ec4acf8e2c1245607befa8:68b42f48cf9652fcfb54357ecd2b0da8:371f8b449f7c78bec6b5dc210b2b1578$
+   -----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(oc-stretch-body.png);}
+
+.Body_W_Arm-1 {width:106px; height:301px; background-position: -0px -0px}
+.Body_W_Arm-2 {width:106px; height:301px; background-position: -106px -0px}
+.Body_W_Arm-3 {width:106px; height:301px; background-position: -212px -0px}
+.Body_W_Arm-4 {width:106px; height:301px; background-position: -318px -0px}
+.Body_W_Arm-5 {width:106px; height:301px; background-position: -424px -0px}
+.Body_W_Arm-6 {width:106px; height:301px; background-position: -530px -0px}
+.Body_W_Arm-7 {width:106px; height:301px; background-position: -636px -0px}
+.Body_W_Arm-8 {width:106px; height:301px; background-position: -742px -0px}

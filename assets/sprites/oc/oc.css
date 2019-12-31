@@ -17,6 +17,9 @@
   100% { background-position: -1000px}
 }
 
+@keyframes stretch-key {
+  100% { background-position: -848px}
+}
 
 
 
@@ -32,7 +35,6 @@
   z-index: 31;
 	background-repeat: no-repeat;
   
- 
 }
 
 .oc-above {
@@ -61,12 +63,20 @@
   /*xtransform: rotateX(-15deg) translateY(-15px);*/
   background: url(/sprites/oc/oc-rise.png); 
   animation: rise-key 0.8s steps(10);
-/*  animation-timing-function: linear;
-  animation-delay: 0s;
-  animation-iteration-count: 1;
-  animation-direction: normal;
-*/
+
 }
+
+
+.oc-stretch {
+  width: 106px; 
+  height: 301px;
+  background: url(/sprites/oc/oc-stretch-body.png); 
+  animation: stretch-key 0.8s steps(8);
+
+}
+
+
+
 .walk-movement {
   
   animation: walk-key 1.31s steps(1) infinite;

@@ -81,3 +81,14 @@ function ocRise(){
   }
   window.setTimeout(endTransition, 800);
 }
+
+
+function ocStretch(){
+  oc.classList.add("oc-stretch");
+  
+
+  function endTransition(){
+    oc.classList.remove("oc-stretch");
+  }
+  window.setTimeout(endTransition, 800);
+}

@@ -70,7 +70,7 @@ document.addEventListener('keydown', function(event) {
       	break;
       case "Esc":
       case "Escape":
-      	ocRise()
+      	ocStretch()
       	break;
 
 		}
