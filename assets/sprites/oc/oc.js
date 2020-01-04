@@ -22,7 +22,7 @@ function offset(el) {
   var rect = el.getBoundingClientRect(),
   scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
   scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  return { top: Math.floor(rect.top + scrollTop), left: Math.floor(rect.left + scrollLeft) }
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
 }
 
 function angle(cx, cy, ex, ey) {
@@ -82,9 +82,9 @@ function ocReach(targetX, targetY){
 
   function shrink(){
 
+    
+    armWidth = (armWidth - (maxArmLength / 8))
     arms.style.width = armWidth;
-    armWidth = armWidth - Math.floor(maxArmLength / 8)
-
     if(armWidth > 5){
       window.setTimeout(shrink,50);
     }
@@ -94,13 +94,14 @@ function ocReach(targetX, targetY){
   function grow(){
 
     arms.style.width = armWidth;
-    armWidth = armWidth + Math.floor(maxArmLength / 16)
+    armWidth = (armWidth + (maxArmLength / 16))
 
-    if(armWidth < maxArmLength){
+    if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
     }
     else {
-      shrink();
+
+      window.setTimeout(shrink,200);
     }
 
   }
