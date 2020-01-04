@@ -6,7 +6,13 @@ document.ontouchmove = function(event){
 document.ontouchend = (e) => {
   e.preventDefault();
 };
+window.addEventListener('mousedown', e => {
+  const x = e.clientX;
+  const y = e.clientY;
+  
+  ocReach(x,y);
 
+});
 
 window.addEventListener('touchstart', function onFirstTouch(event) {
 	var oc = document.getElementById("oc");
@@ -70,7 +76,7 @@ document.addEventListener('keydown', function(event) {
       	break;
       case "Esc":
       case "Escape":
-      	ocRise()
+      	ocStretch()
       	break;
 
 		}
