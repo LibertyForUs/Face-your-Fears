@@ -21,6 +21,12 @@
   100% { background-position: -848px}
 }
 
+@keyframes reverse-stretch-key {
+  100% { background-position: 848px}
+}
+
+
+
 
 
 .oc {
@@ -75,6 +81,13 @@
 
 }
 
+.oc-reverse-stretch {
+  width: 106px; 
+  height: 301px;
+  background: url(/sprites/oc/oc-stretch-body.png); 
+  animation: reverse-stretch-key 0.4s steps(8);
+
+}
 
 
 .walk-movement {
@@ -89,5 +102,32 @@
 }
 
 
+.oc-arms-grow {
+  background-color: #0C0C0C;
+  position: fixed;
+  top: 115px;
+  left: 52px;
+  width: 10px;
+  height: 10px;
 
+  transform-origin: center left;
+}
+
+
+.triangle-right {
+  
+  width: 200;
+  height: 0;
+
+  position: fixed;
+  top: 115px;
+  left: 52px;
+
+  border-top: 5px  solid transparent;
+  border-left: 5px solid red;
+  border-bottom: 5px solid transparent;
+
+  
+  transform-origin: center left;
+  /*transform: rotate(125deg);*/
 
