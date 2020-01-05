@@ -40,6 +40,8 @@
   top: 20%;
   z-index: 31;
 	background-repeat: no-repeat;
+
+  
   
 }
 
@@ -96,7 +98,7 @@
 }
 
 .turn-around {
-  transform: scaleX(-1) rotateX(-20deg); 
+  transform: scaleX(-1) rotateX(-15deg); 
   
   /*rotateX(-60deg);*/
 }

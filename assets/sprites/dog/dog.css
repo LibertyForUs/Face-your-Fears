@@ -3,8 +3,6 @@
   transform: rotateX(-20deg) translateY(-15px);
   position: fixed;
   transform-origin: bottom center;
-  top: 120px;
-  left: 50%;
   width: 158px; 
   height: 85px;
   z-index: 30;

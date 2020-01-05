@@ -1,6 +1,9 @@
 var objectX 
 var dog = document.getElementById("dog")
 
+dog.style.top = '120px';
+dog.style.left = '2000px';
+holdables.push(dog);
 
 function dogWatch(object){
 	if(!object) return

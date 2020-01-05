@@ -1,50 +1,26 @@
 
 
-var oc = document.getElementById("oc"),
-	d = {},
-  dx = 0,
-  skip = 3;
 
-
-
+var oc = document.getElementById("oc");
 oc.style.left = '1200px';
 
-
-
-function safeX(x) {  
-		var w = window.width - 10000; //2800
-    var leftEdge = 950
-
-    return x < leftEdge ? leftEdge : x > w ? w : x;
+function createAttribute(element, name, value){
+  var a = document.createAttribute(name);
+  a.value = value;
+  element.setAttributeNode(a);
 }
+createAttribute(oc,"dx",0);
+createAttribute(oc,"speed",3);
+createAttribute(oc,"pulling",false);
 
-function offset(el) {
-  var rect = el.getBoundingClientRect(),
-  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-  scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-}
 
-function angle(cx, cy, ex, ey) {
-  var dy = ey - cy;
-  var dx = ex - cx;
-  var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-  //if (theta < 0) theta = 360 + theta; // range [0, 360)
-  return theta;
-}
+
+
 
 
 
 function ocReach(targetX, targetY){
   oc.classList.add("oc-stretch");
-
- 
-  
-  
-  
-
-
 
   let arms = document.createElement("DIV");
 
@@ -58,6 +34,7 @@ function ocReach(targetX, targetY){
     oc.removeChild(arms);
 
   }
+
   function reverseStretch(){
     oc.classList.remove("oc-stretch");
     oc.classList.add("oc-reverse-stretch");
@@ -65,7 +42,7 @@ function ocReach(targetX, targetY){
 
   }
   var armWidth = 5;
-  const armPosition = offset(arms);
+  const armPosition = getPosition(arms);
   armLeft = armPosition.left;
   armTop = armPosition.top;
   
@@ -79,11 +56,38 @@ function ocReach(targetX, targetY){
   const rotation = "rotate(" + armAngle + "deg)";
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
+  var held;
+  holdables.map(o => {
+    if(intersects(targetX,targetY,o)){
+      console.log("held " + o.id);
+      held = o;
+    }
+  })
 
+  hardpoints.map(o => {
+    if(intersects(targetX,targetY,o)){
+      oc.pulling = true;
+    }
+  })
   function shrink(){
 
     
-    armWidth = (armWidth - (maxArmLength / 8))
+
+    dArmWidth = maxArmLength / 8;
+    if(held){
+      const radAngle = degToRad(armAngle);
+      dl = Math.cos(radAngle) * dArmWidth * -1;
+      dt = Math.sin(radAngle) * dArmWidth * -1;
+      const newLeft = parseInt(held.style.left,10) + dl ;
+      const newTop = parseInt(held.style.top,10) + dt ;
+      console.log(held.id,  dl,  dt, newLeft, newTop);
+
+      held.style.left = newLeft;
+      held.style.top = newTop;
+    }
+
+
+    armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;
     if(armWidth > 5){
       window.setTimeout(shrink,50);
@@ -113,32 +117,36 @@ function ocReach(targetX, targetY){
 
 
 function ocMoveLeft(oc){
-  var left = parseInt(oc.style.left,10);
+  // var left = parseInt(oc.style.left,10);
 
 	oc.classList.add('walk-movement');
   oc.classList.add('turn-around');
-  dx = skip * -1;
+  
+  
+  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
 
 }
 
 function ocMoveRight(oc){
 	oc.classList.add('walk-movement');
   oc.classList.remove('turn-around');
-  dx = skip;
-  var left = parseInt(oc.style.left,10);
+  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
+  // var left = parseInt(oc.style.left,10);
   
 }
 
 
 
 var timer = setInterval(function() {
-	
-  oc.style.left = safeX(parseInt(oc.style.left, 10) + dx) //+ "px";
+	const dl = parseInt(oc.getAttribute("dx"),10);
+  const l = parseInt(oc.style.left, 10);
+  const newLeft = safeX( l + dl );
+  oc.style.left = newLeft; //+ "px";
   
   // clear the timer at 400px to stop the animation
-  if ( oc.style.left > getWidth() ) {
-    clearInterval( timer );
-  }
+  // if ( oc.style.left > getWidth() ) {
+  //   clearInterval( timer );
+  // }
 }, 20);
 
 
