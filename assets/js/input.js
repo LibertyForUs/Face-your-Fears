@@ -51,7 +51,7 @@ window.addEventListener('touchstart', function onFirstTouch(event) {
 
 window.addEventListener('touchend', function onFirstTouch(event) {
   document.getElementById("oc").classList.remove('walk-movement');
-	dx = 0;
+	oc.setAttribute("dx",0);
  
 }, false);
 
@@ -85,6 +85,6 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('keyup', function(event) {
 	
 	document.getElementById("oc").classList.remove('walk-movement');
-	dx = 0;
+	oc.setAttribute("dx", 0);
 });
 
