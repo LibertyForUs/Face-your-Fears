@@ -63,10 +63,13 @@ function ocReach(targetX, targetY){
   const rotation = "rotate(" + armAngle + "deg)";
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
-  var held;
+  var pickUp, putDown;
   holdables.map(e => {
     if(intersects(targetX,targetY,e)){
-      held = e;
+      pickUp = e;
+    }
+    else if(intersects(armLeft,armTop,e)){
+      putDown = e;
     }
   })
 
@@ -76,17 +79,19 @@ function ocReach(targetX, targetY){
     }
   })
 
-  const dArmWidth = maxArmLength / 8;
+  
   const reachBackwards = Math.sign(baseAngle - 180);
 
-  const xMoveTowards = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
-  console.log(xMoveTowards, reachBackwards, ocFacesLeft());
+  
+
 
   function shrink(){
 
-    
+    const dArmWidth = maxArmLength / 8;
 
-    moveElement(held, armAngle, dArmWidth, xMoveTowards, Direction.up);
+    const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
+    moveElement(pickUp, armAngle, dArmWidth, pullDirection, Direction.up);
+
     
 
     armWidth = (armWidth - dArmWidth)
@@ -100,7 +105,13 @@ function ocReach(targetX, targetY){
   function grow(){
 
     arms.style.width = armWidth;
-    armWidth = (armWidth + (maxArmLength / 16))
+    
+    const dArmWidth = maxArmLength / 16;
+    armWidth = armWidth + dArmWidth;
+
+
+    const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
+    moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down);
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
@@ -111,6 +122,7 @@ function ocReach(targetX, targetY){
     }
 
   }
+
   
   grow();
   window.setTimeout(reverseStretch, 800);
