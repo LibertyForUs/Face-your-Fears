@@ -16,7 +16,9 @@ createAttribute(oc,"pulling",false);
 
 
 
-
+function ocFacesLeft(){
+  return oc.classList.contains("turn-around");
+}
 
 
 function ocReach(targetX, targetY){
@@ -52,15 +54,19 @@ function ocReach(targetX, targetY){
   adx = Math.abs(reachDx);
   ady = Math.abs(reachDy);
   maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
-  const armAngle = angle(armLeft,armTop, targetX, targetY);
+
+  
+  const baseAngle = angle(armLeft,armTop, targetX, targetY);
+  const armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
+
+
   const rotation = "rotate(" + armAngle + "deg)";
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
   var held;
-  holdables.map(o => {
-    if(intersects(targetX,targetY,o)){
-      console.log("held " + o.id);
-      held = o;
+  holdables.map(e => {
+    if(intersects(targetX,targetY,e)){
+      held = e;
     }
   })
 
@@ -69,23 +75,19 @@ function ocReach(targetX, targetY){
       oc.pulling = true;
     }
   })
+
+  const dArmWidth = maxArmLength / 8;
+  const reachBackwards = Math.sign(baseAngle - 180);
+
+  const xMoveTowards = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
+  console.log(xMoveTowards, reachBackwards, ocFacesLeft());
+
   function shrink(){
 
     
 
-    dArmWidth = maxArmLength / 8;
-    if(held){
-      const radAngle = degToRad(armAngle);
-      dl = Math.cos(radAngle) * dArmWidth * -1;
-      dt = Math.sin(radAngle) * dArmWidth * -1;
-      const newLeft = parseInt(held.style.left,10) + dl ;
-      const newTop = parseInt(held.style.top,10) + dt ;
-      console.log(held.id,  dl,  dt, newLeft, newTop);
-
-      held.style.left = newLeft;
-      held.style.top = newTop;
-    }
-
+    moveElement(held, armAngle, dArmWidth, xMoveTowards, Direction.up);
+    
 
     armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;

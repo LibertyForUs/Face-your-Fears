@@ -1,3 +1,9 @@
+const Direction = {
+	left: -1,
+	right: 1,
+	up: -1,
+	down: 1
+}
 function intersects(x,y,element){
 	pos = getPosition(element);
 	l = pos.left;
@@ -30,19 +36,48 @@ function safeX(x) {
     return x < leftEdge ? leftEdge : x > w ? w : x;
 }
 
+function moveElement(element, angle, distance, directionX, directionY){
+  if(element){
+    const radAngle = degToRad(angle);
+    const dl = Math.cos(radAngle) * distance * directionX;
+    const dt = Math.sin(radAngle) * distance * directionY;
+    const newLeft = parseInt(element.style.left,10) + dl ;
+    const newTop = parseInt(element.style.top,10) + dt ;
+
+    element.style.left = newLeft;
+    element.style.top = newTop;
+  }
+
+}
+
+function safeDegree(angle){
+	if(angle < 0){
+		angle += 360;
+	}
+	if(angle > 360){
+		angle -= 360;
+	}
+	if (angle < 0 || angle > 360){
+		angle = safeDegree(angle);
+	}
+	return angle;
+}
 
 function angle(cx, cy, ex, ey) {
   const dy = ey - cy;
   const dx = ex - cx;
-  var theta = Math.atan2(dy, dx); // range (-PI, PI]
-  theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-  //if (theta < 0) theta = 360 + theta; // range [0, 360)
-  return theta;
+  const atan = Math.atan2(dy, dx); // range (-PI, PI]
+  const theta = radToDeg(atan); // rads to degs, range (-180, 180]
+  return safeDegree(theta);
+}
+function radToDeg(angle){
+	return angle * (180 / Math.PI);
+}
+function degToRad(angle){
+	return angle / (180 /Math.PI);
 }
 
-function degToRad(angle){
-	return angle / (108 /Math.PI);
-}
+
 
 var holdables = [];
 var hardpoints = [];
