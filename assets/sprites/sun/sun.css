@@ -1,0 +1,40 @@
+
+@keyframes spin {
+  
+
+  100% {transform: rotate(360deg);}
+
+}
+
+
+@keyframes pulse {
+  100% { 
+    background-position: -648px 0px ; 
+
+  }
+}
+
+.sun {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+
+  position: fixed;
+  top: 50px;
+  left: 100px;
+  width: 216px; 
+  height: 216px;
+  z-index: 1;
+  
+
+  background: url(/sprites/sun/sun.png);  
+  background-repeat: no-repeat;
+  
+  transform-origin: center bottom;
+  transition:  1s ease-in-out;
+ 
+}
+
+.sun-spin {
+  animation: spin 120s steps(2880) infinite, pulse 3.5s steps(3) infinite;
+  transform-origin: center center;
+ }

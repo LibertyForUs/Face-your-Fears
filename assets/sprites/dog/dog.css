@@ -1,0 +1,28 @@
+
+.dog {
+  transform: rotateX(-20deg) translateY(-15px);
+  position: fixed;
+  transform-origin: bottom center;
+  width: 158px; 
+  height: 85px;
+  z-index: 30;
+  background: url(/sprites/dog/dog-sprite.png);  
+  background-repeat: no-repeat;
+  
+}
+
+@keyframes dog-wag {
+  100% {background-position: -474px 0px;}
+}
+
+.dog-wag {
+    animation: dog-wag 0.5s steps(3) infinite;
+}
+
+.dog-wag-fast {
+    animation: dog-wag 0.25s steps(3) infinite;
+}
+
+.dog-wag-very-fast {
+    animation: dog-wag 0.125s steps(3) infinite;
+}

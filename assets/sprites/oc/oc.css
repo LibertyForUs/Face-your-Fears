@@ -1,0 +1,135 @@
+
+@keyframes walk-key {
+  12.5% { background-position: 105px; }
+  25% { background-position: 210px; }
+  37.5% { background-position: 315px; }
+  50% { background-position: 420px; }
+  62.5% { background-position: 525px; }
+  75% { background-position: 630px; }
+  87.5% { background-position: 735px; }
+  100% { background-position: 840px; }
+}
+
+@keyframes sink-key {
+  100% { background-position: -1500px; }
+}
+@keyframes rise-key {
+  100% { background-position: -1000px}
+}
+
+@keyframes stretch-key {
+  100% { background-position: -848px}
+}
+
+@keyframes reverse-stretch-key {
+  100% { background-position: 848px}
+}
+
+
+
+
+
+.oc {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+  transform: rotateX(-15deg) translateY(-15px); /* translateY(20px); /* translateY(-20px);*/
+
+  position: fixed;
+  transform-origin: bottom center;
+  
+  top: 20%;
+  z-index: 31;
+	background-repeat: no-repeat;
+
+  
+  
+}
+
+.oc-above {
+ width: 105px; 
+  height: 280px;
+  background: url(/sprites/oc/ocsharp.png) left center; 
+}
+
+.oc-below{
+  transform: rotateX(-88deg) translateY(-240px);
+}
+
+.oc-sink {
+  width: 100px; 
+  height: 300px;
+
+  background: url(/sprites/oc/sink-small.png) left center; 
+  animation: sink-key 0.8s steps(15); 
+  
+}
+
+
+.oc-rise {
+  width: 100px; 
+  height: 210px;
+  /*xtransform: rotateX(-15deg) translateY(-15px);*/
+  background: url(/sprites/oc/oc-rise.png); 
+  animation: rise-key 0.8s steps(10);
+
+}
+
+
+.oc-stretch {
+  width: 106px; 
+  height: 301px;
+  background: url(/sprites/oc/oc-stretch-body.png); 
+  animation: stretch-key 0.8s steps(8);
+
+}
+
+.oc-reverse-stretch {
+  width: 106px; 
+  height: 301px;
+  background: url(/sprites/oc/oc-stretch-body.png); 
+  animation: reverse-stretch-key 0.4s steps(8);
+
+}
+
+
+.walk-movement {
+  
+  animation: walk-key 1.31s steps(1) infinite;
+}
+
+.turn-around {
+  transform: scaleX(-1) rotateX(-15deg); 
+  
+  /*rotateX(-60deg);*/
+}
+
+
+.oc-arms-grow {
+  background-color: #0C0C0C;
+  position: fixed;
+  top: 115px;
+  left: 52px;
+  width: 10px;
+  height: 10px;
+
+  transform-origin: center left;
+}
+
+
+.triangle-right {
+  
+  width: 200;
+  height: 0;
+
+  position: fixed;
+  top: 115px;
+  left: 52px;
+
+  border-top: 5px  solid transparent;
+  border-left: 5px solid red;
+  border-bottom: 5px solid transparent;
+
+  
+  transform-origin: center left;
+  /*transform: rotate(125deg);*/
+

@@ -1,96 +1,34 @@
-.crop-container div {
-		position: relative;
-		xleft: 200px;
-		xtop: 200px;
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    object-fit: cover;
-    border-width: 5px;
-    border-style: solid;
-    border-color: blue;
-}
-.crop-container img {
-
-		width: 20%;
-		height: 20%;
-    margin-top: -10px;
-    margin-left: -20px;
-}
-.rotate-experiment {
-	position: relative; 
-	left: 50px; 
-	top: 100px;  
-	transform: 
-	rotate(20deg);
-}
-.crop {
- 	object-fit: cover;
-  object-position: -30% -5;
-
-  width: 300px;
-  height: 337px;
+:root {
+  --horizon: 440;
 }
 
-.animation-walk-left {
-	
-	width: 800px;
-  height: 800px;
-  position: absolute;
-  animation-name: walkleft;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-  
-  animation-timing-function: linear;
-  
-}
-.animation-walk-right {
-	
-	width: 800px;
-  height: 800px;
-  position: absolute;
-  
-  animation-name: walkright;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
-@keyframes walkright {
-  0%   {
-  	left:-100px; 
-  	opacity:1.0;
-  }
-  48% {opacity: 1.0;}
-  49% {opacity: 0.0;}
-  50%  {
-  	left:100px;
-  	opacity:0.0;
-  }
-  98% {opacity: 0.0;}
-  99% {opacity: 1.0;}
-  100% {
-  	left:-100px;
-  	opacity: 1.0;
-	}  
+html, body {
+  overflow: hidden;
+
 }
 
-@keyframes walkleft {
-  0%   {
-  	left:-100px; 
-  	opacity:0.0;
-  }
-  48% {opacity: 0.0;}
-  49% {opacity: 1.0;}
-  50%  {
-  	left:100px; 
-  	opacity:1.0;
-  }
-  98% {opacity: 1.0;}
-  99% {opacity: 0.0;}
-  100% {
-  	left:-100px;
-  	opacity:0.0;
-  }
-  
-  
+.disable-magnify {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+}
+
+
+
+
+
+.debug-messages {
+  position: fixed;
+  z-index: 10000;
+  top: 400px;
+  left: 400px;
+  color: black;
+}
+
+
+.universe{
+	transform: scale(1.0);
+	background-color: black;
+	z-index: 0;
+	height: 100%;
+	width: auto;
 }

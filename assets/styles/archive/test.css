@@ -1,0 +1,145 @@
+:root {
+  --horizon: 240px;
+  --perspectiveOffset: -20deg;
+  --rotationBelow: 80deg;
+  --transitionSpeed: 0.8s;
+}
+
+html, body {
+  overflow: hidden;
+	
+	margin:0;
+  
+}
+
+.disable-magnify {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+}
+
+
+
+
+
+.universe{
+	transform: scale(1.0);
+	background-color: black;
+	z-index: 0;
+	height: 100%;
+	width: auto;
+}
+
+.sky{
+	background-color: lightblue;
+	z-index: 1000;
+	height: 100%;
+	width: auto;
+}
+.sun{
+	position: fixed;
+	z-index: 1001;
+	top: 80px;
+	left: 80px;
+	background-color: yellow;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+}
+
+.cloud{
+	position: fixed;
+	z-index: 1010;
+	top: 200px;
+	left: 150px;
+	background-color: white;
+	width: 300px;
+	height: 100px;
+	border-radius: 70%;
+}
+
+.world{
+	perspective: 2000px;
+	perspective-origin: top center;
+  position: fixed;
+  z-index: 2000;
+  top: 400px;
+  width: 200%;
+  left: -50%;
+  height: 64%;
+  
+
+}
+.plate{
+	  transform-style: preserve-3d;
+  transform-origin: top center;
+  	z-index: 2002;
+  	  transform: rotateX(20deg);
+  	transition: all var(--transitionSpeed);
+}
+.land {
+  
+  background-color: white;
+
+	width: 100%;
+	height: 100%;
+}
+
+
+.dog {
+
+	transform: rotateX(-20deg) translateY(-20px);
+  position: fixed;
+  transform-origin: bottom center;
+  top: 120px;
+  left: 50%;
+  width: 158px; 
+  height: 85px;
+  z-index: 30;
+  
+  background: url(/sprites/dog/dog-sprite.png);  
+  background-repeat: no-repeat;
+  
+}
+
+
+
+
+
+.below {
+  
+  
+  transform: rotateX(88deg);
+  transition: all var(--transitionSpeed);
+}
+
+.above {
+  transform: rotateX(20deg);
+  transition: all var(--transitionSpeed);
+
+}
+.stay-above{
+	
+	transform: rotateX(-88deg);
+	transition:  var(--transitionSpeed);
+}
+
+.return-above{
+	transform: rotateX(-20deg) translateY(-25px);
+	transition:  var(--transitionSpeed);
+
+}
+
+
+/* OC animation */
+@keyframes walk-key {
+   100% { background-position: -1141px; }
+}
+.walk-movement {
+  animation: walk-key 0.25s steps(7) infinite;
+}
+.turn-around {
+  transform: scaleX(-1);
+}
+
+
+

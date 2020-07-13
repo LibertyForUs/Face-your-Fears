@@ -1,0 +1,24 @@
+{
+  "name": "face-your-fears",
+  "version": "1.0.0",
+  "description": "game allows you to help everyone face your fears",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libertyforus/face-your-fears.git"
+  },
+  "author": "Liberty and Cort Fritz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/libertyforus/face-your-fears/issues"
+  },
+  "homepage": "https://github.com/libertyforus/face-your-fears#readme",
+  "dependencies": {
+    "body-scroll-lock": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}
