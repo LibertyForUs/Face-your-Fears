@@ -1,4 +1,7 @@
+const normalOCSpeed = 3;
 
+// for future "shift mode" for running
+//const fastOCSpeed = 9;
 
 
 var oc = document.getElementById("oc");
@@ -10,7 +13,7 @@ function createAttribute(element, name, value){
   element.setAttributeNode(a);
 }
 createAttribute(oc,"dx",0);
-createAttribute(oc,"speed",3);
+createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
 
