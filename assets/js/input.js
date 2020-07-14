@@ -58,27 +58,33 @@ window.addEventListener('touchend', function onFirstTouch(event) {
 
 
 document.addEventListener('keydown', function(event) {
-    const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-    
+	const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+	
     switch (key) {
 	    case "ArrowLeft":
+		case "a":
 	    	ocMoveLeft(oc)
         break;
 	    case "ArrowRight":
+		case "d":
 	    	ocMoveRight(oc)
         break;
-      case "ArrowDown":
+	  case "ArrowDown":
+	  case "s":
       	worldGoBelow()
       	break;
       case "ArrowUp":
+	  case 'w':
       	worldGoAbove()
       	break;
       case "Esc":
       case "Escape":
       	ocStretch()
-      	break;
-
-		}
+		  break;
+	  case " ":
+		  debugger;
+	  break;
+	}
 });
 
 document.addEventListener('keyup', function(event) {
