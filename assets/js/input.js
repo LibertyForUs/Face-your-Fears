@@ -58,7 +58,8 @@ window.addEventListener('touchend', function onFirstTouch(event) {
 
 
 document.addEventListener('keydown', function(event) {
-	const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+	const key = event.key, // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+		  plate = document.querySelector('.plate'); // Plate's classList tells us the world state (.shifting, .above or .below classes)
 	
     switch (key) {
 	    case "ArrowLeft":
@@ -82,7 +83,13 @@ document.addEventListener('keydown', function(event) {
       	ocStretch()
 		  break;
 	  case " ":
-		  debugger;
+		if(!plate.classList.contains('shifting')){
+			if(plate.classList.contains('above')){
+				worldGoBelow();
+			}else{
+				worldGoAbove();
+			}
+		}
 	  break;
 	}
 });
