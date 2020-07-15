@@ -20,8 +20,8 @@ function worldGoBelow(){
 }
 
 function worldGoAbove(){
-	ocRise();
 	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("above")[0]){
+		ocRise();
 		var p = document.getElementById("plate");
 		var d = document.getElementById("dog");
 		
