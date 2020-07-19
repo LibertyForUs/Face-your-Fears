@@ -1,3 +1,4 @@
+var isMouseDown = false;
 
 document.ontouchmove = function(event){
   event.preventDefault();
@@ -6,12 +7,17 @@ document.ontouchend = (e) => {
   e.preventDefault();
 };
 window.addEventListener('mousedown', e => {
+  isMouseDown = true;
   const x = e.clientX;
   const y = e.clientY;
   
   ocReach(x,y);
 
 });
+
+window.addEventListener('mouseup', e => {
+	isMouseDown = false;
+})
 
 window.addEventListener('touchstart', function onFirstTouch(event) {
 	var oc = document.getElementById("oc");
