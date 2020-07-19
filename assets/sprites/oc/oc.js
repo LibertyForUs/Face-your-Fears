@@ -5,6 +5,7 @@ var isDragMode = false;
 
 
 var oc = document.getElementById("oc");
+
 oc.style.left = '1200px';
 
 function createAttribute(element, name, value){
@@ -79,12 +80,14 @@ function ocReach(targetX, targetY){
 
   var pickUp, putDown;
   holdables.map(e => {
-    if(intersects(targetX,targetY,e)){
+    if (!!heldItem){
+      putDown = e;
+      oc.classList.remove('oc-carrying');
+      heldItem = null;
+    }else if(intersects(targetX,targetY,e)){
       pickUp = e;
     }
-    else if(intersects(armLeft,armTop,e)){
-      putDown = e;
-    }
+
   })
 
   hardpoints.map(o => {
@@ -150,6 +153,12 @@ function ocReach(targetX, targetY){
     arms.style.width = armWidth;
     if(armWidth > 5){
       window.setTimeout(shrink,50);
+    }else{
+      // Item has been pulled in, now we're carrying it around
+      if(!!pickUp){
+        heldItem = pickUp;
+        oc.classList.add('oc-carrying');
+      }
     }
 
   }
@@ -169,19 +178,11 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }
     else {
-
-      if(isDragMode){
-
-        if(typeof pickUp !== undefined){
-          dragObject(pickUp);
-
-        }else if (typeof putDown !== undefined){
-          dragObject(putDown)
-        } 
-        
-      }else{
-        window.setTimeout(shrink,200);
+      if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
+      {
+        putDown.style.top = 0;
       }
+      window.setTimeout(shrink,200);
     }
 
   }
@@ -219,12 +220,27 @@ var timer = setInterval(function() {
   const l = parseInt(oc.style.left, 10);
   const newLeft = safeX( l + dl );
   oc.style.left = newLeft; //+ "px";
+
+  holdItem(heldItem);
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
   //   clearInterval( timer );
   // }
 }, 20);
+
+function holdItem(item){
+  if(!!item)
+  {
+    const ocRect = oc.getBoundingClientRect();
+  item.style.top = oc
+  if(oc.classList.contains('turn-around')){
+    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
+  }else{
+    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
+  }
+  }
+}
 
 
 function ocSink(){

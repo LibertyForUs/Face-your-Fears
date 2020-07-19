@@ -81,3 +81,4 @@ function degToRad(angle){
 
 var holdables = [];
 var hardpoints = [];
+var heldItem;

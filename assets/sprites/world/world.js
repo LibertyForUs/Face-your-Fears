@@ -1,21 +1,21 @@
 
 
 function worldGoBelow(){
-	ocSink();
+	if(!heldItem){
 
-	if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("below")[0]){
-		var p = document.getElementById("plate");
-		var d = document.getElementById("dog");
-		
-	
-		
-		
+		ocSink();
 
-		d.classList.add("stay-above");
-		d.classList.remove("return-above");
-		p.classList.add("below");
-		p.classList.remove("above");
-	}	
+		if(!document.getElementsByClassName("shifting")[0] && !document.getElementsByClassName("below")[0]){
+			var p = document.getElementById("plate");
+			var d = document.getElementById("dog");
+
+			d.classList.add("stay-above");
+			d.classList.remove("return-above");
+			p.classList.add("below");
+			p.classList.remove("above");
+		}	
+
+	}
 	
 }
 
