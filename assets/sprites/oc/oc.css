@@ -18,14 +18,43 @@
 }
 
 @keyframes stretch-key {
-  100% { background-position: -848px}
+  from { background-position: 0px }
+  to { background-position: -848px}
 }
 
 @keyframes reverse-stretch-key {
   100% { background-position: 848px}
 }
 
+.oc.oc-carrying:before {
+  content: ' ';
+    width: 9px;
+    height: 48px;
+    background-color: white;
+    z-index: 5000;
+    display: block;
+    position: absolute;
+    left: 54px;
+    top: 133px;
+}
 
+.oc.oc-carrying:not(.oc-stretch):after {
+  content: ' ';
+  width: 90px;
+  height: 10px;
+  background-color: black;
+  z-index: 5000;
+  display: block;
+  position: absolute;
+  left: 54px;
+  top: 133px;
+  /* border-radius: 10px; */
+  transform: rotate(4deg);
+}
+
+/* .oc.oc-carrying.turn-around:not(.oc-stretch):after {
+
+} */
 
 
 
@@ -58,7 +87,7 @@
 .oc-sink {
   width: 100px; 
   height: 300px;
-
+  animation-fill-mode: forwards;
   background: url(/sprites/oc/sink-small.png) left center; 
   animation: sink-key 0.8s steps(15); 
   
@@ -79,8 +108,12 @@
   width: 106px; 
   height: 301px;
   background: url(/sprites/oc/oc-stretch-body.png); 
+  animation-fill-mode: forwards;
   animation: stretch-key 0.8s steps(8);
+}
 
+.oc-stretch-drag {
+  /* animation-fill-mode: forwards; */
 }
 
 .oc-reverse-stretch {
