@@ -11,6 +11,11 @@ window.addEventListener('mousedown', e => {
   const x = e.clientX;
   const y = e.clientY;
   
+  if(x < getPosition(oc).left){
+	  oc.classList.add('turn-around');
+  }else if(x > getPosition(oc).left + oc.clientWidth){
+	oc.classList.remove('turn-around');
+  }
   ocReach(x,y);
 
 });
