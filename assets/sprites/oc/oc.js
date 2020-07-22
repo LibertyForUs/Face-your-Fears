@@ -1,5 +1,5 @@
 const normalOCSpeed = 3;
-var isDragMode = false;
+
 // for future "shift mode" for running
 //const fastOCSpeed = 9;
 
@@ -27,15 +27,9 @@ function ocFacesLeft(){
 
 function ocReach(targetX, targetY){
 
-  // Drag grabbed objects, rather than pull them in, if the user holds the mouse down
-  window.setTimeout( () => {
-    if(isMouseDown){
-      isDragMode = true;
-      oc.classList.add('oc-stretch-drag');
-    }
-  }, 500);
-
   oc.classList.add("oc-stretch");
+  oc.classList.remove('walk-movement');
+	oc.setAttribute("dx", 0);
   
   let arms = document.createElement("DIV");
   arms.classList.add('arms');
@@ -46,22 +40,27 @@ function ocReach(targetX, targetY){
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
-    oc.removeChild(arms);
+    if(oc.hasChildNodes(arms)){
+      oc.removeChild(arms);
+    }
   }
 
   function reverseStretch(){
-    if(!isDragMode)
-    {
-      oc.classList.remove("oc-stretch");
-      oc.classList.add("oc-reverse-stretch");
-      window.setTimeout(endTransition, 400);
-    }
+    oc.classList.remove("oc-stretch");
+    oc.classList.add("oc-reverse-stretch");
+    window.setTimeout(endTransition, 400);
   }
+
+  // If we're holding something, it's coordinates are matched with the extending arm (starts from OC's position)
+  if(!!heldItem){
+    heldItem.style.left = oc.style.left;
+    heldItem.style.top = (getPosition(oc).top - oc.clientHeight)
+  }
+
   var armWidth = 5;
   const armPosition = getPosition(arms);
   armLeft = armPosition.left;
   armTop = armPosition.top;
-  
   
   reachDx = targetX - armLeft;
   reachDy = targetY - armTop;
@@ -99,49 +98,8 @@ function ocReach(targetX, targetY){
   
   const reachBackwards = Math.sign(baseAngle - 180);
 
-  
-  function dragObject(obj){
-    // Qasim: Suspect that bodyscroll locking is causing this gap between obj.style.left's reported value, and the mouseEvent's clientX
-    // Current workaround is to calculate the left and top offset and add it in. 
-    // In the longer run, rendering on a <canvas> element would eliminate DOM element scrolling issues
-    const leftOffset = Number( obj.style.left.slice(0, -2) ) - targetX,
-           topOffset = Number( obj.style.top.slice(0, -2) ) - targetY;
-    
-    function movementEventHandler (event) {
-      obj.style.left = event.pageX + leftOffset;
-      obj.style.top = event.pageY + topOffset;
-
-      const armPosition = getPosition(arms);
-      armLeft = armPosition.left;
-      armTop = armPosition.top;
-      
-      
-      reachDx = event.clientX - armLeft;
-      reachDy = event.clientY - armTop;
-      adx = Math.abs(reachDx);
-      ady = Math.abs(reachDy);
-      maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
-
-      
-      const baseAngle = angle(armLeft,armTop, event.clientX, event.clientY);
-      const armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
-
-
-      const rotation = "rotate(" + armAngle + "deg)";
-      arms.style.transform = rotation;
-      arms.style.zIndex = 3000;
-    }
-
-    window.addEventListener('mousemove', movementEventHandler);
-    window.addEventListener('mouseup', () => {
-      window.removeEventListener('mousemove', movementEventHandler);
-      isDragMode = false;
-      reverseStretch();
-    })
-  }
 
   function shrink(){
-
     const dArmWidth = maxArmLength / 8;
 
     const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
@@ -151,13 +109,30 @@ function ocReach(targetX, targetY){
 
     armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;
-    if(armWidth > 5){
-      window.setTimeout(shrink,50);
-    }else{
-      // Item has been pulled in, now we're carrying it around
-      if(!!pickUp){
+
+    if(!!pickUp){
+      var objOCDistance; // distance between OC and pickUp object's nearest side
+      if(oc.classList.contains('turn-around')){
+        objOCDistance = Math.abs((getPosition(pickUp).left + pickUp.clientWidth) - getPosition(oc).left);
+      }else{
+        objOCDistance = Math.abs(getPosition(pickUp).left - (getPosition(oc).left + oc.clientWidth));
+      }
+
+      // Distance from OC's side to the object
+      if(objOCDistance <= pickUp.clientWidth){
         heldItem = pickUp;
         oc.classList.add('oc-carrying');
+        heldItem.style.top = getPosition(oc).top - oc.clientHeight;
+        heldItem.style.left = getPosition(oc).left - oc.clientWidth
+        endTransition();
+      }else{
+        window.setTimeout(shrink,50);
+      }
+      
+    }else{
+      // No pickup, regular arm stretchy back
+      if(armWidth > 5){
+        window.setTimeout(shrink,50);  
       }
     }
 
@@ -178,6 +153,7 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }
     else {
+      // If an item is being put in the sky, it's set down on the horizon instead
       if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
       {
         putDown.style.top = 0;
@@ -195,22 +171,24 @@ function ocReach(targetX, targetY){
 
 
 function ocMoveLeft(oc){
-  // var left = parseInt(oc.style.left,10);
-
-	oc.classList.add('walk-movement');
-  oc.classList.add('turn-around');
-  
-  
-  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
-
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch'))
+  { 
+    oc.classList.add('walk-movement');
+    oc.classList.add('turn-around');
+    
+    
+    oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
+  }
 }
 
 function ocMoveRight(oc){
-	oc.classList.add('walk-movement');
-  oc.classList.remove('turn-around');
-  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
-  // var left = parseInt(oc.style.left,10);
-  
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch'))
+  {
+    oc.classList.add('walk-movement');
+    oc.classList.remove('turn-around');
+    oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
+    // var left = parseInt(oc.style.left,10);
+  }
 }
 
 
@@ -230,15 +208,14 @@ var timer = setInterval(function() {
 }, 20);
 
 function holdItem(item){
-  if(!!item)
-  {
+  if(!!item){
     const ocRect = oc.getBoundingClientRect();
-  item.style.top = oc
-  if(oc.classList.contains('turn-around')){
-    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
-  }else{
-    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
-  }
+    item.style.top = oc
+    if(oc.classList.contains('turn-around')){
+      item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
+    }else{
+      item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
+    }
   }
 }
 
