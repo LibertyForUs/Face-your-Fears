@@ -1,7 +1,7 @@
 
 
 function worldGoBelow(){
-	if(!heldItem && !oc.classList.contains('oc-stretch') && oc.classList.contains('oc-reverse-stretch')){
+	if(!Boolean(heldItem) && !oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
 
 		ocSink();
 
