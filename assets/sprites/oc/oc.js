@@ -14,16 +14,32 @@ function createAttribute(element, name, value){
   element.setAttributeNode(a);
 }
 createAttribute(oc,"dx",0);
+createAttribute(oc,"dz",0);
+
+createAttribute(oc,"z",2);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
-
+setPosition(oc); // Setting initial Z position
 
 
 function ocFacesLeft(){
   return oc.classList.contains("turn-around");
 }
 
+// orients Oc towards the left or right.
+// Explaination: We're setting css transforms in JS, to scale Oc for the Z axis.
+// This means that the .turn-around classes transform: scalex(-1) no longer works
+// css transforms don't stack, and all css transforms are overridden once a transform is set by JS
+function ocFaceLeft(){
+  oc.classList.add("turn-around");
+  setPosition(oc);
+}
+
+function ocFaceRight(){
+  oc.classList.remove("turn-around");
+  setPosition(oc);
+}
 
 function ocReach(targetX, targetY){
 
@@ -153,7 +169,7 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }
     else {
-      // If an item is being put in the sky, it's set down on the horizon instead
+      // If an item is dropped in the sky, it's set down on the horizon instead
       if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
       {
         putDown.style.top = 0;
@@ -171,26 +187,99 @@ function ocReach(targetX, targetY){
 
 
 function ocMoveLeft(oc){
-  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch'))
-  { 
-    oc.classList.add('walk-movement');
-    oc.classList.add('turn-around');
-    
-    
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){ 
+    oc.classList.add('walk-movement', 'turn-around');
+    setPosition(oc); // sets z-position & CSS transform
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
   }
 }
 
 function ocMoveRight(oc){
-  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch'))
-  {
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
     oc.classList.add('walk-movement');
     oc.classList.remove('turn-around');
+    setPosition(oc);
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
     // var left = parseInt(oc.style.left,10);
   }
 }
 
+// moves Oc towards the horizon
+function ocMoveOut(event){
+  if(event.repeat) return;
+
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+    oc.classList.add('walk-movement');
+    oc.classList.remove('turn-around');
+    
+    var upKeyPressed = true;
+    console.log('ocMoveOut');
+    function moveOcUp(){
+      let zVal = Number(oc.getAttribute('z')),
+          updatedZ = zVal + (normalOCSpeed * 0.015);
+
+      oc.setAttribute('z', Math.min( updatedZ, maxZ));
+      setPosition(oc);
+
+      if(upKeyPressed){
+        window.requestAnimationFrame(moveOcUp);
+      }
+    }
+
+    window.requestAnimationFrame(moveOcUp);
+    window.addEventListener('keyup', keyUpHandler);
+
+    function keyUpHandler(event) {
+      if( ['w', 'ArrowUp'].includes( event.key) ){
+        upKeyPressed = false;
+        window.removeEventListener('keyup', keyUpHandler);
+      }
+    }
+
+  }
+}
+
+
+
+// moves Oc closer to the 4th wall
+function ocMoveIn(event){
+  if(event.repeat) return;
+
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+    oc.classList.add('walk-movement');
+    oc.classList.add('turn-around');
+    
+    var downKeyPressed = true;
+    console.log('ocMoveOut');
+    function moveOcUp(){
+      let zVal = Number(oc.getAttribute('z')),
+          updatedZ = zVal - (normalOCSpeed * 0.015);
+
+      oc.setAttribute('z', Math.max( updatedZ, 0));
+      setPosition(oc);
+
+      if(downKeyPressed){
+        window.requestAnimationFrame(moveOcUp);
+      }
+    }
+
+    window.requestAnimationFrame(moveOcUp);
+    window.addEventListener('keyup', keyUpHandler);
+
+    function keyUpHandler(event) {
+      if( ['s', 'ArrowDown'].includes( event.key) ){
+        downKeyPressed = false;
+        window.removeEventListener('keyup', keyUpHandler);
+      }
+    }
+
+  }
+}
+
+// onFrame function for ocMoveIn() and ocMoveOut()
+function depthMovementHandler(){
+
+}
 
 
 var timer = setInterval(function() {
@@ -199,7 +288,9 @@ var timer = setInterval(function() {
   const newLeft = safeX( l + dl );
   oc.style.left = newLeft; //+ "px";
 
-  holdItem(heldItem);
+  if(!!heldItem){
+    holdItem(heldItem);
+  }
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
@@ -208,14 +299,12 @@ var timer = setInterval(function() {
 }, 20);
 
 function holdItem(item){
-  if(!!item){
-    const ocRect = oc.getBoundingClientRect();
-    item.style.top = oc
-    if(oc.classList.contains('turn-around')){
-      item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
-    }else{
-      item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
-    }
+  const ocRect = oc.getBoundingClientRect();
+  item.style.top = oc
+  if(oc.classList.contains('turn-around')){
+    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
+  }else{
+    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
   }
 }
 

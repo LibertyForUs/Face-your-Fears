@@ -61,7 +61,8 @@ window.addEventListener('touchstart', function onFirstTouch(event) {
 
 window.addEventListener('touchend', function onFirstTouch(event) {
   document.getElementById("oc").classList.remove('walk-movement');
-	oc.setAttribute("dx",0);
+	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
  
 }, false);
 
@@ -83,11 +84,11 @@ document.addEventListener('keydown', function(event) {
         break;
 	  case "ArrowDown":
 	  case "s":
-      	worldGoBelow()
+      	ocMoveIn(event);
       	break;
       case "ArrowUp":
 	  case 'w':
-      	worldGoAbove()
+		ocMoveOut(event);
       	break;
       case "Esc":
       case "Escape":
@@ -109,5 +110,6 @@ document.addEventListener('keyup', function(event) {
 	
 	document.getElementById("oc").classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
 });
 
