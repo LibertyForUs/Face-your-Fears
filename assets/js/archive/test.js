@@ -40,22 +40,22 @@ function worldGoAbove(){
 	
 }
 
-document.addEventListener('keydown', function(event) {
-    const key = event.key; 
+// document.addEventListener('keydown', function(event) {
+//     const key = event.key; 
     
-    switch (key) {
-	    case "ArrowLeft":
+//     switch (key) {
+// 	    case "ArrowLeft":
 	    	
-        break;
-	    case "ArrowRight":
+//         break;
+// 	    case "ArrowRight":
 	    	
-        break;
-      case "ArrowDown":
-      	worldGoBelow()
-      	break;
-      case "ArrowUp":
-      	worldGoAbove()
-      	break;
-		}
-});
+//         break;
+//       case "ArrowDown":
+//       	worldGoBelow()
+//       	break;
+//       case "ArrowUp":
+//       	worldGoAbove()
+//       	break;
+// 		}
+// });
 
