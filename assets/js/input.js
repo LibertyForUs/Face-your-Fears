@@ -77,39 +77,37 @@ document.addEventListener('keydown', function(event) {
 	
     switch (key) {
 	    case "ArrowLeft":
-		case "a":
+			case "a":
 	    	ocMoveLeft(oc)
         break;
 	    case "ArrowRight":
-		case "d":
+			case "d":
 	    	ocMoveRight(oc)
         break;
-	  case "ArrowDown":
-	  case "s":
+	  	case "ArrowDown":
+	  	case "s":
       	ocMoveIn(event);
       	break;
-      case "ArrowUp":
-	  case 'w':
-		ocMoveOut(event);
+    	case "ArrowUp":
+	  	case 'w':
+				ocMoveOut(event);
       	break;
-      case "Esc":
-      case "Escape":
-      	ocStretch()
+			case "Esc":
+			case "Escape":
 		  break;
 	  case " ":
-		if(!plate.classList.contains('shifting')){
-			if(plate.classList.contains('above')){
-				worldGoBelow();
-			}else{
-				worldGoAbove();
+			if(!plate.classList.contains('shifting')){
+				if(plate.classList.contains('above')){
+					worldGoBelow();
+				}else{
+					worldGoAbove();
+				}
 			}
-		}
 	  break;
 	}
 });
 
 document.addEventListener('keyup', function(event) {
-	
 	document.getElementById("oc").classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
 	oc.setAttribute("dz", 0);
