@@ -56,8 +56,8 @@
 }
 
 .oc-sink {
-  width: 100px; 
-  height: 300px;
+  width: 105px; 
+  height: 280px;
 
   background: url(/sprites/oc/sink-small.png) left center; 
   animation: sink-key 0.8s steps(15); 
@@ -66,8 +66,8 @@
 
 
 .oc-rise {
-  width: 100px; 
-  height: 210px;
+  width: 105px; 
+  height: 280px;
   /*xtransform: rotateX(-15deg) translateY(-15px);*/
   background: url(/sprites/oc/oc-rise.png); 
   animation: rise-key 0.8s steps(10);
@@ -76,16 +76,16 @@
 
 
 .oc-stretch {
-  width: 106px; 
-  height: 301px;
+  width: 105px; 
+  height: 280px;
   background: url(/sprites/oc/oc-stretch-body.png); 
   animation: stretch-key 0.8s steps(8);
 
 }
 
 .oc-reverse-stretch {
-  width: 106px; 
-  height: 301px;
+  width: 105px; 
+  height: 280px;
   background: url(/sprites/oc/oc-stretch-body.png); 
   animation: reverse-stretch-key 0.4s steps(8);
 
@@ -133,3 +133,4 @@
   transform-origin: center left;
   /*transform: rotate(125deg);*/
 
+}
