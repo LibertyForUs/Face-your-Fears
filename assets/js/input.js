@@ -15,7 +15,9 @@ window.addEventListener('mousedown', e => {
 	  oc.classList.add('turn-around');
   }else if(x > getPosition(oc).left + oc.clientWidth){
 	oc.classList.remove('turn-around');
+
   }
+  setPosition(oc);
   ocReach(x,y);
 
 });
@@ -61,7 +63,8 @@ window.addEventListener('touchstart', function onFirstTouch(event) {
 
 window.addEventListener('touchend', function onFirstTouch(event) {
   document.getElementById("oc").classList.remove('walk-movement');
-	oc.setAttribute("dx",0);
+	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
  
 }, false);
 
@@ -74,40 +77,39 @@ document.addEventListener('keydown', function(event) {
 	
     switch (key) {
 	    case "ArrowLeft":
-		case "a":
+			case "a":
 	    	ocMoveLeft(oc)
         break;
 	    case "ArrowRight":
-		case "d":
+			case "d":
 	    	ocMoveRight(oc)
         break;
-	  case "ArrowDown":
-	  case "s":
-      	worldGoBelow()
+	  	case "ArrowDown":
+	  	case "s":
+      	ocMoveIn(event);
       	break;
-      case "ArrowUp":
-	  case 'w':
-      	worldGoAbove()
+    	case "ArrowUp":
+	  	case 'w':
+				ocMoveOut(event);
       	break;
-      case "Esc":
-      case "Escape":
-      	ocStretch()
+			case "Esc":
+			case "Escape":
 		  break;
 	  case " ":
-		if(!plate.classList.contains('shifting')){
-			if(plate.classList.contains('above')){
-				worldGoBelow();
-			}else{
-				worldGoAbove();
+			if(!plate.classList.contains('shifting')){
+				if(plate.classList.contains('above')){
+					worldGoBelow();
+				}else{
+					worldGoAbove();
+				}
 			}
-		}
 	  break;
 	}
 });
 
 document.addEventListener('keyup', function(event) {
-	
 	document.getElementById("oc").classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
 });
 

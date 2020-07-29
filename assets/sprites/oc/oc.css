@@ -26,6 +26,17 @@
   100% { background-position: 848px}
 }
 
+@keyframes carrying-key {
+  12.5% { transform:rotate(-4deg); }
+  25% { transform:rotate(-1deg); }
+  37.5% { transform:rotate(0deg); }
+  50% { transform:rotate(-1deg); }
+  62.5% { transform:rotate(-5deg); }
+  75% { transform:rotate(-1deg); }
+  87.5% { transform:rotate(-0deg); }
+  100% { transform:rotate(0deg); }
+}
+
 .oc.oc-carrying:before {
   content: ' ';
     width: 9px;
@@ -48,12 +59,23 @@
   position: absolute;
   left: 54px;
   top: 133px;
-  /* border-radius: 10px; */
-  transform: rotate(4deg);
+  transform-origin: 100% 100%;
+  transform: rotate(-1deg);
 }
 
-/* .oc.oc-carrying.turn-around:not(.oc-stretch):after {
+.oc.oc-carrying.walk-movement:not(.oc-stretch):after {
+  animation: carrying-key 1.31s steps(1) infinite;
+}
 
+.oc.oc-carrying.walk-movement.turn-around:not(.oc-stretch):after {
+  transform-origin: 100% 0%;
+}
+
+
+
+
+/* .oc.oc-carrying.turn-around:not(.oc-stretch):after {
+animation: walk-key 1.31s steps(1) infinite;
 } */
 
 

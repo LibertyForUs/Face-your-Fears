@@ -1,7 +1,7 @@
 
 
 function worldGoBelow(){
-	if(!heldItem && !oc.classList.contains('oc-stretch') && oc.classList.contains('oc-reverse-stretch')){
+	if(!Boolean(heldItem) && !oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
 
 		ocSink();
 
@@ -33,37 +33,5 @@ function worldGoAbove(){
 		d.classList.add("return-above");
 		d.classList.remove("stay-above");
 
-	}
-
-
-	
-
-
-	//p.classList.add("above");
-	//w.classList.remove("below");
-
-	
-	
-	//t.classList.add("return-above");
-	
+	}	
 }
-
-document.addEventListener('keydown', function(event) {
-    const key = event.key; 
-    
-    switch (key) {
-	    case "ArrowLeft":
-	    	
-        break;
-	    case "ArrowRight":
-	    	
-        break;
-      case "ArrowDown":
-      	worldGoBelow()
-      	break;
-      case "ArrowUp":
-      	worldGoAbove()
-      	break;
-		}
-});
-
