@@ -5,6 +5,7 @@ const normalOCSpeed = 3;
 
 
 var oc = document.getElementById("oc");
+
 oc.style.left = '1200px';
 
 function createAttribute(element, name, value){
@@ -13,22 +14,41 @@ function createAttribute(element, name, value){
   element.setAttributeNode(a);
 }
 createAttribute(oc,"dx",0);
+createAttribute(oc,"dz",0);
+
+createAttribute(oc,"z",2);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
-
+setPosition(oc); // Setting initial Z position
 
 
 function ocFacesLeft(){
   return oc.classList.contains("turn-around");
 }
 
+// orients Oc towards the left or right.
+// Explaination: We're setting css transforms in JS, to scale Oc for the Z axis.
+// This means that the .turn-around classes transform: scalex(-1) no longer works
+// css transforms don't stack, and all css transforms are overridden once a transform is set by JS
+function ocFaceLeft(){
+  oc.classList.add("turn-around");
+  setPosition(oc);
+}
+
+function ocFaceRight(){
+  oc.classList.remove("turn-around");
+  setPosition(oc);
+}
 
 function ocReach(targetX, targetY){
+
   oc.classList.add("oc-stretch");
-
+  oc.classList.remove('walk-movement');
+	oc.setAttribute("dx", 0);
+  
   let arms = document.createElement("DIV");
-
+  arms.classList.add('arms');
   arms.classList.add("oc-arms-grow");
 
   //arms.classList.add("triangle-right");
@@ -36,21 +56,27 @@ function ocReach(targetX, targetY){
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
-    oc.removeChild(arms);
-
+    if(oc.hasChildNodes(arms)){
+      oc.removeChild(arms);
+    }
   }
 
   function reverseStretch(){
     oc.classList.remove("oc-stretch");
     oc.classList.add("oc-reverse-stretch");
     window.setTimeout(endTransition, 400);
-
   }
+
+  // If we're holding something, it's coordinates are matched with the extending arm (starts from OC's position)
+  if(!!heldItem){
+    heldItem.style.left = oc.style.left;
+    heldItem.style.top = (getPosition(oc).top - oc.clientHeight)
+  }
+
   var armWidth = 5;
   const armPosition = getPosition(arms);
   armLeft = armPosition.left;
   armTop = armPosition.top;
-  
   
   reachDx = targetX - armLeft;
   reachDy = targetY - armTop;
@@ -66,14 +92,17 @@ function ocReach(targetX, targetY){
   const rotation = "rotate(" + armAngle + "deg)";
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
+
   var pickUp, putDown;
   holdables.map(e => {
-    if(intersects(targetX,targetY,e)){
+    if (!!heldItem){
+      putDown = e;
+      oc.classList.remove('oc-carrying');
+      heldItem = null;
+    }else if(intersects(targetX,targetY,e)){
       pickUp = e;
     }
-    else if(intersects(armLeft,armTop,e)){
-      putDown = e;
-    }
+
   })
 
   hardpoints.map(o => {
@@ -85,11 +114,8 @@ function ocReach(targetX, targetY){
   
   const reachBackwards = Math.sign(baseAngle - 180);
 
-  
-
 
   function shrink(){
-
     const dArmWidth = maxArmLength / 8;
 
     const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
@@ -99,8 +125,31 @@ function ocReach(targetX, targetY){
 
     armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;
-    if(armWidth > 5){
-      window.setTimeout(shrink,50);
+
+    if(!!pickUp){
+      var objOCDistance; // distance between OC and pickUp object's nearest side
+      if(oc.classList.contains('turn-around')){
+        objOCDistance = Math.abs((getPosition(pickUp).left + pickUp.clientWidth) - getPosition(oc).left);
+      }else{
+        objOCDistance = Math.abs(getPosition(pickUp).left - (getPosition(oc).left + oc.clientWidth));
+      }
+
+      // Distance from OC's side to the object
+      if(objOCDistance <= pickUp.clientWidth){
+        heldItem = pickUp;
+        oc.classList.add('oc-carrying');
+        heldItem.style.top = getPosition(oc).top - oc.clientHeight;
+        heldItem.style.left = getPosition(oc).left - oc.clientWidth
+        endTransition();
+      }else{
+        window.setTimeout(shrink,50);
+      }
+      
+    }else{
+      // No pickup, regular arm stretchy back
+      if(armWidth > 5){
+        window.setTimeout(shrink,50);  
+      }
     }
 
   }
@@ -120,7 +169,11 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }
     else {
-
+      // If an item is dropped in the sky, it's set down on the horizon instead
+      if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
+      {
+        putDown.style.top = 0;
+      }
       window.setTimeout(shrink,200);
     }
 
@@ -134,24 +187,99 @@ function ocReach(targetX, targetY){
 
 
 function ocMoveLeft(oc){
-  // var left = parseInt(oc.style.left,10);
-
-	oc.classList.add('walk-movement');
-  oc.classList.add('turn-around');
-  
-  
-  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
-
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){ 
+    oc.classList.add('walk-movement', 'turn-around');
+    setPosition(oc); // sets z-position & CSS transform
+    oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
+  }
 }
 
 function ocMoveRight(oc){
-	oc.classList.add('walk-movement');
-  oc.classList.remove('turn-around');
-  oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
-  // var left = parseInt(oc.style.left,10);
-  
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+    oc.classList.add('walk-movement');
+    oc.classList.remove('turn-around');
+    setPosition(oc);
+    oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
+    // var left = parseInt(oc.style.left,10);
+  }
 }
 
+// moves Oc towards the horizon
+function ocMoveOut(event){
+  if(event.repeat) return;
+
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+    oc.classList.add('walk-movement');
+    oc.classList.remove('turn-around');
+    
+    var upKeyPressed = true;
+    console.log('ocMoveOut');
+    function moveOcUp(){
+      let zVal = Number(oc.getAttribute('z')),
+          updatedZ = zVal + (normalOCSpeed * 0.015);
+
+      oc.setAttribute('z', Math.min( updatedZ, maxZ));
+      setPosition(oc);
+
+      if(upKeyPressed){
+        window.requestAnimationFrame(moveOcUp);
+      }
+    }
+
+    window.requestAnimationFrame(moveOcUp);
+    window.addEventListener('keyup', keyUpHandler);
+
+    function keyUpHandler(event) {
+      if( ['w', 'ArrowUp'].includes( event.key) ){
+        upKeyPressed = false;
+        window.removeEventListener('keyup', keyUpHandler);
+      }
+    }
+
+  }
+}
+
+
+
+// moves Oc closer to the 4th wall
+function ocMoveIn(event){
+  if(event.repeat) return;
+
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+    oc.classList.add('walk-movement');
+    oc.classList.add('turn-around');
+    
+    var downKeyPressed = true;
+    console.log('ocMoveOut');
+    function moveOcUp(){
+      let zVal = Number(oc.getAttribute('z')),
+          updatedZ = zVal - (normalOCSpeed * 0.015);
+
+      oc.setAttribute('z', Math.max( updatedZ, 0));
+      setPosition(oc);
+
+      if(downKeyPressed){
+        window.requestAnimationFrame(moveOcUp);
+      }
+    }
+
+    window.requestAnimationFrame(moveOcUp);
+    window.addEventListener('keyup', keyUpHandler);
+
+    function keyUpHandler(event) {
+      if( ['s', 'ArrowDown'].includes( event.key) ){
+        downKeyPressed = false;
+        window.removeEventListener('keyup', keyUpHandler);
+      }
+    }
+
+  }
+}
+
+// onFrame function for ocMoveIn() and ocMoveOut()
+function depthMovementHandler(){
+
+}
 
 
 var timer = setInterval(function() {
@@ -159,12 +287,26 @@ var timer = setInterval(function() {
   const l = parseInt(oc.style.left, 10);
   const newLeft = safeX( l + dl );
   oc.style.left = newLeft; //+ "px";
+
+  if(!!heldItem){
+    holdItem(heldItem);
+  }
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
   //   clearInterval( timer );
   // }
 }, 20);
+
+function holdItem(item){
+  const ocRect = oc.getBoundingClientRect();
+  item.style.top = oc
+  if(oc.classList.contains('turn-around')){
+    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
+  }else{
+    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
+  }
+}
 
 
 function ocSink(){

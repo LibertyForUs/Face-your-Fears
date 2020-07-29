@@ -4,6 +4,19 @@ const Direction = {
 	up: -1,
 	down: 1
 }
+const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this much
+	  maxFilter = 20,	// The maximum desaturation / fade applied to Oc, when they're at a distance
+	  scaleDifferential = 1 - scaleDownFactor, // The scaling difference Oc undergoes
+	  maxZ = 9; //Z values range from 0 - maxZ
+
+// storing Oc's CSS transforms (so they can be overridden in JS)
+var ocTransform = {
+	rotateX: "-15deg",
+	translateY: "-15px",
+	scaleX: 1,
+	scale: 1,
+}
+
 function intersects(x,y,element){
 	pos = getPosition(element);
 	l = pos.left;
@@ -27,7 +40,26 @@ function getPosition(element) {
   }
 }
 
+// Sets an object's position in a 3D cartesian plane, reading it's z attribute
+function setPosition(element){
+	let z = Number(element.getAttribute('z')),
+		percentage = z / maxZ;
+		scale = ((1 - percentage) * scaleDifferential) + scaleDownFactor;	// Current scaling to apply to Oc. Example: (1 - (0 / 9)) * 0.4 + 0.6 [for foreground]
 
+	// Having Oc face the right way
+	if(element.classList.contains('turn-around')){
+		ocTransform.scaleX = -1;
+	}else{
+		ocTransform.scaleX = 1;
+	}
+	ocTransform.scale = scale;
+	oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY})`;
+
+	oc.style.top = 'auto';
+	oc.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
+
+	oc.style.filter = `invert(${maxFilter * percentage}%)`;
+}
 
 function safeX(x) {  
 		var w = window.width - 10000; //2800
@@ -81,3 +113,4 @@ function degToRad(angle){
 
 var holdables = [];
 var hardpoints = [];
+var heldItem;

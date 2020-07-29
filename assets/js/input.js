@@ -1,3 +1,4 @@
+var isMouseDown = false;
 
 document.ontouchmove = function(event){
   event.preventDefault();
@@ -6,12 +7,24 @@ document.ontouchend = (e) => {
   e.preventDefault();
 };
 window.addEventListener('mousedown', e => {
+  isMouseDown = true;
   const x = e.clientX;
   const y = e.clientY;
   
+  if(x < getPosition(oc).left){
+	  oc.classList.add('turn-around');
+  }else if(x > getPosition(oc).left + oc.clientWidth){
+	oc.classList.remove('turn-around');
+
+  }
+  setPosition(oc);
   ocReach(x,y);
 
 });
+
+window.addEventListener('mouseup', e => {
+	isMouseDown = false;
+})
 
 window.addEventListener('touchstart', function onFirstTouch(event) {
 	var oc = document.getElementById("oc");
@@ -50,7 +63,8 @@ window.addEventListener('touchstart', function onFirstTouch(event) {
 
 window.addEventListener('touchend', function onFirstTouch(event) {
   document.getElementById("oc").classList.remove('walk-movement');
-	oc.setAttribute("dx",0);
+	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
  
 }, false);
 
@@ -58,32 +72,44 @@ window.addEventListener('touchend', function onFirstTouch(event) {
 
 
 document.addEventListener('keydown', function(event) {
-    const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-    
+	const key = event.key, // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+		  plate = document.querySelector('.plate'); // Plate's classList tells us the world state (.shifting, .above or .below classes)
+	
     switch (key) {
 	    case "ArrowLeft":
+			case "a":
 	    	ocMoveLeft(oc)
         break;
 	    case "ArrowRight":
+			case "d":
 	    	ocMoveRight(oc)
         break;
-      case "ArrowDown":
-      	worldGoBelow()
+	  	case "ArrowDown":
+	  	case "s":
+      	ocMoveIn(event);
       	break;
-      case "ArrowUp":
-      	worldGoAbove()
+    	case "ArrowUp":
+	  	case 'w':
+				ocMoveOut(event);
       	break;
-      case "Esc":
-      case "Escape":
-      	ocStretch()
-      	break;
-
-		}
+			case "Esc":
+			case "Escape":
+		  break;
+	  case " ":
+			if(!plate.classList.contains('shifting')){
+				if(plate.classList.contains('above')){
+					worldGoBelow();
+				}else{
+					worldGoAbove();
+				}
+			}
+	  break;
+	}
 });
 
 document.addEventListener('keyup', function(event) {
-	
 	document.getElementById("oc").classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
+	oc.setAttribute("dz", 0);
 });
 
