@@ -37,6 +37,28 @@
   100% { transform:rotate(0deg); }
 }
 
+@keyframes walkback-key {
+  12.5% { background-position: 56.25px; }
+  25% { background-position: 112.5px; }
+  37.5% { background-position: 168.75px; }
+  50% { background-position: 225px; }
+  62.5% { background-position: 281.25px; }
+  75% { background-position: 337.5px; }
+  87.5% { background-position: 393.75px; }
+  100% { background-position: 450px; }
+}
+
+@keyframes walkforward-key {
+  12.5% { background-position: 55.125px; }
+  25% { background-position: 110.25px; }
+  37.5% { background-position: 165.375px; }
+  50% { background-position: 220.5px; }
+  62.5% { background-position: 275.625px; }
+  75% { background-position: 330.75px; }
+  87.5% { background-position: 385.875px; }
+  100% { background-position: 441px; }
+}
+
 .oc.oc-carrying:before {
   content: ' ';
     width: 9px;
@@ -70,14 +92,6 @@
 .oc.oc-carrying.walk-movement.turn-around:not(.oc-stretch):after {
   transform-origin: 100% 0%;
 }
-
-
-
-
-/* .oc.oc-carrying.turn-around:not(.oc-stretch):after {
-animation: walk-key 1.31s steps(1) infinite;
-} */
-
 
 
 .oc {
@@ -122,7 +136,20 @@ animation: walk-key 1.31s steps(1) infinite;
   /*xtransform: rotateX(-15deg) translateY(-15px);*/
   background: url(/sprites/oc/oc-rise.png); 
   animation: rise-key 0.8s steps(10);
+}
 
+.walk-back {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-away.png);
+  animation: walkback-key 1.31s steps(1) infinite;
+}
+
+.walk-forward {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-forward.png);
+  animation: walkforward-key 1.31s steps(1) infinite;
 }
 
 
@@ -148,7 +175,6 @@ animation: walk-key 1.31s steps(1) infinite;
 
 
 .walk-movement {
-  
   animation: walk-key 1.31s steps(1) infinite;
 }
 

@@ -75,14 +75,14 @@ function ocReach(targetX, targetY){
 
   var armWidth = 5;
   const armPosition = getPosition(arms);
-  armLeft = armPosition.left;
-  armTop = armPosition.top;
+  var armLeft = armPosition.left;
+  var armTop = armPosition.top;
   
-  reachDx = targetX - armLeft;
-  reachDy = targetY - armTop;
-  adx = Math.abs(reachDx);
-  ady = Math.abs(reachDy);
-  maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
+  var reachDx = targetX - armLeft,
+      reachDy = targetY - armTop,
+      adx = Math.abs(reachDx),
+      ady = Math.abs(reachDy),
+      maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
   
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
@@ -155,25 +155,23 @@ function ocReach(targetX, targetY){
   }
 
   function grow(){
-
-    arms.style.width = armWidth;
     
     const dArmWidth = maxArmLength / 16;
     armWidth = armWidth + dArmWidth;
 
+    arms.style.width = armWidth;
 
     const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
     moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down);
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
-    }
-    else {
+    }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
-      {
+      if(!!putDown && parseInt(putDown.style.top, 10) < 0 ){
         putDown.style.top = 0;
       }
+      
       window.setTimeout(shrink,200);
     }
 
