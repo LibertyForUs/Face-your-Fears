@@ -8,6 +8,8 @@ var oc = document.getElementById("oc");
 
 oc.style.left = '1200px';
 
+oc.classList.add('oc-right');
+
 function createAttribute(element, name, value){
   var a = document.createAttribute(name);
   a.value = value;
@@ -171,7 +173,7 @@ function ocReach(targetX, targetY){
       if(!!putDown && parseInt(putDown.style.top, 10) < 0 ){
         putDown.style.top = 0;
       }
-      
+
       window.setTimeout(shrink,200);
     }
 
@@ -186,7 +188,8 @@ function ocReach(targetX, targetY){
 
 function ocMoveLeft(oc){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){ 
-    oc.classList.add('walk-movement', 'turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-left', 'moving');
     setPosition(oc); // sets z-position & CSS transform
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
   }
@@ -194,8 +197,8 @@ function ocMoveLeft(oc){
 
 function ocMoveRight(oc){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.remove('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-right', 'moving');
     setPosition(oc);
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
     // var left = parseInt(oc.style.left,10);
@@ -204,14 +207,13 @@ function ocMoveRight(oc){
 
 // moves Oc towards the horizon
 function ocMoveOut(event){
-  if(event.repeat) return;
+  if(event.repeat) return;// prevent repeat events, movement occurs until key is lifted
 
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.remove('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-back', 'moving');
     
     var upKeyPressed = true;
-    console.log('ocMoveOut');
     function moveOcUp(){
       let zVal = Number(oc.getAttribute('z')),
           updatedZ = zVal + (normalOCSpeed * 0.015);
@@ -237,18 +239,15 @@ function ocMoveOut(event){
   }
 }
 
-
-
 // moves Oc closer to the 4th wall
 function ocMoveIn(event){
-  if(event.repeat) return;
+  if(event.repeat) return; 
 
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.add('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-forward', 'moving');
     
     var downKeyPressed = true;
-    console.log('ocMoveOut');
     function moveOcUp(){
       let zVal = Number(oc.getAttribute('z')),
           updatedZ = zVal - (normalOCSpeed * 0.015);
