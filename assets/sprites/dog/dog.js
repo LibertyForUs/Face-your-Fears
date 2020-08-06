@@ -1,7 +1,7 @@
 var objectX 
 var dog = document.getElementById("dog")
 
-dog.style.top = '120px';
+dog.style.bottom = '500px';
 dog.style.left = '2000px';
 holdables.push(dog);
 

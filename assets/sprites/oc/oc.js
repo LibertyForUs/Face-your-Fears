@@ -142,8 +142,8 @@ function ocReach(targetX, targetY){
       if(objOCDistance <= pickUp.clientWidth){
         heldItem = pickUp;
         oc.classList.add('oc-carrying');
-        heldItem.style.top = getPosition(oc).top - oc.clientHeight;
-        heldItem.style.left = getPosition(oc).left - oc.clientWidth
+        heldItem.style.bottom = getPosition(oc).bottom - oc.clientHeight;
+        heldItem.style.left = getPosition(oc).left - oc.clientWidth;
         endTransition();
       }else{
         window.setTimeout(shrink,50);
