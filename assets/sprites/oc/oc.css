@@ -59,7 +59,7 @@
   100% { background-position: 441px; }
 }
 
-.oc.oc-carrying:before {
+.oc.oc-carrying:not(.oc-forward):not(.oc-back):before {
   content: ' ';
     width: 9px;
     height: 48px;
@@ -68,10 +68,10 @@
     display: block;
     position: absolute;
     left: 54px;
-    top: 133px;
+    top: 98px;
 }
 
-.oc.oc-carrying:not(.oc-stretch):after {
+.oc.oc-carrying:not(.oc-stretch):not(.oc-forward):not(.oc-back):after {
   content: ' ';
   width: 90px;
   height: 10px;
@@ -80,16 +80,16 @@
   display: block;
   position: absolute;
   left: 54px;
-  top: 133px;
+  top: 103px;
   transform-origin: 100% 100%;
   transform: rotate(-1deg);
 }
 
-.oc.oc-carrying.walk-movement:not(.oc-stretch):after {
+.oc.oc-carrying.oc-right.moving:not(.oc-stretch):after, .oc.oc-carrying.oc-left.moving:not(.oc-stretch):after {
   animation: carrying-key 1.31s steps(1) infinite;
 }
 
-.oc.oc-carrying.walk-movement.turn-around:not(.oc-stretch):after {
+.oc.oc-carrying.oc-left:not(.oc-stretch):after {
   transform-origin: 100% 0%;
 }
 
