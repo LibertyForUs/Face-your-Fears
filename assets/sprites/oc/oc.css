@@ -111,9 +111,8 @@
 }
 
 .oc-above {
- width: 105px; 
+  width: 105px; 
   height: 280px;
-  background: url(/sprites/oc/ocsharp.png) left center; 
 }
 
 .oc-below{
@@ -134,8 +133,17 @@
   width: 100px; 
   height: 210px;
   /*xtransform: rotateX(-15deg) translateY(-15px);*/
-  background: url(/sprites/oc/oc-rise.png); 
   animation: rise-key 0.8s steps(10);
+}
+
+.walk-movement {
+  animation: walk-key 1.31s steps(1) infinite;
+}
+
+.turn-around {
+  transform: scaleX(-1) rotateX(-15deg); 
+  
+  /*rotateX(-60deg);*/
 }
 
 .walk-back {
@@ -152,6 +160,42 @@
   animation: walkforward-key 1.31s steps(1) infinite;
 }
 
+.oc-right {
+  width: 100px; 
+  height: 210px;
+  background: url(/sprites/oc/ocsharp.png) left center; 
+}
+
+.oc-left {
+  width: 100px; 
+  height: 210px;
+  background: url(/sprites/oc/ocsharp.png) left center;
+  transform: scaleX(-1) rotateX(-15deg);
+}
+
+.oc-forward {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-forward.png);
+}
+
+.oc-back {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-away.png);
+}
+
+.oc-right.moving, .oc-left.moving {
+  animation: walk-key 1.31s steps(1) infinite;
+}
+
+.oc-forward.moving {
+  animation: walkforward-key 1.31s steps(1) infinite;
+}
+
+.oc-back.moving {
+  animation: walkback-key 1.31s steps(1) infinite;
+}
 
 .oc-stretch {
   width: 106px; 
@@ -171,17 +215,6 @@
   background: url(/sprites/oc/oc-stretch-body.png); 
   animation: reverse-stretch-key 0.4s steps(8);
 
-}
-
-
-.walk-movement {
-  animation: walk-key 1.31s steps(1) infinite;
-}
-
-.turn-around {
-  transform: scaleX(-1) rotateX(-15deg); 
-  
-  /*rotateX(-60deg);*/
 }
 
 

@@ -47,7 +47,7 @@ function setPosition(element){
 		scale = ((1 - percentage) * scaleDifferential) + scaleDownFactor;	// Current scaling to apply to Oc. Example: (1 - (0 / 9)) * 0.4 + 0.6 [for foreground]
 
 	// Having Oc face the right way
-	if(element.classList.contains('turn-around')){
+	if(element.classList.contains('oc-left')){
 		ocTransform.scaleX = -1;
 	}else{
 		ocTransform.scaleX = 1;
