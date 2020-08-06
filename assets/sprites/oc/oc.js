@@ -26,7 +26,7 @@ setPosition(oc); // Setting initial Z position
 
 
 function ocFacesLeft(){
-  return oc.classList.contains("turn-around");
+  return oc.classList.contains("oc-left");
 }
 
 // orients Oc towards the left or right.
@@ -34,12 +34,14 @@ function ocFacesLeft(){
 // This means that the .turn-around classes transform: scalex(-1) no longer works
 // css transforms don't stack, and all css transforms are overridden once a transform is set by JS
 function ocFaceLeft(){
-  oc.classList.add("turn-around");
+  oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+  oc.classList.add("oc-left");
   setPosition(oc);
 }
 
 function ocFaceRight(){
-  oc.classList.remove("turn-around");
+  oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+  oc.classList.add("oc-right");
   setPosition(oc);
 }
 
