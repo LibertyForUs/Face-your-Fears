@@ -93,6 +93,15 @@
   transform-origin: 100% 0%;
 }
 
+/* .oc.oc-carrying.oc-forward + .dog:first-child { 
+
+ } */
+
+ .above-ground {
+   position: relative;
+   z-index: 100;
+ }
+
 
 .oc {
   -webkit-touch-callout: none;

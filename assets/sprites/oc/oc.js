@@ -132,7 +132,7 @@ function ocReach(targetX, targetY){
 
     if(!!pickUp){
       var objOCDistance; // distance between OC and pickUp object's nearest side
-      if(oc.classList.contains('turn-around')){
+      if(oc.classList.contains('oc-left')){
         objOCDistance = Math.abs((getPosition(pickUp).left + pickUp.clientWidth) - getPosition(oc).left);
       }else{
         objOCDistance = Math.abs(getPosition(pickUp).left - (getPosition(oc).left + oc.clientWidth));
@@ -142,7 +142,7 @@ function ocReach(targetX, targetY){
       if(objOCDistance <= pickUp.clientWidth){
         heldItem = pickUp;
         oc.classList.add('oc-carrying');
-        heldItem.style.bottom = getPosition(oc).bottom - oc.clientHeight;
+        heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         heldItem.style.left = getPosition(oc).left - oc.clientWidth;
         endTransition();
       }else{
@@ -173,7 +173,7 @@ function ocReach(targetX, targetY){
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
       if(!!putDown && parseInt(putDown.style.top, 10) < 0 ){
-        putDown.style.top = 0;
+        // putDown.style.bottom = 0;
       }
 
       window.setTimeout(shrink,200);
@@ -297,20 +297,31 @@ var timer = setInterval(function() {
   // }
 }, 20);
 
+
 function holdItem(item){
-  const ocRect = oc.getBoundingClientRect();
-  item.style.top = oc
-  if(oc.classList.contains('turn-around')){
-    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
-  }else{
-    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
+  const ocRect = oc.getBoundingClientRect(),
+        ocBottom = parseInt(oc.style.bottom, 10),  // Getting numerical pixel values, removing 'px' from style the string
+        ocLeft = parseInt(oc.style.left, 10),
+        ocCenter = ocLeft + (50) - (item.getBoundingClientRect().width / 2);
+  item.setAttribute('z', oc.getAttribute('z'));
+  setPosition(item);
+  item.style.bottom = ocBottom + (ocRect.height / 2) - (item.getBoundingClientRect().height / 2);
+
+  if(oc.classList.contains('oc-left')){
+    item.style.left = ocLeft - ocRect.width;
+  }else if(oc.classList.contains('oc-right')){
+    item.style.left = ocLeft + ocRect.width - (item.getBoundingClientRect().width / 2);
+  }else if(oc.classList.contains('oc-back')){
+    item.style.left = ocCenter;
+  }else if(oc.classList.contains('oc-forward')){
+    item.style.left = ocCenter;
   }
 }
 
 
 function ocSink(){
   
-  
+
   oc.classList.remove("oc-above");
   oc.classList.add("oc-sink");
   
