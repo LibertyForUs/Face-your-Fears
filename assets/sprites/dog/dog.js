@@ -1,8 +1,10 @@
 var objectX 
 var dog = document.getElementById("dog")
 
-dog.style.bottom = '500px';
+// dog.style.bottom = '500px';
 dog.style.left = '2000px';
+dog.setAttribute('z', 4);
+setPosition(dog);
 holdables.push(dog);
 
 function dogWatch(object){

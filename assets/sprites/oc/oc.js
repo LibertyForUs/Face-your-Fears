@@ -72,10 +72,10 @@ function ocReach(targetX, targetY){
   }
 
   // If we're holding something, it's coordinates are matched with the extending arm (starts from OC's position)
-  if(!!heldItem){
-    heldItem.style.left = oc.style.left;
-    heldItem.style.top = (getPosition(oc).top - oc.clientHeight)
-  }
+  // if(!!heldItem){
+  //   heldItem.style.left = oc.style.left;
+  //   heldItem.style.bottom = (getPosition(oc).top - oc.clientHeight)
+  // }
 
   var armWidth = 5;
   const armPosition = getPosition(arms);
@@ -90,7 +90,8 @@ function ocReach(targetX, targetY){
 
   
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
-  const armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
+  
+  var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
 
 
   const rotation = "rotate(" + armAngle + "deg)";
@@ -122,15 +123,16 @@ function ocReach(targetX, targetY){
   function shrink(){
     const dArmWidth = maxArmLength / 8;
 
-    const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
-    moveElement(pickUp, armAngle, dArmWidth, pullDirection, Direction.up);
-
-    
-
     armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;
 
     if(!!pickUp){
+      const pickupZ = Number(pickUp.getAttribute('z'));
+      const zMovementIncrement = ((Number(oc.getAttribute('z')) - pickupZ) / 8);
+      const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
+      pickUp.setAttribute('z', pickupZ + zMovementIncrement);
+      moveElement(pickUp, armAngle, dArmWidth, pullDirection, Direction.up);
+
       var objOCDistance; // distance between OC and pickUp object's nearest side
       if(oc.classList.contains('oc-left')){
         objOCDistance = Math.abs((getPosition(pickUp).left + pickUp.clientWidth) - getPosition(oc).left);
@@ -160,20 +162,31 @@ function ocReach(targetX, targetY){
 
   function grow(){
     
-    const dArmWidth = maxArmLength / 16;
+    const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
+    if(!!putDown){
+      // Placing picked object on the same Z-axis as Oc
+      armAngle = 0;
+      arms.style.transform = `rotate(${armAngle}deg)`;
+      maxArmLength = Math.sqrt(Math.pow( (targetX - getPosition(arms).left), 2)); // Calculating distance for X-axis stretch (the Y remains the same as Oc)
+      
+    }else{
+      // Reaching out to grab the object
+
+    }
+    const dArmWidth = maxArmLength / 8;
     armWidth = armWidth + dArmWidth;
 
     arms.style.width = armWidth;
 
-    const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
+    
     moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down);
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.top, 10) < 0 ){
-        // putDown.style.bottom = 0;
+      if(!!putDown && parseInt(putDown.style.bottom, 10) > 690 ){
+        putDown.style.bottom = 690;
       }
 
       window.setTimeout(shrink,200);

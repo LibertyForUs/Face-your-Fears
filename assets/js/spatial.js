@@ -82,10 +82,12 @@ function moveElement(element, angle, distance, directionX, directionY){
     const dl = Math.cos(radAngle) * distance * directionX;
     const dt = Math.sin(radAngle) * distance * directionY;
     const newLeft = parseInt(element.style.left,10) + dl ;
-    const newBottom = parseInt(element.style.bottom,10) - dt ;
+    // const newBottom = parseInt(element.style.bottom,10) - dt ;
 
     element.style.left = newLeft;
-    element.style.bottom = newBottom;
+	// element.style.bottom = newBottom;
+	
+	setPosition(element); // Y-axis positioning is dependent on the element's depth/Z value
   }
 
 }
