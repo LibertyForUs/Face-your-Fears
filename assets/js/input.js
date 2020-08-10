@@ -79,39 +79,40 @@ document.addEventListener('keydown', function(event) {
 
 	if(directionKeyCodes.includes(event.key)){
 		pressedDirectionalKeys.push(event.key);
-
-		const plate = document.querySelector('.plate'); // Plate's classList tells us the world state (.shifting, .above or .below classes)
-		
-		switch (event.key) {
-			case "ArrowLeft":
-			case "a":
-				ocMoveLeft(oc);
-			break;
-			case "ArrowRight":
-			case "d":
-				ocMoveRight(oc);
-			break;
-			case "ArrowDown":
-			case "s":
-				ocMoveIn(event);
-			break;
-			case "ArrowUp":
-			case 'w':
-				ocMoveOut(event);
-			break;
-			case "Esc":
-			case "Escape":
-			break;
-		case " ":
-				if(!plate.classList.contains('shifting')){
-					if(plate.classList.contains('above')){
-						worldGoBelow();
-					}else{
-						worldGoAbove();
-					}
-				}
+	}
+	
+	const plate = document.querySelector('.plate'); // Plate's classList tells us the world state (.shifting, .above or .below classes)
+	
+	switch (event.key) {
+		case "ArrowLeft":
+		case "a":
+			ocMoveLeft(oc);
 		break;
-		}
+		case "ArrowRight":
+		case "d":
+			ocMoveRight(oc);
+		break;
+		case "ArrowDown":
+		case "s":
+			ocMoveIn(event);
+		break;
+		case "ArrowUp":
+		case 'w':
+			ocMoveOut(event);
+		break;
+		case "Esc":
+		case "Escape":
+		break;
+		case " ":
+			debugger;		
+			if(!plate.classList.contains('shifting')){
+				if(plate.classList.contains('above')){
+					worldGoBelow();
+				}else{
+					worldGoAbove();
+				}
+			}
+		break;
 	}
 });
 
