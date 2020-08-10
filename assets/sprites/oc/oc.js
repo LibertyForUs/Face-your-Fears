@@ -163,7 +163,9 @@ function ocReach(targetX, targetY){
   function grow(){
     
     const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
-    if(!!putDown){
+    
+    // Oc drops objects above himself, or at his own level - not below
+    if(!!putDown && targetY < getPosition(arms).bottom ){
       // Placing picked object on the same Z-axis as Oc
       armAngle = 0;
       arms.style.transform = `rotate(${armAngle}deg)`;
