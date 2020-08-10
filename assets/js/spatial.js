@@ -5,7 +5,7 @@ const Direction = {
 	down: 1
 }
 const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this much
-	  maxFilter = 20,	// The maximum desaturation / fade applied to Oc, when they're at a distance
+	  maxFilter = 8,	// The maximum desaturation / fade applied to Oc, when they're at a distance
 	  scaleDifferential = 1 - scaleDownFactor, // The scaling difference Oc undergoes
 	  maxZ = 9; //Z values range from 0 - maxZ
 
