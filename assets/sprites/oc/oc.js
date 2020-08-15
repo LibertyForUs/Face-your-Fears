@@ -145,8 +145,8 @@ function ocReach(targetX, targetY){
         heldItem = pickUp;
         oc.classList.add('oc-carrying');
         heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
-        heldItem.style.left = getPosition(oc).left - oc.clientWidth;
         endTransition();
+        holdItem(heldItem);
       }else{
         window.setTimeout(shrink,50);
       }
@@ -271,7 +271,9 @@ function ocMoveIn(event){
 
       oc.setAttribute('z', Math.max( updatedZ, 0));
       setPosition(oc);
-
+      // if(oc.classList.contains('oc-carrying'))
+      //   setPosition(heldItem);
+      
       if(downKeyPressed){
         window.requestAnimationFrame(moveOcUp);
       }
@@ -297,40 +299,52 @@ function depthMovementHandler(){
 
 
 var timer = setInterval(function() {
-	const dl = parseInt(oc.getAttribute("dx"),10);
-  const l = parseInt(oc.style.left, 10);
-  const newLeft = safeX( l + dl );
-  oc.style.left = newLeft; //+ "px";
+  if(oc.classList.contains('moving')){
+ 
+    const dl = parseInt(oc.getAttribute("dx"),10);
+    const l = parseInt(oc.style.left, 10);
+    const newLeft = safeX( l + dl );
+    oc.style.left = newLeft; //+ "px";
 
-  if(!!heldItem){
-    holdItem(heldItem);
-  }
+    if(!!heldItem){
+      holdItem(heldItem);
+    }
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
   //   clearInterval( timer );
   // }
+  }
 }, 20);
 
-
+// ($0.clientWidth - ($0.clientWidth * 0.3)) / 2 
+// Math.round(($0.offsetWidth - $0.getBoundingClientRect().width) / 2)
 function holdItem(item){
   const ocRect = oc.getBoundingClientRect(),
+        itemRect = item.getBoundingClientRect(),
         ocBottom = parseInt(oc.style.bottom, 10),  // Getting numerical pixel values, removing 'px' from style the string
-        ocLeft = parseInt(oc.style.left, 10),
-        ocCenter = ocLeft + (50) - (item.getBoundingClientRect().width / 2);
+        ocLeft = parseInt(oc.style.left, 10),      // CSS style's left value. When Oc is scaled, there is a gap on the left
+        scaledOCSpacing = Math.round((oc.offsetWidth - ocRect.width) / 2),
+        scaledItemSpacing = Math.round((item.offsetWidth - itemRect.width) / 2),
+        ocScaledLeft = ocLeft - scaledOCSpacing, // when Oc is scaled, this gives the true left. offsetWidth is unscaled, ocRect is scaled
+        ocCenter = ocLeft + (oc.clientWidth / 2) - (item.clientWidth / 2);
+  
   item.setAttribute('z', oc.getAttribute('z'));
-  setPosition(item);
-  item.style.bottom = ocBottom + (ocRect.height / 2) - (item.getBoundingClientRect().height / 2);
 
   if(oc.classList.contains('oc-left')){
-    item.style.left = ocLeft - ocRect.width;
+    item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
   }else if(oc.classList.contains('oc-right')){
-    item.style.left = ocLeft + ocRect.width - (item.getBoundingClientRect().width / 2);
+    item.style.left = ocScaledLeft + oc.clientWidth - scaledItemSpacing;
   }else if(oc.classList.contains('oc-back')){
     item.style.left = ocCenter;
+    // item.style.left = ocLeft - scaledItemSpacing;
   }else if(oc.classList.contains('oc-forward')){
     item.style.left = ocCenter;
   }
+
+  setPosition(item);
+  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
+  
 }
 
 
