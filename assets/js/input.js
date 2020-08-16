@@ -14,10 +14,14 @@ window.addEventListener('mousedown', e => {
   const y = e.clientY;
   
   if(x < getPosition(oc).left){
-	  oc.classList.add('turn-around');
+	oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+	oc.classList.add('oc-left');
+	ocTransform.scaleX = -1;
+	
   }else if(x > getPosition(oc).left + oc.clientWidth){
-	oc.classList.remove('turn-around');
-
+	oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+	oc.classList.add('oc-right');
+	ocTransform.scaleX = 1;
   }
   setPosition(oc);
   ocReach(x,y);

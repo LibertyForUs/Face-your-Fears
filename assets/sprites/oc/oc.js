@@ -48,9 +48,9 @@ function ocFaceRight(){
 function ocReach(targetX, targetY){
   
   // Matching the reach animation's arm with the carried object. Temporary fix - need to match Oc's animation frame dimensions
-  if(oc.classList.contains('oc-carrying')){
-    dog.style.bottom = parseInt(dog.style.bottom) + 100;
-  }
+  // if(oc.classList.contains('oc-carrying')){
+  //   dog.style.bottom = parseInt(dog.style.bottom) + 100;
+  // }
 
   oc.classList.add("oc-stretch");
   oc.classList.remove('walk-movement');
@@ -108,7 +108,7 @@ function ocReach(targetX, targetY){
   var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
 
 
-  const rotation = "rotate(" + armAngle + "deg)";
+  const rotation = `rotate(${armAngle}deg) scaleX(${ocTransform.scaleX})`;
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
 
@@ -206,7 +206,27 @@ function ocReach(targetX, targetY){
       // If an item is dropped in the sky, it's set down on the horizon instead
       //TODO: Dog animation goes here
       if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
-        setPosition(putDown);
+        if(putDown.classList.contains('dog')){
+          
+          dog.classList.add('dog-umbrella');
+          let umbrellaFloatSpeed = 4,
+              umbrellaCloseDistance = 100; // dog umbrella animation changes 
+
+          dogFloatsDown();
+
+          function dogFloatsDown(){
+            if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+              dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+              requestAnimationFrame(dogFloatsDown);
+            }else{
+              dog.style.bottom = oc.style.bottom;
+              dog.classList.remove('dog-umbrella');
+            }
+          }
+        }else{
+          setPosition(putDown);
+        }
+        
       }
 
       window.setTimeout(shrink,200);

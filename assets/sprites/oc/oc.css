@@ -136,6 +136,10 @@
   /*rotateX(-60deg);*/
 }
 
+.oc-carrying.oc-forward + .dog {
+  z-index: 1000;
+}
+
 .walk-back {
   width: 56.25px;
   height: 200px;

@@ -34,6 +34,7 @@ function worldGoAbove(){
 		p.classList.remove("below");
 		p.classList.add("above");
 		// d.classList.add("return-above");
+		// setTimeout(function(){ d.classList.remove("return-above") }, 800);
 		d.classList.remove("stay-above");
 
 	}	
