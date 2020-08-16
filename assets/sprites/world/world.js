@@ -9,6 +9,9 @@ function worldGoBelow(){
 			var p = document.getElementById("plate");
 			var d = document.getElementById("dog");
 
+			p.classList.add("shifting");
+			setTimeout(function(){ p.classList.remove("shifting") }, 800);
+
 			d.classList.add("stay-above");
 			d.classList.remove("return-above");
 			p.classList.add("below");
