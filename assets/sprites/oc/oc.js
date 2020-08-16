@@ -51,17 +51,26 @@ function ocReach(targetX, targetY){
   oc.classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
   
-  let arms = document.createElement("DIV");
+  let arms = document.createElement("DIV"),
+      ocScale = (oc.getBoundingClientRect().width / oc.clientWidth), // how much is Oc scaled down currently. Effects arm stretch
+      armScaledWidth = 10 * ocScale;
+  
+  arms.style.width = armScaledWidth;
   arms.classList.add('arms');
   arms.classList.add("oc-arms-grow");
 
   //arms.classList.add("triangle-right");
-  oc.appendChild(arms);
+  arms.style.left = parseInt(oc.style.left) + oc.clientWidth / 2;
+  arms.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+  oc.parentElement.appendChild(arms);
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
-    if(oc.hasChildNodes(arms)){
-      oc.removeChild(arms);
+    if(arms.parentElement === oc.parentElement){
+      oc.parentElement.removeChild(arms);
+      
+      if(!!pickUp)
+        holdItem(pickUp);
     }
   }
 
@@ -88,7 +97,8 @@ function ocReach(targetX, targetY){
       ady = Math.abs(reachDy),
       maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
-  
+  // maxArmLength *= maxArmLength / ocScale; // when Oc's scaled down, they still reach the clicked point
+
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
   
   var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
@@ -181,14 +191,14 @@ function ocReach(targetX, targetY){
     arms.style.width = armWidth;
 
     
-    moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down);
+    moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down, true);
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.bottom, 10) > 690 ){
-        putDown.style.bottom = 690;
+      if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
+        setPosition(putDown);
       }
 
       window.setTimeout(shrink,200);

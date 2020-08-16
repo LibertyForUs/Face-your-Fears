@@ -70,24 +70,28 @@ function setPosition(element){
 }
 
 function safeX(x) {  
-		var w = window.width - 10000; //2800
+	var w = window.width - 10000; //2800
     var leftEdge = 950
 
     return x < leftEdge ? leftEdge : x > w ? w : x;
 }
 
-function moveElement(element, angle, distance, directionX, directionY){
+function moveElement(element, angle, distance, directionX, directionY, disableZMovement){
   if(element){
     const radAngle = degToRad(angle);
     const dl = Math.cos(radAngle) * distance * directionX;
     const dt = Math.sin(radAngle) * distance * directionY;
     const newLeft = parseInt(element.style.left,10) + dl ;
-    // const newBottom = parseInt(element.style.bottom,10) - dt ;
 
     element.style.left = newLeft;
-	// element.style.bottom = newBottom;
+
+	if(disableZMovement){
+		const newBottom = parseInt(element.style.bottom,10) - dt;
+		element.style.bottom = newBottom;
+	}else{
+		setPosition(element); // Y-axis positioning is dependent on the element's depth/Z value
+	}
 	
-	setPosition(element); // Y-axis positioning is dependent on the element's depth/Z value
   }
 
 }
