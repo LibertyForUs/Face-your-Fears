@@ -114,10 +114,7 @@
   
   top: 20%;
   z-index: 31;
-	background-repeat: no-repeat;
-
-  
-  
+	background-repeat: no-repeat; 
 }
 
 .oc-above {
@@ -127,23 +124,6 @@
 
 .oc-below{
   transform: rotateX(-88deg) translateY(-240px);
-}
-
-.oc-sink {
-  width: 100px; 
-  height: 300px;
-  animation-fill-mode: forwards;
-  background: url(/sprites/oc/sink-small.png) left center; 
-  animation: sink-key 0.8s steps(15); 
-  
-}
-
-
-.oc-rise {
-  width: 100px; 
-  height: 210px;
-  /*xtransform: rotateX(-15deg) translateY(-15px);*/
-  animation: rise-key 0.8s steps(10);
 }
 
 .walk-movement {
@@ -227,6 +207,26 @@
 
 }
 
+.oc-sink {
+  width: 100px; 
+  height: 300px;
+  animation-fill-mode: forwards;
+  background: url(/sprites/oc/sink-small.png) left center; 
+  animation: sink-key 0.8s steps(15); 
+}
+
+
+.oc-rise {
+  width: 100px; 
+  height: 210px;
+  /*xtransform: rotateX(-15deg) translateY(-15px);*/
+  background: url(/sprites/oc/oc-rise.png) left center; 
+  animation: rise-key 0.8s steps(10);
+}
+
+.plate.below:not(.shifting) .above-ground > .oc {
+  display: none;
+}
 
 .oc-arms-grow {
   background-color: #0C0C0C;

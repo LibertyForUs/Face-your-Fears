@@ -46,6 +46,11 @@ function ocFaceRight(){
 }
 
 function ocReach(targetX, targetY){
+  
+  // Matching the reach animation's arm with the carried object. Temporary fix - need to match Oc's animation frame dimensions
+  if(oc.classList.contains('oc-carrying')){
+    dog.style.bottom = parseInt(dog.style.bottom) + 100;
+  }
 
   oc.classList.add("oc-stretch");
   oc.classList.remove('walk-movement');
@@ -172,30 +177,34 @@ function ocReach(targetX, targetY){
   function grow(){
     
     const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
-    
-    // Oc drops objects above himself, or at his own level - not below
-    if(!!putDown && targetY > getPosition(arms).bottom ){
-      // Placing picked object on the same Z-axis as Oc
-      armAngle = 0;
-      arms.style.transform = `rotate(${armAngle}deg)`;
-      maxArmLength = Math.sqrt(Math.pow( (targetX - getPosition(arms).left), 2)); // Calculating distance for X-axis stretch (the Y remains the same as Oc)
-      
-    }else{
-      // Reaching out to grab the object
-
-    }
     const dArmWidth = maxArmLength / 8;
     armWidth = armWidth + dArmWidth;
 
     arms.style.width = armWidth;
 
+    // Oc drops objects above their height, or at their own height - not below
+    if(!!putDown){
+
+      if(targetY > getPosition(arms).bottom){
+        // Placing picked object on the same Z-axis as Oc
+        armAngle = 0;
+        arms.style.transform = `rotate(${armAngle}deg)`;
+        maxArmLength = Math.sqrt(Math.pow( (targetX - getPosition(arms).left), 2)); // Calculating distance for X-axis stretch (the Y remains the same as Oc)
+      }
+
+      moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down, true);
+      
+    }else{
+      // Reaching out to grab the object
+
+    }
     
-    moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down, true);
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
+      //TODO: Dog animation goes here
       if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
         setPosition(putDown);
       }
