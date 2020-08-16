@@ -55,23 +55,23 @@ function ocReach(targetX, targetY){
       ocScale = (oc.getBoundingClientRect().width / oc.clientWidth), // how much is Oc scaled down currently. Effects arm stretch
       armScaledWidth = 10 * ocScale;
   
-  arms.style.width = armScaledWidth;
+  
   arms.classList.add('arms');
   arms.classList.add("oc-arms-grow");
 
   //arms.classList.add("triangle-right");
+  arms.style.width = armScaledWidth;
   arms.style.left = parseInt(oc.style.left) + oc.clientWidth / 2;
   arms.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
   oc.parentElement.appendChild(arms);
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
-    if(arms.parentElement === oc.parentElement){
-      oc.parentElement.removeChild(arms);
+    if(!!pickUp)
+      holdItem(pickUp);
       
-      if(!!pickUp)
-        holdItem(pickUp);
-    }
+    if(arms.parentElement === oc.parentElement)
+      oc.parentElement.removeChild(arms);
   }
 
   function reverseStretch(){
@@ -97,7 +97,6 @@ function ocReach(targetX, targetY){
       ady = Math.abs(reachDy),
       maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
-  // maxArmLength *= maxArmLength / ocScale; // when Oc's scaled down, they still reach the clicked point
 
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
   
