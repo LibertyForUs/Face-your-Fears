@@ -33,7 +33,7 @@ function worldGoAbove(){
 		setTimeout(function(){ p.classList.remove("shifting") }, 800);
 		p.classList.remove("below");
 		p.classList.add("above");
-		d.classList.add("return-above");
+		// d.classList.add("return-above");
 		d.classList.remove("stay-above");
 
 	}	
