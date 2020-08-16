@@ -104,7 +104,6 @@ document.addEventListener('keydown', function(event) {
 		case "Escape":
 		break;
 		case " ":
-			debugger;		
 			if(!plate.classList.contains('shifting')){
 				if(plate.classList.contains('above')){
 					worldGoBelow();
