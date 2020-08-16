@@ -231,8 +231,8 @@
 .oc-arms-grow {
   background-color: #0C0C0C;
   position: fixed;
-  top: 115px;
-  left: 52px;
+  /* top: 115px; */
+  /* left: 52px; */
   width: 10px;
   height: 10px;
 
