@@ -26,3 +26,9 @@
 .dog-wag-very-fast {
     animation: dog-wag 0.125s steps(3) infinite;
 }
+
+.dog-umbrella {
+  background: url(/sprites/dog/dog-umbrella.png);
+  background-size: cover;
+  height: 138px;/* Fixing aspect ratio */
+}
