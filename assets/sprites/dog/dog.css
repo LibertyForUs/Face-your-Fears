@@ -1,11 +1,11 @@
 
 .dog {
-  transform: rotateX(-20deg) translateY(-15px);
+  transform: rotateX(-15deg) translateY(-15px);
   position: fixed;
   transform-origin: bottom center;
   width: 158px; 
   height: 85px;
-  z-index: 30;
+  z-index: 50;
   background: url(/sprites/dog/dog-sprite.png);  
   background-repeat: no-repeat;
   
@@ -25,4 +25,10 @@
 
 .dog-wag-very-fast {
     animation: dog-wag 0.125s steps(3) infinite;
+}
+
+.dog-umbrella {
+  background: url(/sprites/dog/dog-umbrella.png);
+  background-size: cover;
+  height: 138px;/* Fixing aspect ratio */
 }
