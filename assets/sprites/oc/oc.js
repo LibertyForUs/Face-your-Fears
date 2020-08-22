@@ -18,7 +18,7 @@ function createAttribute(element, name, value){
 createAttribute(oc,"dx",0);
 createAttribute(oc,"dz",0);
 
-createAttribute(oc,"z",2);
+createAttribute(oc,"z",9);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
@@ -66,17 +66,16 @@ function ocReach(targetX, targetY){
 
   //arms.classList.add("triangle-right");
   arms.style.width = armScaledWidth;
-  arms.style.left = parseInt(oc.style.left) + oc.clientWidth / 2;
-  arms.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
-  oc.parentElement.appendChild(arms);
+  // arms.style.left = oc.clientWidth / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
+  oc.appendChild(arms);
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
     if(!!pickUp)
       holdItem(pickUp);
-      
-    if(arms.parentElement === oc.parentElement)
-      oc.parentElement.removeChild(arms);
+    
+    oc.removeChild(arms);
   }
 
   function reverseStretch(){
@@ -102,13 +101,15 @@ function ocReach(targetX, targetY){
       ady = Math.abs(reachDy),
       maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
+    maxArmLength *= (1/ocScale); // accounting for oc's current scale
+
 
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
   
   var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
 
 
-  const rotation = `rotate(${armAngle}deg) scaleX(${ocTransform.scaleX})`;
+  const rotation = `rotate(${armAngle}deg)`;
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
 
