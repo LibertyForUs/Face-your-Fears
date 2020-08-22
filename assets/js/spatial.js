@@ -13,6 +13,7 @@ const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this mu
 var ocTransform = {
 	rotateX: "-15deg",
 	translateY: "0px",
+	translateZ: "15px",
 	scaleX: 1,
 	scale: 1,
 }
@@ -58,11 +59,11 @@ function setPosition(element){
 		}
 
 		ocTransform.scale = scale;
-		oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY})`;
+		oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`;
 		oc.style.top = 'auto';
 	}else{
 		ocTransform.scale = scale;
-		element.style.transform = `scale(${ocTransform.scale}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY})`
+		element.style.transform = `scale(${ocTransform.scale}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`
 	}
 
 	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
