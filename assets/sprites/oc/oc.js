@@ -75,7 +75,8 @@ function ocReach(targetX, targetY){
     if(!!pickUp)
       holdItem(pickUp);
     
-    oc.removeChild(arms);
+    if(oc.hasChildNodes())
+      oc.removeChild(arms);
   }
 
   function reverseStretch(){
@@ -235,11 +236,16 @@ function ocReach(targetX, targetY){
 
   }
 
+  // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
+  if(!!putDown){
+    putDown.style.left = oc.style.left;
+    putDown.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+  }
   
   grow();
   window.setTimeout(reverseStretch, 800);
 
-}
+} // ocReach() ENDs
 
 
 function ocMoveLeft(oc){
