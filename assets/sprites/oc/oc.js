@@ -18,7 +18,7 @@ function createAttribute(element, name, value){
 createAttribute(oc,"dx",0);
 createAttribute(oc,"dz",0);
 
-createAttribute(oc,"z",9);
+createAttribute(oc,"z",3);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
