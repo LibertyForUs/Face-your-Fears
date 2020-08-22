@@ -212,7 +212,7 @@ function ocReach(targetX, targetY){
           
           dog.classList.add('dog-umbrella');
           let umbrellaFloatSpeed = 4,
-              umbrellaCloseDistance = 100; // dog umbrella animation changes 
+              umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
           dogFloatsDown();
 
@@ -375,7 +375,8 @@ function holdItem(item){
         ocCenter = ocLeft + (oc.clientWidth / 2) - (item.clientWidth / 2);
   
   item.setAttribute('z', oc.getAttribute('z'));
-
+  setPosition(item);
+  
   if(oc.classList.contains('oc-left')){
     item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
   }else if(oc.classList.contains('oc-right')){
@@ -385,9 +386,10 @@ function holdItem(item){
     // item.style.left = ocLeft - scaledItemSpacing;
   }else if(oc.classList.contains('oc-forward')){
     item.style.left = ocCenter;
+    item.style.transform += " translateZ(20px)"
+    // debugger;
   }
 
-  setPosition(item);
   item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
   
 }
