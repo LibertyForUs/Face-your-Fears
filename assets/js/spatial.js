@@ -13,7 +13,7 @@ const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this mu
 var ocTransform = {
 	rotateX: "-15deg",
 	translateY: "0px",
-	translateZ: "15px",
+	translateZ: "5px",
 	scaleX: 1,
 	scale: 1,
 }

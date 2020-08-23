@@ -206,15 +206,14 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      //TODO: Dog animation goes here
       if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
+        
+        // Umbrella animation, if the putDown object is our beloved dog
         if(putDown.classList.contains('dog')){
-          
           dog.classList.add('dog-umbrella');
           let umbrellaFloatSpeed = 4,
               umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
-          dogFloatsDown();
 
           function dogFloatsDown(){
             if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
@@ -223,8 +222,13 @@ function ocReach(targetX, targetY){
             }else{
               dog.style.bottom = oc.style.bottom;
               dog.classList.remove('dog-umbrella');
+
+              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(5px)'; // Altering the Z translation, to render tufts of grass in the foreground
             }
           }
+          
+          dogFloatsDown();
+
         }else{
           setPosition(putDown);
         }
@@ -337,11 +341,6 @@ function ocMoveIn(event){
   }
 }
 
-// onFrame function for ocMoveIn() and ocMoveOut()
-function depthMovementHandler(){
-
-}
-
 
 var timer = setInterval(function() {
   if(oc.classList.contains('moving')){
@@ -376,6 +375,8 @@ function holdItem(item){
   
   item.setAttribute('z', oc.getAttribute('z'));
   setPosition(item);
+  item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(15px)'; // Prevents tufts of grass from showing above the item
+  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
   
   if(oc.classList.contains('oc-left')){
     item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
@@ -386,11 +387,9 @@ function holdItem(item){
     // item.style.left = ocLeft - scaledItemSpacing;
   }else if(oc.classList.contains('oc-forward')){
     item.style.left = ocCenter;
-    item.style.transform += " translateZ(20px)"
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(25px)'; // Renders carried object in front of Oc
     // debugger;
   }
-
-  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
   
 }
 
