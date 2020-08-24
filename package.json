@@ -4,7 +4,7 @@
   "description": "game allows you to help everyone face your fears",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node index.js"
   },
   "repository": {
@@ -20,5 +20,8 @@
   "dependencies": {
     "body-scroll-lock": "^2.6.1",
     "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
   }
 }
