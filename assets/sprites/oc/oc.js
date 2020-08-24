@@ -18,7 +18,7 @@ function createAttribute(element, name, value){
 createAttribute(oc,"dx",0);
 createAttribute(oc,"dz",0);
 
-createAttribute(oc,"z",2);
+createAttribute(oc,"z",3);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
@@ -66,17 +66,17 @@ function ocReach(targetX, targetY){
 
   //arms.classList.add("triangle-right");
   arms.style.width = armScaledWidth;
-  arms.style.left = parseInt(oc.style.left) + oc.clientWidth / 2;
-  arms.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
-  oc.parentElement.appendChild(arms);
+  // arms.style.left = oc.clientWidth / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
+  oc.appendChild(arms);
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
     if(!!pickUp)
       holdItem(pickUp);
-      
-    if(arms.parentElement === oc.parentElement)
-      oc.parentElement.removeChild(arms);
+    
+    if(oc.hasChildNodes())
+      oc.removeChild(arms);
   }
 
   function reverseStretch(){
@@ -102,13 +102,15 @@ function ocReach(targetX, targetY){
       ady = Math.abs(reachDy),
       maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
+    maxArmLength *= (1/ocScale); // accounting for oc's current scale
+
 
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
   
   var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
 
 
-  const rotation = `rotate(${armAngle}deg) scaleX(${ocTransform.scaleX})`;
+  const rotation = `rotate(${armAngle}deg)`;
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
 
@@ -204,15 +206,14 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      //TODO: Dog animation goes here
       if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
+        
+        // Umbrella animation, if the putDown object is our beloved dog
         if(putDown.classList.contains('dog')){
-          
           dog.classList.add('dog-umbrella');
           let umbrellaFloatSpeed = 4,
-              umbrellaCloseDistance = 100; // dog umbrella animation changes 
+              umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
-          dogFloatsDown();
 
           function dogFloatsDown(){
             if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
@@ -221,8 +222,13 @@ function ocReach(targetX, targetY){
             }else{
               dog.style.bottom = oc.style.bottom;
               dog.classList.remove('dog-umbrella');
+
+              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(5px)'; // Altering the Z translation, to render tufts of grass in the foreground
             }
           }
+          
+          dogFloatsDown();
+
         }else{
           setPosition(putDown);
         }
@@ -234,11 +240,16 @@ function ocReach(targetX, targetY){
 
   }
 
+  // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
+  if(!!putDown){
+    putDown.style.left = oc.style.left;
+    putDown.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+  }
   
   grow();
   window.setTimeout(reverseStretch, 800);
 
-}
+} // ocReach() ENDs
 
 
 function ocMoveLeft(oc){
@@ -330,11 +341,6 @@ function ocMoveIn(event){
   }
 }
 
-// onFrame function for ocMoveIn() and ocMoveOut()
-function depthMovementHandler(){
-
-}
-
 
 var timer = setInterval(function() {
   if(oc.classList.contains('moving')){
@@ -368,7 +374,10 @@ function holdItem(item){
         ocCenter = ocLeft + (oc.clientWidth / 2) - (item.clientWidth / 2);
   
   item.setAttribute('z', oc.getAttribute('z'));
-
+  setPosition(item);
+  item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(15px)'; // Prevents tufts of grass from showing above the item
+  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
+  
   if(oc.classList.contains('oc-left')){
     item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
   }else if(oc.classList.contains('oc-right')){
@@ -378,10 +387,9 @@ function holdItem(item){
     // item.style.left = ocLeft - scaledItemSpacing;
   }else if(oc.classList.contains('oc-forward')){
     item.style.left = ocCenter;
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(25px)'; // Renders carried object in front of Oc
+    // debugger;
   }
-
-  setPosition(item);
-  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
   
 }
 
