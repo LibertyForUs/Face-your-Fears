@@ -37,7 +37,29 @@
   100% { transform:rotate(0deg); }
 }
 
-.oc.oc-carrying:before {
+@keyframes walkback-key {
+  12.5% { background-position: 56.25px; }
+  25% { background-position: 112.5px; }
+  37.5% { background-position: 168.75px; }
+  50% { background-position: 225px; }
+  62.5% { background-position: 281.25px; }
+  75% { background-position: 337.5px; }
+  87.5% { background-position: 393.75px; }
+  100% { background-position: 450px; }
+}
+
+@keyframes walkforward-key {
+  12.5% { background-position: 55.125px; }
+  25% { background-position: 110.25px; }
+  37.5% { background-position: 165.375px; }
+  50% { background-position: 220.5px; }
+  62.5% { background-position: 275.625px; }
+  75% { background-position: 330.75px; }
+  87.5% { background-position: 385.875px; }
+  100% { background-position: 441px; }
+}
+
+.oc.oc-carrying:not(.oc-forward):not(.oc-back):before {
   content: ' ';
     width: 9px;
     height: 48px;
@@ -46,10 +68,10 @@
     display: block;
     position: absolute;
     left: 54px;
-    top: 133px;
+    top: 98px;
 }
 
-.oc.oc-carrying:not(.oc-stretch):after {
+.oc.oc-carrying:not(.oc-stretch):not(.oc-forward):not(.oc-back):after {
   content: ' ';
   width: 90px;
   height: 10px;
@@ -58,26 +80,28 @@
   display: block;
   position: absolute;
   left: 54px;
-  top: 133px;
+  top: 103px;
+  border-radius: 5px;
   transform-origin: 100% 100%;
   transform: rotate(-1deg);
 }
 
-.oc.oc-carrying.walk-movement:not(.oc-stretch):after {
+.oc.oc-carrying.oc-right.moving:not(.oc-stretch):after, .oc.oc-carrying.oc-left.moving:not(.oc-stretch):after {
   animation: carrying-key 1.31s steps(1) infinite;
 }
 
-.oc.oc-carrying.walk-movement.turn-around:not(.oc-stretch):after {
+.oc.oc-carrying.oc-left:not(.oc-stretch):after {
   transform-origin: 100% 0%;
 }
 
+/* .oc.oc-carrying.oc-forward + .dog:first-child { 
 
+ } */
 
-
-/* .oc.oc-carrying.turn-around:not(.oc-stretch):after {
-animation: walk-key 1.31s steps(1) infinite;
-} */
-
+ .above-ground {
+   position: relative;
+   z-index: 100;
+ }
 
 
 .oc {
@@ -90,41 +114,82 @@ animation: walk-key 1.31s steps(1) infinite;
   
   top: 20%;
   z-index: 31;
-	background-repeat: no-repeat;
-
-  
-  
+	background-repeat: no-repeat; 
 }
 
 .oc-above {
- width: 105px; 
+  width: 105px; 
   height: 280px;
-  background: url(/sprites/oc/ocsharp.png) left center; 
 }
 
 .oc-below{
   transform: rotateX(-88deg) translateY(-240px);
 }
 
-.oc-sink {
-  width: 100px; 
-  height: 300px;
-  animation-fill-mode: forwards;
-  background: url(/sprites/oc/sink-small.png) left center; 
-  animation: sink-key 0.8s steps(15); 
-  
+.walk-movement {
+  animation: walk-key 1.31s steps(1) infinite;
 }
 
+.turn-around {
+  transform: scaleX(-1) rotateX(-15deg); 
+  
+  /*rotateX(-60deg);*/
+}
 
-.oc-rise {
+.oc-carrying.oc-forward + .dog {
+  z-index: 1000;
+}
+
+.walk-back {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-away.png);
+  animation: walkback-key 1.31s steps(1) infinite;
+}
+
+.walk-forward {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-forward.png);
+  animation: walkforward-key 1.31s steps(1) infinite;
+}
+
+.oc-right {
   width: 100px; 
   height: 210px;
-  /*xtransform: rotateX(-15deg) translateY(-15px);*/
-  background: url(/sprites/oc/oc-rise.png); 
-  animation: rise-key 0.8s steps(10);
-
+  background: url(/sprites/oc/ocsharp.png) left center; 
 }
 
+.oc-left {
+  width: 100px; 
+  height: 210px;
+  background: url(/sprites/oc/ocsharp.png) left center;
+  transform: scaleX(-1) rotateX(-15deg);
+}
+
+.oc-forward {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-forward.png);
+}
+
+.oc-back {
+  width: 56.25px;
+  height: 200px;
+  background: url(/sprites/oc/walk-away.png);
+}
+
+.oc-right.moving, .oc-left.moving {
+  animation: walk-key 1.31s steps(1) infinite;
+}
+
+.oc-forward.moving {
+  animation: walkforward-key 1.31s steps(1) infinite;
+}
+
+.oc-back.moving {
+  animation: walkback-key 1.31s steps(1) infinite;
+}
 
 .oc-stretch {
   width: 106px; 
@@ -146,18 +211,26 @@ animation: walk-key 1.31s steps(1) infinite;
 
 }
 
-
-.walk-movement {
-  
-  animation: walk-key 1.31s steps(1) infinite;
+.oc-sink {
+  width: 100px; 
+  height: 300px;
+  animation-fill-mode: forwards;
+  background: url(/sprites/oc/sink-small.png) left center; 
+  animation: sink-key 0.8s steps(15); 
 }
 
-.turn-around {
-  transform: scaleX(-1) rotateX(-15deg); 
-  
-  /*rotateX(-60deg);*/
+
+.oc-rise {
+  width: 100px; 
+  height: 210px;
+  /*xtransform: rotateX(-15deg) translateY(-15px);*/
+  background: url(/sprites/oc/oc-rise.png) left center; 
+  animation: rise-key 0.8s steps(10);
 }
 
+.plate.below:not(.shifting) .above-ground > .oc {
+  display: none;
+}
 
 .oc-arms-grow {
   background-color: #0C0C0C;

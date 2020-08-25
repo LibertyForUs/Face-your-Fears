@@ -8,6 +8,8 @@ var oc = document.getElementById("oc");
 
 oc.style.left = '1200px';
 
+oc.classList.add('oc-right');
+
 function createAttribute(element, name, value){
   var a = document.createAttribute(name);
   a.value = value;
@@ -16,7 +18,7 @@ function createAttribute(element, name, value){
 createAttribute(oc,"dx",0);
 createAttribute(oc,"dz",0);
 
-createAttribute(oc,"z",2);
+createAttribute(oc,"z",3);
 createAttribute(oc,"speed",normalOCSpeed);
 createAttribute(oc,"pulling",false);
 
@@ -24,7 +26,7 @@ setPosition(oc); // Setting initial Z position
 
 
 function ocFacesLeft(){
-  return oc.classList.contains("turn-around");
+  return oc.classList.contains("oc-left");
 }
 
 // orients Oc towards the left or right.
@@ -32,33 +34,49 @@ function ocFacesLeft(){
 // This means that the .turn-around classes transform: scalex(-1) no longer works
 // css transforms don't stack, and all css transforms are overridden once a transform is set by JS
 function ocFaceLeft(){
-  oc.classList.add("turn-around");
+  oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+  oc.classList.add("oc-left");
   setPosition(oc);
 }
 
 function ocFaceRight(){
-  oc.classList.remove("turn-around");
+  oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+  oc.classList.add("oc-right");
   setPosition(oc);
 }
 
 function ocReach(targetX, targetY){
+  
+  // Matching the reach animation's arm with the carried object. Temporary fix - need to match Oc's animation frame dimensions
+  // if(oc.classList.contains('oc-carrying')){
+  //   dog.style.bottom = parseInt(dog.style.bottom) + 100;
+  // }
 
   oc.classList.add("oc-stretch");
   oc.classList.remove('walk-movement');
 	oc.setAttribute("dx", 0);
   
-  let arms = document.createElement("DIV");
+  let arms = document.createElement("DIV"),
+      ocScale = (oc.getBoundingClientRect().width / oc.clientWidth), // how much is Oc scaled down currently. Effects arm stretch
+      armScaledWidth = 10 * ocScale;
+  
+  
   arms.classList.add('arms');
   arms.classList.add("oc-arms-grow");
 
   //arms.classList.add("triangle-right");
+  arms.style.width = armScaledWidth;
+  // arms.style.left = oc.clientWidth / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
   oc.appendChild(arms);
 
   function endTransition(){
     oc.classList.remove("oc-reverse-stretch");
-    if(oc.hasChildNodes(arms)){
+    if(!!pickUp)
+      holdItem(pickUp);
+    
+    if(oc.hasChildNodes())
       oc.removeChild(arms);
-    }
   }
 
   function reverseStretch(){
@@ -68,28 +86,31 @@ function ocReach(targetX, targetY){
   }
 
   // If we're holding something, it's coordinates are matched with the extending arm (starts from OC's position)
-  if(!!heldItem){
-    heldItem.style.left = oc.style.left;
-    heldItem.style.top = (getPosition(oc).top - oc.clientHeight)
-  }
+  // if(!!heldItem){
+  //   heldItem.style.left = oc.style.left;
+  //   heldItem.style.bottom = (getPosition(oc).top - oc.clientHeight)
+  // }
 
   var armWidth = 5;
   const armPosition = getPosition(arms);
-  armLeft = armPosition.left;
-  armTop = armPosition.top;
+  var armLeft = armPosition.left;
+  var armTop = armPosition.top;
   
-  reachDx = targetX - armLeft;
-  reachDy = targetY - armTop;
-  adx = Math.abs(reachDx);
-  ady = Math.abs(reachDy);
-  maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
+  var reachDx = targetX - armLeft,
+      reachDy = targetY - armTop,
+      adx = Math.abs(reachDx),
+      ady = Math.abs(reachDy),
+      maxArmLength = Math.sqrt(Math.pow(adx,2) + Math.pow(ady,2));
 
-  
+    maxArmLength *= (1/ocScale); // accounting for oc's current scale
+
+
   const baseAngle = angle(armLeft,armTop, targetX, targetY);
-  const armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
+  
+  var armAngle = ocFacesLeft() ? safeDegree(180 - baseAngle) : baseAngle;
 
 
-  const rotation = "rotate(" + armAngle + "deg)";
+  const rotation = `rotate(${armAngle}deg)`;
   arms.style.transform = rotation;
   arms.style.zIndex = 3000;
 
@@ -118,17 +139,18 @@ function ocReach(targetX, targetY){
   function shrink(){
     const dArmWidth = maxArmLength / 8;
 
-    const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
-    moveElement(pickUp, armAngle, dArmWidth, pullDirection, Direction.up);
-
-    
-
     armWidth = (armWidth - dArmWidth)
     arms.style.width = armWidth;
 
     if(!!pickUp){
+      const pickupZ = Number(pickUp.getAttribute('z'));
+      const zMovementIncrement = ((Number(oc.getAttribute('z')) - pickupZ) / 8);
+      const pullDirection = reachBackwards * ocFacesLeft() ? Direction.right : Direction.left;
+      pickUp.setAttribute('z', pickupZ + zMovementIncrement);
+      moveElement(pickUp, armAngle, dArmWidth, pullDirection, Direction.up);
+
       var objOCDistance; // distance between OC and pickUp object's nearest side
-      if(oc.classList.contains('turn-around')){
+      if(oc.classList.contains('oc-left')){
         objOCDistance = Math.abs((getPosition(pickUp).left + pickUp.clientWidth) - getPosition(oc).left);
       }else{
         objOCDistance = Math.abs(getPosition(pickUp).left - (getPosition(oc).left + oc.clientWidth));
@@ -138,9 +160,9 @@ function ocReach(targetX, targetY){
       if(objOCDistance <= pickUp.clientWidth){
         heldItem = pickUp;
         oc.classList.add('oc-carrying');
-        heldItem.style.top = getPosition(oc).top - oc.clientHeight;
-        heldItem.style.left = getPosition(oc).left - oc.clientWidth
+        heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         endTransition();
+        holdItem(heldItem);
       }else{
         window.setTimeout(shrink,50);
       }
@@ -155,40 +177,85 @@ function ocReach(targetX, targetY){
   }
 
   function grow(){
-
-    arms.style.width = armWidth;
     
-    const dArmWidth = maxArmLength / 16;
+    const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
+    const dArmWidth = maxArmLength / 8;
     armWidth = armWidth + dArmWidth;
 
+    arms.style.width = armWidth;
 
-    const pushDirection = reachBackwards * ocFacesLeft() ? Direction.left : Direction.right;
-    moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down);
+    // Oc drops objects above their height, or at their own height - not below
+    if(!!putDown){
+
+      if(targetY > getPosition(arms).bottom){
+        // Placing picked object on the same Z-axis as Oc
+        armAngle = 0;
+        arms.style.transform = `rotate(${armAngle}deg)`;
+        maxArmLength = Math.sqrt(Math.pow( (targetX - getPosition(arms).left), 2)); // Calculating distance for X-axis stretch (the Y remains the same as Oc)
+      }
+
+      moveElement(putDown, armAngle, dArmWidth, pushDirection, Direction.down, true);
+      
+    }else{
+      // Reaching out to grab the object
+
+    }
+    
 
     if(armWidth <= maxArmLength){
       window.setTimeout(grow,50);
-    }
-    else {
+    }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.top, 10) < 0 )
-      {
-        putDown.style.top = 0;
+      if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
+        
+        // Umbrella animation, if the putDown object is our beloved dog
+        if(putDown.classList.contains('dog')){
+          dog.classList.add('dog-umbrella');
+          let umbrellaFloatSpeed = 4,
+              umbrellaCloseDistance = 10; // dog umbrella animation changes 
+
+
+          function dogFloatsDown(){
+            if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+              dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+              requestAnimationFrame(dogFloatsDown);
+            }else{
+              dog.style.bottom = oc.style.bottom;
+              dog.classList.remove('dog-umbrella');
+
+              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(5px)'; // Altering the Z translation, to render tufts of grass in the foreground
+            }
+          }
+          
+          dogFloatsDown();
+
+        }else{
+          setPosition(putDown);
+        }
+        
       }
+
       window.setTimeout(shrink,200);
     }
 
   }
 
+  // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
+  if(!!putDown){
+    putDown.style.left = oc.style.left;
+    putDown.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+  }
   
   grow();
   window.setTimeout(reverseStretch, 800);
 
-}
+} // ocReach() ENDs
 
 
 function ocMoveLeft(oc){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){ 
-    oc.classList.add('walk-movement', 'turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-left', 'moving');
     setPosition(oc); // sets z-position & CSS transform
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
   }
@@ -196,8 +263,8 @@ function ocMoveLeft(oc){
 
 function ocMoveRight(oc){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.remove('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-right', 'moving');
     setPosition(oc);
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
     // var left = parseInt(oc.style.left,10);
@@ -206,14 +273,13 @@ function ocMoveRight(oc){
 
 // moves Oc towards the horizon
 function ocMoveOut(event){
-  if(event.repeat) return;
+  if(event.repeat) return;// prevent repeat events, movement occurs until key is lifted
 
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.remove('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-back', 'moving');
     
     var upKeyPressed = true;
-    console.log('ocMoveOut');
     function moveOcUp(){
       let zVal = Number(oc.getAttribute('z')),
           updatedZ = zVal + (normalOCSpeed * 0.015);
@@ -239,25 +305,24 @@ function ocMoveOut(event){
   }
 }
 
-
-
 // moves Oc closer to the 4th wall
 function ocMoveIn(event){
-  if(event.repeat) return;
+  if(event.repeat) return; 
 
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
-    oc.classList.add('walk-movement');
-    oc.classList.add('turn-around');
+    oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
+    oc.classList.add('oc-forward', 'moving');
     
     var downKeyPressed = true;
-    console.log('ocMoveOut');
     function moveOcUp(){
       let zVal = Number(oc.getAttribute('z')),
           updatedZ = zVal - (normalOCSpeed * 0.015);
 
       oc.setAttribute('z', Math.max( updatedZ, 0));
       setPosition(oc);
-
+      // if(oc.classList.contains('oc-carrying'))
+      //   setPosition(heldItem);
+      
       if(downKeyPressed){
         window.requestAnimationFrame(moveOcUp);
       }
@@ -276,42 +341,62 @@ function ocMoveIn(event){
   }
 }
 
-// onFrame function for ocMoveIn() and ocMoveOut()
-function depthMovementHandler(){
-
-}
-
 
 var timer = setInterval(function() {
-	const dl = parseInt(oc.getAttribute("dx"),10);
-  const l = parseInt(oc.style.left, 10);
-  const newLeft = safeX( l + dl );
-  oc.style.left = newLeft; //+ "px";
+  if(oc.classList.contains('moving')){
+ 
+    const dl = parseInt(oc.getAttribute("dx"),10);
+    const l = parseInt(oc.style.left, 10);
+    const newLeft = safeX( l + dl );
+    oc.style.left = newLeft; //+ "px";
 
-  if(!!heldItem){
-    holdItem(heldItem);
-  }
+    if(!!heldItem){
+      holdItem(heldItem);
+    }
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
   //   clearInterval( timer );
   // }
+  }
 }, 20);
 
+// ($0.clientWidth - ($0.clientWidth * 0.3)) / 2 
+// Math.round(($0.offsetWidth - $0.getBoundingClientRect().width) / 2)
 function holdItem(item){
-  const ocRect = oc.getBoundingClientRect();
-  item.style.top = oc
-  if(oc.classList.contains('turn-around')){
-    item.style.left = parseInt(oc.style.left, 10) - ocRect.width;//item.getBoundingClientRect().width + 90;
-  }else{
-    item.style.left = parseInt(oc.style.left, 10) + ocRect.width;
+  const ocRect = oc.getBoundingClientRect(),
+        itemRect = item.getBoundingClientRect(),
+        ocBottom = parseInt(oc.style.bottom, 10),  // Getting numerical pixel values, removing 'px' from style the string
+        ocLeft = parseInt(oc.style.left, 10),      // CSS style's left value. When Oc is scaled, there is a gap on the left
+        scaledOCSpacing = Math.round((oc.offsetWidth - ocRect.width) / 2),
+        scaledItemSpacing = Math.round((item.offsetWidth - itemRect.width) / 2),
+        ocScaledLeft = ocLeft - scaledOCSpacing, // when Oc is scaled, this gives the true left. offsetWidth is unscaled, ocRect is scaled
+        ocCenter = ocLeft + (oc.clientWidth / 2) - (item.clientWidth / 2);
+  
+  item.setAttribute('z', oc.getAttribute('z'));
+  setPosition(item);
+  item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(15px)'; // Prevents tufts of grass from showing above the item
+  item.style.bottom = ocBottom + (ocRect.height / 2) - (itemRect.height / 2);
+  
+  if(oc.classList.contains('oc-left')){
+    item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
+  }else if(oc.classList.contains('oc-right')){
+    item.style.left = ocScaledLeft + oc.clientWidth - scaledItemSpacing;
+  }else if(oc.classList.contains('oc-back')){
+    item.style.left = ocCenter;
+    // item.style.left = ocLeft - scaledItemSpacing;
+  }else if(oc.classList.contains('oc-forward')){
+    item.style.left = ocCenter;
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(25px)'; // Renders carried object in front of Oc
+    // debugger;
   }
+  
 }
 
 
 function ocSink(){
   
-  
+
   oc.classList.remove("oc-above");
   oc.classList.add("oc-sink");
   

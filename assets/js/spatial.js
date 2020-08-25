@@ -5,14 +5,15 @@ const Direction = {
 	down: 1
 }
 const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this much
-	  maxFilter = 20,	// The maximum desaturation / fade applied to Oc, when they're at a distance
+	  maxFilter = 8,	// The maximum desaturation / fade applied to Oc, when they're at a distance
 	  scaleDifferential = 1 - scaleDownFactor, // The scaling difference Oc undergoes
 	  maxZ = 9; //Z values range from 0 - maxZ
 
-// storing Oc's CSS transforms (so they can be overridden in JS)
+// storing Oc's CSS transforms (so they can be toggled in JS)
 var ocTransform = {
 	rotateX: "-15deg",
-	translateY: "-15px",
+	translateY: "0px",
+	translateZ: "5px",
 	scaleX: 1,
 	scale: 1,
 }
@@ -34,9 +35,11 @@ function getPosition(element) {
   var rect = element && element.getBoundingClientRect(),
   scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
   scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
   return rect && { 
   	top: rect.top + scrollTop, 
-  	left: rect.left + scrollLeft 
+	left: rect.left + scrollLeft,
+	bottom: rect.bottom
   }
 }
 
@@ -46,38 +49,50 @@ function setPosition(element){
 		percentage = z / maxZ;
 		scale = ((1 - percentage) * scaleDifferential) + scaleDownFactor;	// Current scaling to apply to Oc. Example: (1 - (0 / 9)) * 0.4 + 0.6 [for foreground]
 
-	// Having Oc face the right way
-	if(element.classList.contains('turn-around')){
-		ocTransform.scaleX = -1;
+	if(element.classList.contains('oc')){
+
+		// Having Oc face the right way
+		if(oc.classList.contains('oc-left')){
+			ocTransform.scaleX = -1;
+		}else{
+			ocTransform.scaleX = 1;
+		}
+
+		ocTransform.scale = scale;
+		oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`;
+		oc.style.top = 'auto';
 	}else{
-		ocTransform.scaleX = 1;
+		ocTransform.scale = scale;
+		element.style.transform = `scale(${ocTransform.scale}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`
 	}
-	ocTransform.scale = scale;
-	oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY})`;
 
-	oc.style.top = 'auto';
-	oc.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
-
-	oc.style.filter = `invert(${maxFilter * percentage}%)`;
+	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
+	element.style.filter = `invert(${maxFilter * percentage}%)`;
 }
 
 function safeX(x) {  
-		var w = window.width - 10000; //2800
+	var w = window.width - 10000; //2800
     var leftEdge = 950
 
     return x < leftEdge ? leftEdge : x > w ? w : x;
 }
 
-function moveElement(element, angle, distance, directionX, directionY){
+function moveElement(element, angle, distance, directionX, directionY, disableZMovement){
   if(element){
     const radAngle = degToRad(angle);
     const dl = Math.cos(radAngle) * distance * directionX;
     const dt = Math.sin(radAngle) * distance * directionY;
     const newLeft = parseInt(element.style.left,10) + dl ;
-    const newTop = parseInt(element.style.top,10) + dt ;
 
     element.style.left = newLeft;
-    element.style.top = newTop;
+
+	if(disableZMovement){
+		const newBottom = parseInt(element.style.bottom,10) - dt;
+		element.style.bottom = newBottom;
+	}else{
+		setPosition(element); // Y-axis positioning is dependent on the element's depth/Z value
+	}
+	
   }
 
 }
