@@ -7,7 +7,7 @@
   height: 600px;
   overflow: hidden;
   /*top: 440;*/
-  background: url(/sprites/lawn/Lawn.png) left top;
+  background: url(/sprites/lawn/Lawn2.png) left top;
   background-size: cover;
   filter: brightness(1.5);
 }
