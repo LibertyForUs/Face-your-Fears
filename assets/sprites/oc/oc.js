@@ -67,7 +67,7 @@ function ocReach(targetX, targetY){
   //arms.classList.add("triangle-right");
   arms.style.width = armScaledWidth;
   // arms.style.left = oc.clientWidth / 2;
-  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height  * .62;
   oc.appendChild(arms);
 
   function endTransition(){
@@ -223,7 +223,7 @@ function ocReach(targetX, targetY){
               dog.style.bottom = oc.style.bottom;
               dog.classList.remove('dog-umbrella');
 
-              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(5px)'; // Altering the Z translation, to render tufts of grass in the foreground
+              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
             }
           }
           
@@ -242,8 +242,8 @@ function ocReach(targetX, targetY){
 
   // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
   if(!!putDown){
-    putDown.style.left = oc.style.left;
-    putDown.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+    putDown.style.left = parseInt(oc.style.left) - (putDown.getBoundingClientRect().width / 2);
+    putDown.style.bottom = parseInt(oc.style.bottom) + (oc.getBoundingClientRect().height / 2);
   }
   
   grow();
