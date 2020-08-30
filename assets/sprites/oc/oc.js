@@ -67,7 +67,7 @@ function ocReach(targetX, targetY){
   //arms.classList.add("triangle-right");
   arms.style.width = armScaledWidth;
   // arms.style.left = oc.clientWidth / 2;
-  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height  * .62;
   oc.appendChild(arms);
 
   function endTransition(){
