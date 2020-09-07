@@ -240,9 +240,10 @@ function ocReach(targetX, targetY){
           } 
         }
 
+        console.log("Left style", putDown.style.left);
         // Updating item position in items[]. Used for parrallax positioning
         items.filter(item => item.name === putDown.id)[0].position = {
-          x: parseInt(putDown.style.left), 
+          x: parseInt(putDown.style.left) - landXPosition, 
           z: putDown.getAttribute('z')
         }
         items.filter(item => item.name === putDown.id)[0].isHeld = false;
