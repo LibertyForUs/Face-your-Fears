@@ -1,13 +1,21 @@
-const normalOCSpeed = 3;
+var oc = document.getElementById("oc"),
+    land = document.getElementById("land"),
+    midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
+    landXPosition = 0;
+
+const normalOCSpeed = 3,
+      ocLeftOffset = 783,   // Qasim: Oc at left:0 doesn't align with the left of the screen (I don't know why, yet - will look into it further). This is their left offset
+      landLeftOffset = 740,
+      ocWidth = oc.clientWidth;   // Initial Oc width
 
 // for future "shift mode" for running
 //const fastOCSpeed = 9;
 
 
-var oc = document.getElementById("oc");
+
 
 oc.style.left = '1200px';
-
+land.style.left = `${landLeftOffset}px`;
 oc.classList.add('oc-right');
 
 function createAttribute(element, name, value){
@@ -348,7 +356,41 @@ var timer = setInterval(function() {
     const dl = parseInt(oc.getAttribute("dx"),10);
     const l = parseInt(oc.style.left, 10);
     const newLeft = safeX( l + dl );
-    oc.style.left = newLeft; //+ "px";
+    const landLeft = parseInt(land.style.left);
+    
+    // Oc is moving right
+    // if(dl > 0){
+    //   // Checking bounds, Oc should only walk till the center of the screen
+    //   if((newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint){
+    //     oc.style.left = newLeft;
+    //   }else{
+    //     moveBackground();
+    //   }
+
+    // }else{
+    //   // Oc is moving left
+    //   if((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint){
+    //     oc.style.left = newLeft;
+    //   }else{
+    //     // moveBackground();
+    //   }
+    // }
+
+    // Parrallax background moves with Oc
+    // function moveBackground(){
+    //   landXPosition += (dl * -1);
+    //   land.style.left = landLeftOffset + landXPosition;
+    // }
+    // Moving Oc, on the left and rightmost areas of #land
+    if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
+        (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
+    // if( () || (parseInt(land.style.left) <= ) ){
+      oc.style.left = newLeft; //+ "px";
+    }else{
+      // Moving the background
+      landXPosition += (dl * -1);
+      land.style.left = landLeftOffset + landXPosition;
+    }
 
     if(!!heldItem){
       holdItem(heldItem);
