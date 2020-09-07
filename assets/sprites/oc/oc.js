@@ -11,9 +11,6 @@ const normalOCSpeed = 3,
 // for future "shift mode" for running
 //const fastOCSpeed = 9;
 
-
-
-
 oc.style.left = '1200px';
 land.style.left = `${landLeftOffset}px`;
 oc.classList.add('oc-right');
@@ -171,6 +168,7 @@ function ocReach(targetX, targetY){
         heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         endTransition();
         holdItem(heldItem);
+        items.filter(item => item.name === heldItem.id)[0].isHeld = true;
       }else{
         window.setTimeout(shrink,50);
       }
@@ -214,33 +212,41 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
-        
-        // Umbrella animation, if the putDown object is our beloved dog
-        if(putDown.classList.contains('dog')){
-          dog.classList.add('dog-umbrella');
-          let umbrellaFloatSpeed = 4,
-              umbrellaCloseDistance = 10; // dog umbrella animation changes 
+      if(!!putDown){
+        if(parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom)){
+          // Umbrella animation, if the putDown object is our beloved dog
+          if(putDown.classList.contains('dog')){
+            dog.classList.add('dog-umbrella');
+            let umbrellaFloatSpeed = 4,
+                umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
 
-          function dogFloatsDown(){
-            if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
-              dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
-              requestAnimationFrame(dogFloatsDown);
-            }else{
-              dog.style.bottom = oc.style.bottom;
-              dog.classList.remove('dog-umbrella');
+            function dogFloatsDown(){
+              if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+                dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+                requestAnimationFrame(dogFloatsDown);
+              }else{
+                dog.style.bottom = oc.style.bottom;
+                dog.classList.remove('dog-umbrella');
 
-              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
+                dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
+              }
             }
-          }
-          
-          dogFloatsDown();
+            
+            dogFloatsDown();
 
-        }else{
-          setPosition(putDown);
+          }else{
+            setPosition(putDown);
+          } 
         }
-        
+
+        // Updating item position in items[]. Used for parrallax positioning
+        items.filter(item => item.name === putDown.id)[0].position = {
+          x: parseInt(putDown.style.left), 
+          z: putDown.getAttribute('z')
+        }
+        items.filter(item => item.name === putDown.id)[0].isHeld = false;
+
       }
 
       window.setTimeout(shrink,200);
@@ -357,30 +363,7 @@ var timer = setInterval(function() {
     const l = parseInt(oc.style.left, 10);
     const newLeft = safeX( l + dl );
     const landLeft = parseInt(land.style.left);
-    
-    // Oc is moving right
-    // if(dl > 0){
-    //   // Checking bounds, Oc should only walk till the center of the screen
-    //   if((newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint){
-    //     oc.style.left = newLeft;
-    //   }else{
-    //     moveBackground();
-    //   }
 
-    // }else{
-    //   // Oc is moving left
-    //   if((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint){
-    //     oc.style.left = newLeft;
-    //   }else{
-    //     // moveBackground();
-    //   }
-    // }
-
-    // Parrallax background moves with Oc
-    // function moveBackground(){
-    //   landXPosition += (dl * -1);
-    //   land.style.left = landLeftOffset + landXPosition;
-    // }
     // Moving Oc, on the left and rightmost areas of #land
     if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
         (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
@@ -390,11 +373,41 @@ var timer = setInterval(function() {
       // Moving the background
       landXPosition += (dl * -1);
       land.style.left = landLeftOffset + landXPosition;
+
+      items.forEach(object => {
+        if(!object.isHeld){
+          object.item.style.left = object.position.x + landXPosition;
+        }
+      })
     }
 
     if(!!heldItem){
       holdItem(heldItem);
     }
+
+    // Oc is moving right
+        // if(dl > 0){
+        //   // Checking bounds, Oc should only walk till the center of the screen
+        //   if((newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint){
+        //     oc.style.left = newLeft;
+        //   }else{
+        //     moveBackground();
+        //   }
+
+        // }else{
+        //   // Oc is moving left
+        //   if((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint){
+        //     oc.style.left = newLeft;
+        //   }else{
+        //     // moveBackground();
+        //   }
+        // }
+
+        // Parrallax background moves with Oc
+        // function moveBackground(){
+        //   landXPosition += (dl * -1);
+        //   land.style.left = landLeftOffset + landXPosition;
+        // }
   
   // clear the timer at 400px to stop the animation
   // if ( oc.style.left > getWidth() ) {
