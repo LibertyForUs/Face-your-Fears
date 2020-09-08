@@ -66,13 +66,13 @@ function setPosition(element){
 		element.style.transform = `scale(${ocTransform.scale}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`
 	}
 
-	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
+	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
 	element.style.filter = `invert(${maxFilter * percentage}%)`;
 }
 
 function safeX(x) {  
 	var w = window.width - 10000; //2800
-    var leftEdge = 950
+    var leftEdge = 783
 
     return x < leftEdge ? leftEdge : x > w ? w : x;
 }

@@ -362,28 +362,40 @@ var timer = setInterval(function() {
  
     const dl = parseInt(oc.getAttribute("dx"),10);
     const l = parseInt(oc.style.left, 10);
-    const newLeft = safeX( l + dl );
+    const newLeft = l + dl;
     const landLeft = parseInt(land.style.left);
 
-    // Moving Oc, on the left and rightmost areas of #land
-    if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
-        (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
-    // if( () || (parseInt(land.style.left) <= ) ){
-      oc.style.left = newLeft; //+ "px";
+    // Ensuring that Oc is within the bounds of the _world_
+    if(newLeft > ocLeftOffset && newLeft < (land.clientWidth - ocLeftOffset - oc.clientWidth)){
+      // Moving Oc, on the left and rightmost areas of #land
+      if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
+          (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
+      // if( () || (parseInt(land.style.left) <= ) ){
+        oc.style.left = newLeft; //+ "px";
+      }else{
+        // Moving the background
+        landXPosition += (dl * -1);
+        land.style.left = landLeftOffset + landXPosition;
+
+        items.forEach(object => {
+          if(!object.isHeld){
+            // Fixed position objects (like the fence) don't have parrallax movement
+            if(object.fixed){
+              object.item.style.left = object.position.x + landXPosition;
+            }else{ 
+              debugger;
+              object.item.style.left = object.position.x + landXPosition;
+            }
+          }
+        })
+      }
+
+      if(!!heldItem){
+        holdItem(heldItem);
+      }
+
     }else{
-      // Moving the background
-      landXPosition += (dl * -1);
-      land.style.left = landLeftOffset + landXPosition;
-
-      items.forEach(object => {
-        if(!object.isHeld){
-          object.item.style.left = object.position.x + landXPosition;
-        }
-      })
-    }
-
-    if(!!heldItem){
-      holdItem(heldItem);
+      oc.classList.remove('moving');
     }
 
     // Oc is moving right
