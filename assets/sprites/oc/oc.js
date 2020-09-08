@@ -356,8 +356,9 @@ function ocMoveIn(event){
   }
 }
 
+gameLoop();
+function gameLoop() {
 
-var timer = setInterval(function() {
   if(oc.classList.contains('moving')){
  
     const dl = parseInt(oc.getAttribute("dx"),10);
@@ -397,7 +398,6 @@ var timer = setInterval(function() {
     }else{
       oc.classList.remove('moving');
     }
-
     // Oc is moving right
         // if(dl > 0){
         //   // Checking bounds, Oc should only walk till the center of the screen
@@ -427,7 +427,9 @@ var timer = setInterval(function() {
   //   clearInterval( timer );
   // }
   }
-}, 20);
+  requestAnimationFrame(gameLoop);
+}
+
 
 // ($0.clientWidth - ($0.clientWidth * 0.3)) / 2 
 // Math.round(($0.offsetWidth - $0.getBoundingClientRect().width) / 2)
