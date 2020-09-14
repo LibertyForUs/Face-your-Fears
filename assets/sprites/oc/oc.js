@@ -1,11 +1,14 @@
 var oc = document.getElementById("oc"),
     land = document.getElementById("land"),
     midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
-    landXPosition = 0;
+    landXPosition = 0,
+    parallaxOffset = 700;
 
 const normalOCSpeed = 3,
       ocLeftOffset = 783,   // Qasim: Oc at left:0 doesn't align with the left of the screen (I don't know why, yet - will look into it further). This is their left offset
       landLeftOffset = 740,
+      maxLandLeft = -(land.clientWidth - window.innerWidth - landLeftOffset),
+      landTraverseDistance = landLeftOffset - maxLandLeft,
       ocWidth = oc.clientWidth;   // Initial Oc width
 
 // for future "shift mode" for running
@@ -367,6 +370,7 @@ var timer = setInterval(function() {
 
     // Ensuring that Oc is within the bounds of the _world_
     if(newLeft > ocLeftOffset && newLeft < (land.clientWidth - ocLeftOffset - oc.clientWidth)){
+
       // Moving Oc, on the left and rightmost areas of #land
       if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
           (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
@@ -377,14 +381,19 @@ var timer = setInterval(function() {
         landXPosition += (dl * -1);
         land.style.left = landLeftOffset + landXPosition;
 
+        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
+        debugger;
         items.forEach(object => {
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
             if(object.fixed){
               object.item.style.left = object.position.x + landXPosition;
             }else{ 
+              
               debugger;
-              object.item.style.left = object.position.x + landXPosition;
+
+              let objZPosRatio = 1 - (Number(object.item.getAttribute('z')) / 9);
+              object.item.style.left = object.position.x + landXPosition - ((parallaxOffset * landMovementRatio) * objZPosRatio);
             }
           }
         })
@@ -398,34 +407,6 @@ var timer = setInterval(function() {
       oc.classList.remove('moving');
     }
 
-    // Oc is moving right
-        // if(dl > 0){
-        //   // Checking bounds, Oc should only walk till the center of the screen
-        //   if((newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint){
-        //     oc.style.left = newLeft;
-        //   }else{
-        //     moveBackground();
-        //   }
-
-        // }else{
-        //   // Oc is moving left
-        //   if((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint){
-        //     oc.style.left = newLeft;
-        //   }else{
-        //     // moveBackground();
-        //   }
-        // }
-
-        // Parrallax background moves with Oc
-        // function moveBackground(){
-        //   landXPosition += (dl * -1);
-        //   land.style.left = landLeftOffset + landXPosition;
-        // }
-  
-  // clear the timer at 400px to stop the animation
-  // if ( oc.style.left > getWidth() ) {
-  //   clearInterval( timer );
-  // }
   }
 }, 20);
 

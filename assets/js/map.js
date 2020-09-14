@@ -9,20 +9,33 @@ let items = [
         item: document.querySelector('#dog'), 
         fixed: false,
         position: {x: 2000, z: 4},
-        isHeld: false
+        isHeld: false,
     },
     {
         name: 'mailbox',
         item: document.querySelector('#mailbox'),
         fixed: true,
-        position: {x: 1200, z: 5},
-        isHeld: false
-    }
+        position: {x: 1500, z: 8},
+        isHeld: false,
+    },
+    {
+        name: 'fence',
+        item: document.querySelector('#fence'),
+        fixed: false,
+        position: {x: -170, z: 5},
+        isHeld: false,
+    },
 ]
 
 let mailboxData = items.find(item => item.name === "mailbox"),
-    mailbox = mailboxData.item;
-
+    fenceData = items.find(item => item.name === "fence"),
+    mailbox = mailboxData.item,
+    fence = fenceData.item;
+    
 mailbox.style.left = mailboxData.position.x;
 mailbox.setAttribute('z', mailboxData.position.z);
 setPosition(mailbox);
+
+fence.style.left = fenceData.position.x;
+fence.setAttribute('z', fenceData.position.z);
+setPosition(fence);
