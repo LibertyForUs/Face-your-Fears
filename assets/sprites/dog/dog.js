@@ -22,15 +22,15 @@ function dogWatch(object){
 
 
 function dogIsNearObject(){
-	const dogloc = dogX()
-	const isNear = Math.abs(objectX - dogloc) < 500
+	const dogloc = dogX();
+	const isNear = Math.abs(objectX - dogloc) < 500 && zDistance() < 4;
 
 	return isNear
 }
 
 function dogIsReallyNearObject(){
 	const dogloc = dogX()
-	const isNear = Math.abs(objectX - dogloc) < 200
+	const isNear = Math.abs(objectX - dogloc) < 200 && zDistance() < 1;
 	return isNear
 }
 
@@ -38,6 +38,10 @@ function dogIsReallyReallyNearObject(){
 	const dogloc = dogX()
 	const isNear = Math.abs(objectX - dogloc) < 100
 	return isNear
+}
+
+function zDistance(){
+	return Math.abs(parseInt(dog.getAttribute('z')) - parseInt(oc.getAttribute('z')));
 }
 
 function dogX(){

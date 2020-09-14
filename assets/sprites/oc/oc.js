@@ -293,20 +293,24 @@ function ocMoveRight(oc){
 function ocMoveOut(event){
   if(event.repeat) return;// prevent repeat events, movement occurs until key is lifted
 
-  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch') ){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
     
     var upKeyPressed = true;
     function moveOcUp(){
-      let zVal = Number(oc.getAttribute('z')),
-          updatedZ = zVal + (normalOCSpeed * 0.015);
+      if( (parseInt(oc.style.bottom) < parseInt(fence.style.bottom)) ){
+        let zVal = Number(oc.getAttribute('z')),
+        updatedZ = zVal + (normalOCSpeed * 0.015);
 
-      oc.setAttribute('z', Math.min( updatedZ, maxZ));
-      setPosition(oc);
+        oc.setAttribute('z', Math.min( updatedZ, maxZ));
+        setPosition(oc);
 
-      if(upKeyPressed){
-        window.requestAnimationFrame(moveOcUp);
+        if(upKeyPressed){
+          window.requestAnimationFrame(moveOcUp);
+        }
+      }else{
+
       }
     }
 
