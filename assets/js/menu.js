@@ -3,10 +3,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Play menu audio
     // document.querySelector('audio').play();
     let audio = new Audio('/audio/title-song.mp3');
-    
-    document.addEventListener('mousemove', (event) => {
-        let playPromise = audio.play();
-        document.removeEventListener('mousemove', this);    
+    document.querySelector('.logo').addEventListener('click', (event) => {
+        
+        audio.loop = true;
+        audio.play();
+        document.removeEventListener('click', this);
+        debugger;
+        // let playPromise = audio.play();
+        // document.querySelector('audio').play();
     })
 
 
