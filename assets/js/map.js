@@ -7,7 +7,7 @@ let items = [
     {
         name: 'dog',
         item: document.querySelector('#dog'), 
-        fixed: false,
+        fixed: true,
         position: {x: 2000, z: 4},
         isHeld: false,
     },
@@ -21,7 +21,7 @@ let items = [
     {
         name: 'fence',
         item: document.querySelector('#fence'),
-        fixed: false,
+        fixed: true,
         position: {x: -170, z: 5},
         isHeld: false,
     },

@@ -220,6 +220,7 @@ function ocReach(targetX, targetY){
           // Umbrella animation, if the putDown object is our beloved dog
           if(putDown.classList.contains('dog')){
             dog.classList.add('dog-umbrella');
+            dog.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
             let umbrellaFloatSpeed = 4,
                 umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
