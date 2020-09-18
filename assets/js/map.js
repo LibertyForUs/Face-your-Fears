@@ -15,14 +15,14 @@ let items = [
         name: 'mailbox',
         item: document.querySelector('#mailbox'),
         fixed: true,
-        position: {x: 1500, z: 8},
+        position: {x: 1500, z: 5.5},
         isHeld: false,
     },
     {
         name: 'fence',
         item: document.querySelector('#fence'),
         fixed: true,
-        position: {x: -170, z: 5},
+        position: {x: -200, z: 5},
         isHeld: false,
     },
 ]

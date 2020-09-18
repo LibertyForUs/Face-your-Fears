@@ -1,5 +1,7 @@
 var oc = document.getElementById("oc"),
     land = document.getElementById("land"),
+    background = document.querySelector('.background'),
+    foreground = document.querySelector('#lawn'),
     midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
     landXPosition = 0,
     parallaxOffset = 700;
@@ -300,14 +302,16 @@ function ocMoveOut(event){
     
     var upKeyPressed = true;
     function moveOcUp(){
-      let zVal = Number(oc.getAttribute('z')),
-          updatedZ = zVal + (normalOCSpeed * 0.015);
+      if(parseInt(oc.style.bottom) < parseInt(fence.style.bottom)){
+        let zVal = Number(oc.getAttribute('z')),
+            updatedZ = zVal + (normalOCSpeed * 0.015);
 
-      oc.setAttribute('z', Math.min( updatedZ, maxZ));
-      setPosition(oc);
+        oc.setAttribute('z', Math.min( updatedZ, maxZ));
+        setPosition(oc);
 
-      if(upKeyPressed){
-        window.requestAnimationFrame(moveOcUp);
+        if(upKeyPressed){
+          window.requestAnimationFrame(moveOcUp);
+        }
       }
     }
 
@@ -379,11 +383,13 @@ var timer = setInterval(function() {
         oc.style.left = newLeft; //+ "px";
       }else{
         // Moving the background
+        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
+
         landXPosition += (dl * -1);
         land.style.left = landLeftOffset + landXPosition;
+        // foreground.style.left = landXPosition;
+        background.style.left = (parallaxOffset * landMovementRatio);
 
-        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
-        debugger;
         items.forEach(object => {
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
