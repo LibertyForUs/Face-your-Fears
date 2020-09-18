@@ -1,9 +1,11 @@
 var objectX 
 var dog = document.getElementById("dog")
 
+let dogData = items.filter(item => item.name === "dog")[0];
+
 // dog.style.bottom = '500px';
-dog.style.left = '2000px';
-dog.setAttribute('z', 4);
+dog.style.left = `${dogData.position.x}px`;
+dog.setAttribute('z', dogData.position.z);
 setPosition(dog);
 holdables.push(dog);
 
