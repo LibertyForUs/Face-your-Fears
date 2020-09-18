@@ -38,3 +38,11 @@
   background-size: cover;
   filter: brightness(3.5);
 }
+
+.fence.stay-above {
+  transform: rotateX(-88deg) scale(0.5) translateX(-200px) translateZ(-15px) translateY(-85px) !important;
+}
+
+.mailbox.stay-above {
+  transform: rotateX(-88deg) translateY(-40px) scale(0.8) !important;
+}
