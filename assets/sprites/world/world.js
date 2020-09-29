@@ -12,10 +12,13 @@ function worldGoBelow(){
 			p.classList.add("shifting");
 			setTimeout(function(){ p.classList.remove("shifting") }, 800);
 
-			d.classList.add("stay-above");
-			d.classList.remove("return-above");
+			// d.classList.add("stay-above");
+			// d.classList.remove("return-above");
 			p.classList.add("below");
 			p.classList.remove("above");
+			items.forEach(object => {
+				object.item.classList.add('stay-above');
+			})
 		}	
 
 	}
@@ -35,7 +38,10 @@ function worldGoAbove(){
 		p.classList.add("above");
 		// d.classList.add("return-above");
 		// setTimeout(function(){ d.classList.remove("return-above") }, 800);
-		d.classList.remove("stay-above");
+		items.forEach(object => {
+			object.item.classList.remove('stay-above');
+		})
+		// d.classList.remove("stay-above");
 
 	}	
 }
