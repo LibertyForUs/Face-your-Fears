@@ -1,13 +1,18 @@
 var objectX 
 var dog = document.getElementById("dog")
 
-let dogData = items.filter(item => item.name === "dog")[0];
+let dogData;
 
-// dog.style.bottom = '500px';
-dog.style.left = `${dogData.position.x}px`;
-dog.setAttribute('z', dogData.position.z);
-setPosition(dog);
-holdables.push(dog);
+// Waiting for map data to be loaded and parsed, before initialising these values (bugfix)
+function initializeDog(){
+	dogData = items.filter(item => item.name === "dog")[0];
+	dog.style.left = `${dogData.position.x}px`;
+	dog.setAttribute('z', dogData.position.z);
+	setPosition(dog);
+	holdables.push(dog);
+	// dog.style.bottom = '500px';
+}
+
 
 function dogWatch(object){
 	if(!object) return

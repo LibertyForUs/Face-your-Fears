@@ -389,10 +389,12 @@ var timer = setInterval(function() {
         land.style.left = landLeftOffset + landXPosition;
         // foreground.style.left = landXPosition;
         background.style.left = (parallaxOffset * landMovementRatio);
-
+        debugger;
         items.forEach(object => {
+          debugger;
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
+            
             if(object.fixed){
               object.item.style.left = object.position.x + landXPosition;
             }else{ 

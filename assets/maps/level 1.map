@@ -1,0 +1,14 @@
+# This is a map file. Comments begin with a # symbol
+# Symbols are defined with an @ sign, and then placed on a map.
+
+@dog symbol:& fixed:true position:{x:2000,z:4} isHeld:false
+@mailbox symbol:# fixed:true position:{x:1500,z:5.5} isHeld:false
+@fence symbol:* fixed:true position:{x:-200,z:5} isHeld:false
+
+===
+#           
+#          
+#
+
+#
+===
