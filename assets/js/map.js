@@ -2,7 +2,7 @@
 let path = window.location.pathname,
     currentLevel = null,
     items = [],
-    mailboxData, fenceData, mailbox, fence;
+    mailboxData, fenceData, dogData, mailbox, fence, dog;
 
 // Checking that we have a map
 if(path.indexOf('/level/') !== -1){
@@ -93,10 +93,11 @@ if(path.indexOf('/level/') !== -1){
                     }
                 }
 
-                debugger;
-                // Initializing elements
+                // Initializing map items
                 mailboxData = items.find(item => item.name === "mailbox");
                 fenceData = items.find(item => item.name === "fence");
+                dogData = items.find(item => item.name === "dog")
+
                 if(fenceData !== undefined){
                     fence = fenceData.item;
                     fence.style.left = fenceData.position.x;
@@ -104,7 +105,6 @@ if(path.indexOf('/level/') !== -1){
                     setPosition(fence);
                 }
 
-                // asdf
                 if(mailboxData !== undefined){
                     mailbox = mailboxData.item;
                     mailbox.style.left = mailboxData.position.x;
@@ -112,8 +112,15 @@ if(path.indexOf('/level/') !== -1){
                     setPosition(mailbox);
                 }
 
-                initializeDog();
-                debugger;
+                if(dogData !== undefined){
+                    dog = dogData.item;
+                    dog.style.left = dogData.position.x;
+                    dog.setAttribute('z', dogData.position.z);
+                    setPosition(dog);
+                    holdables.push(dog);
+                    initialiseDog(); // starts wagging behaviour
+                }
+                
 
             }).catch(error => {
                 console.log('error', error);

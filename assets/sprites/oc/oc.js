@@ -300,9 +300,10 @@ function ocMoveOut(event){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
     
+    var ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom));
     var upKeyPressed = true;
     function moveOcUp(){
-      if(parseInt(oc.style.bottom) < parseInt(fence.style.bottom)){
+      if(parseInt(oc.style.bottom) < ceiling){
         let zVal = Number(oc.getAttribute('z')),
             updatedZ = zVal + (normalOCSpeed * 0.015);
 
@@ -389,18 +390,14 @@ var timer = setInterval(function() {
         land.style.left = landLeftOffset + landXPosition;
         // foreground.style.left = landXPosition;
         background.style.left = (parallaxOffset * landMovementRatio);
-        debugger;
+
         items.forEach(object => {
-          debugger;
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
             
             if(object.fixed){
               object.item.style.left = object.position.x + landXPosition;
             }else{ 
-              
-              debugger;
-
               let objZPosRatio = 1 - (Number(object.item.getAttribute('z')) / 9);
               object.item.style.left = object.position.x + landXPosition - ((parallaxOffset * landMovementRatio) * objZPosRatio);
             }
