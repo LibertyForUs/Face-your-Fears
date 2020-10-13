@@ -38,17 +38,61 @@ if(path.indexOf('/level/') !== -1){
                         
                         element.name = itemName;
                         element.item = document.querySelector(`#${itemName}`);
-                        element.position = attributesArr.find(item => item.indexOf('position:') === 0) // Storing position as an Object, it's like so: "{x:5,z:2}"
-                            .split('{')[1]  // Removing {,}, and ',' characters from string
-                            .split('}')[0]
-                            .split(',')
-                            .reduce((accumulator, currentValue) => {    // Reducing vals into a single object
-                                    let keyVal = currentValue.split(':');;
-                                    return {...accumulator, [keyVal[0]] : Number(keyVal[1])};
-                                },{}
-                            );
+
+                        // If this element has a position value coded in, we read it (otherwise we calculate position based on map)
+                        if( element.hasOwnProperty('position') ){
+                            element.position = attributesArr.find(item => item.indexOf('position:') === 0) // Storing position as an Object, it's like so: "{x:5,z:2}"
+                                .split('{')[1]  // Removing {,}, and ',' characters from string
+                                .split('}')[0]
+                                .split(',')
+                                .reduce((accumulator, currentValue) => {    // Reducing vals into a single object
+                                        let keyVal = currentValue.split(':');;
+                                        return {...accumulator, [keyVal[0]] : Number(keyVal[1])};
+                                    },{}
+                                );
+                        }
                         items.push(element);        
                     }
+                }
+
+                // determining object placement based on map symbols
+                let mapPlacementIndex = lines.indexOf('/=='), // placement tiles start with the line /==
+                    mapPlacementEndIndex,   // index of the termination of placement symbols
+                    mapLines,               // Array of all placement tiles
+                    mapWidth,               // Map dimensions
+                    mapHeight,
+                    stageWidth = 1900,
+                    stageHeight = 10;
+
+                // Sanity check
+                if( !!mapPlacementIndex ){
+                    mapPlacementEndIndex = lines.indexOf('\==');    // the last placement line's index
+                    mapLines = lines.slice(mapPlacementIndex  + 1, mapPlacementEndIndex);
+                    mapWidth = mapLines[0].length;
+                    mapHeight = mapLines.length;
+
+                    // Runs for every line of map data
+                    for(let i = 0; i < mapLines.length; i++){
+                        
+                        // Running for each character in a line
+                        for(let j = 0; j < mapLines[i].length; j++){
+
+                            if(mapLines[i][j] !== " "){
+                                let symbol = mapLines[i][j],
+                                    symbolElement = items.find(item => item.symbol === symbol);
+                                
+                                    // Ensuring that a position isn't set on the symbol itself
+                                    if(!symbolElement.hasOwnProperty('position')){
+                                        symbolElement.position = {
+                                            x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
+                                            z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
+                                        }
+                                    }
+                            }
+                        }
+                    }
+
+                    debugger;
                 }
 
                 // Initializing elements

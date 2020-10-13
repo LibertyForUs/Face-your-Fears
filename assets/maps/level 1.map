@@ -1,14 +1,31 @@
-# This is a map file. Comments begin with a # symbol
-# Symbols are defined with an @ sign, and then placed on a map.
+# This is a map for Face-your-fears
+# The aim is to have a really simple map format, that lets us place objects
+# and define behaviour for each level, without needing to hardcode it in. 
+# Comments begin with a # character.
+# Symbols are defined with an @ sign, and can specify their own characters
+# These symbols can either be placed on the map section, or by directly specifying a position:{x,y} value
 
-@dog symbol:& fixed:true position:{x:2000,z:4} isHeld:false
-@mailbox symbol:# fixed:true position:{x:1500,z:5.5} isHeld:false
+
+#Symbols
+@dog symbol:& fixed:true isHeld:false
+@mailbox symbol:= fixed:true isHeld:false
 @fence symbol:* fixed:true position:{x:-200,z:5} isHeld:false
 
-===
-#           
-#          
-#
+#@mailbox symbol:= fixed:true position:{x:1500,z:5.5} isHeld:false
+#@dog symbol:& fixed:true position:{x:2000,z:4} isHeld:false
 
-#
-===
+
+# Map placement of symbols. At the moment, comments (#) aren't valid within the placement region
+/==
+                                                                                        
+
+                                                                                    
+*
+
+                                =
+
+
+
+                                                    &                            
+
+\==
