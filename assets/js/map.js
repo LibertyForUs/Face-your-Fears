@@ -91,23 +91,26 @@ if(path.indexOf('/level/') !== -1){
                             }
                         }
                     }
-
-                    debugger;
                 }
 
+                debugger;
                 // Initializing elements
                 mailboxData = items.find(item => item.name === "mailbox");
                 fenceData = items.find(item => item.name === "fence");
-                mailbox = mailboxData.item;
-                fence = fenceData.item;
-                
-                mailbox.style.left = mailboxData.position.x;
-                mailbox.setAttribute('z', mailboxData.position.z);
-                setPosition(mailbox);
+                if(fenceData !== undefined){
+                    fence = fenceData.item;
+                    fence.style.left = fenceData.position.x;
+                    fence.setAttribute('z', fenceData.position.z);
+                    setPosition(fence);
+                }
 
-                fence.style.left = fenceData.position.x;
-                fence.setAttribute('z', fenceData.position.z);
-                setPosition(fence);
+                // asdf
+                if(mailboxData !== undefined){
+                    mailbox = mailboxData.item;
+                    mailbox.style.left = mailboxData.position.x;
+                    mailbox.setAttribute('z', mailboxData.position.z);
+                    setPosition(mailbox);
+                }
 
                 initializeDog();
                 debugger;
