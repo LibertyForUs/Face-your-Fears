@@ -1,5 +1,7 @@
 var oc = document.getElementById("oc"),
     land = document.getElementById("land"),
+    background = document.querySelector('.background'),
+    foreground = document.querySelector('#lawn'),
     midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
     landXPosition = 0,
     parallaxOffset = 700;
@@ -220,6 +222,7 @@ function ocReach(targetX, targetY){
           // Umbrella animation, if the putDown object is our beloved dog
           if(putDown.classList.contains('dog')){
             dog.classList.add('dog-umbrella');
+            dog.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
             let umbrellaFloatSpeed = 4,
                 umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
@@ -297,11 +300,12 @@ function ocMoveOut(event){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
     
+    var ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom));
     var upKeyPressed = true;
     function moveOcUp(){
-      if( (parseInt(oc.style.bottom) < parseInt(fence.style.bottom)) ){
+      if(parseInt(oc.style.bottom) < ceiling){
         let zVal = Number(oc.getAttribute('z')),
-        updatedZ = zVal + (normalOCSpeed * 0.015);
+            updatedZ = zVal + (normalOCSpeed * 0.015);
 
         oc.setAttribute('z', Math.min( updatedZ, maxZ));
         setPosition(oc);
@@ -309,8 +313,6 @@ function ocMoveOut(event){
         if(upKeyPressed){
           window.requestAnimationFrame(moveOcUp);
         }
-      }else{
-
       }
     }
 
@@ -382,20 +384,20 @@ var timer = setInterval(function() {
         oc.style.left = newLeft; //+ "px";
       }else{
         // Moving the background
+        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
+
         landXPosition += (dl * -1);
         land.style.left = landLeftOffset + landXPosition;
+        // foreground.style.left = landXPosition;
+        background.style.left = (parallaxOffset * landMovementRatio);
 
-        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
-        debugger;
         items.forEach(object => {
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
+            
             if(object.fixed){
               object.item.style.left = object.position.x + landXPosition;
             }else{ 
-              
-              debugger;
-
               let objZPosRatio = 1 - (Number(object.item.getAttribute('z')) / 9);
               object.item.style.left = object.position.x + landXPosition - ((parallaxOffset * landMovementRatio) * objZPosRatio);
             }

@@ -1,13 +1,4 @@
-var objectX 
-var dog = document.getElementById("dog")
-
-let dogData = items.filter(item => item.name === "dog")[0];
-
-// dog.style.bottom = '500px';
-dog.style.left = `${dogData.position.x}px`;
-dog.setAttribute('z', dogData.position.z);
-setPosition(dog);
-holdables.push(dog);
+var objectX;
 
 function dogWatch(object){
 	if(!object) return
@@ -56,25 +47,25 @@ function switchWag(newWag){
 	newWag == "dog-wag-very-fast" ? null : dog.classList.remove('dog-wag-very-fast');
 	newWag ? dog.classList.add(newWag) : null;
 }
-//dog will wag when object is near
-var timer = setInterval(function() {
-	
-	if(dogIsReallyReallyNearObject()){
-  	switchWag('dog-wag-very-fast');
-	}
-	else if(dogIsReallyNearObject()){
-		switchWag('dog-wag-fast');
-	}
-	else if(dogIsNearObject()){
-		switchWag('dog-wag');
-	}
-	else {
-		switchWag()
-	}
-}, 100);
 
+// Waiting for dog data to load. And ensuring that the current map has the dog
+function initialiseDog(){
+	var timer = setInterval(function() {
+		
+		if(dogIsReallyReallyNearObject()){
+		switchWag('dog-wag-very-fast');
+		}
+		else if(dogIsReallyNearObject()){
+			switchWag('dog-wag-fast');
+		}
+		else if(dogIsNearObject()){
+			switchWag('dog-wag');
+		}
+		else {
+			switchWag()
+		}
+	}, 100);
 
-
-var oc = document.getElementById("oc");
-
-dogWatch(oc);
+	var oc = document.getElementById("oc");
+	dogWatch(oc);
+}
