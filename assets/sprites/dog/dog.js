@@ -1,34 +1,35 @@
-var objectX;
+var objectX,
+	objectY
 
 function dogWatch(object){
 	if(!object) return
 
-
-
 	setInterval(function() {
 		objectX = parseInt(object.style.left,10);
-
+		objectY = parseInt(object.style.bottom, 10);
 	}, 100);
 }
 
 
 function dogIsNearObject(){
-	const dogloc = dogX();
-	const isNear = Math.abs(objectX - dogloc) < 500 && zDistance() < 4;
-
-	return isNear
+	const dogXloc = dogX(),
+		  dogYloc = dogY();
+	const isNear = Math.abs(objectX - dogXloc) < 500 && Math.abs(objectY - dogYloc) < 500;
+	return isNear;
 }
 
 function dogIsReallyNearObject(){
-	const dogloc = dogX()
-	const isNear = Math.abs(objectX - dogloc) < 200 && zDistance() < 1;
-	return isNear
+	const dogXloc = dogX(),
+		  dogYloc = dogY();
+	const isNear = Math.abs(objectX - dogXloc) < 200 && Math.abs(objectY - dogYloc) < 200;
+	return isNear;
 }
 
 function dogIsReallyReallyNearObject(){
-	const dogloc = dogX()
-	const isNear = Math.abs(objectX - dogloc) < 100
-	return isNear
+	const dogXloc = dogX(),
+		  dogYloc = dogY();
+	const isNear = Math.abs(objectX - dogXloc) < 100 && Math.abs(objectY - dogYloc) < 100;
+	return isNear;
 }
 
 function zDistance(){
@@ -40,6 +41,13 @@ function dogX(){
 	var style = window.getComputedStyle(dog, null);
 	return parseInt(style.left,10);
 }
+
+function dogY(){
+	if(!dog) return
+	var style = window.getComputedStyle(dog, null);
+	return parseInt(style.bottom,10);
+}
+
 function switchWag(newWag){
 
 	newWag == "dog-wag" ? null : dog.classList.remove('dog-wag');
