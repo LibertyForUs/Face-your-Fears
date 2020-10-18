@@ -1,8 +1,16 @@
 // Loading in map files & parsing items
 let path = window.location.pathname,
     currentLevel = null,
-    items = [],
+    itemTypes = [], // Stores every @symbol in a map file
+    items = [],     // Stores every instance - a map can have multiple instances of an item-type
     mailboxData, fenceData, dogData, mailbox, fence, dog;
+
+// Creates and appends a new DOM element in the .above-ground plane, and returns it
+function createDOMElement(name){
+    let item = document.createElement('div');
+    item.classList.add(name);
+    return document.querySelector('.above-ground').appendChild(item);
+}
 
 // Checking that we have a map
 if(path.indexOf('/level/') !== -1){
@@ -37,7 +45,11 @@ if(path.indexOf('/level/') !== -1){
                             }}, {})
                         
                         element.name = itemName;
-                        element.item = document.querySelector(`#${itemName}`);
+
+                        // let item = document.createElement('div');
+                        // item.classList.add(element.name);
+                        // document.querySelector('.above-ground').appendChild(item);
+                        // element.item = document.querySelector(`#${itemName}`);
 
                         // If this element has a position value coded in, we read it (otherwise we calculate position based on map)
                         if( element.hasOwnProperty('position') ){
@@ -50,8 +62,11 @@ if(path.indexOf('/level/') !== -1){
                                         return {...accumulator, [keyVal[0]] : Number(keyVal[1])};
                                     },{}
                                 );
+                            // Adding element to the list of rendered on-screen items
+                            element.item = createDOMElement(element.name);
+                            items.push(element);
                         }
-                        items.push(element);        
+                        itemTypes.push(element);        
                     }
                 }
 
@@ -79,14 +94,18 @@ if(path.indexOf('/level/') !== -1){
 
                             if(mapLines[i][j] !== " "){
                                 let symbol = mapLines[i][j],
-                                    symbolElement = items.find(item => item.symbol === symbol);
+                                    symbolElement = itemTypes.find(item => item.symbol === symbol);
+                                    debugger;
                                 
-                                    // Ensuring that a position isn't set on the symbol itself
+                                    // Ensuring that a position attribute isn't already present on the symbol itself
                                     if(!symbolElement.hasOwnProperty('position')){
                                         symbolElement.position = {
                                             x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
                                             z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
                                         }
+                                        symbolElement.item = createDOMElement(symbolElement.name);
+                                        items.push(symbolElement);
+                                        debugger;
                                     }
                             }
                         }
@@ -94,32 +113,47 @@ if(path.indexOf('/level/') !== -1){
                 }
 
                 // Initializing map items
-                mailboxData = items.find(item => item.name === "mailbox");
-                fenceData = items.find(item => item.name === "fence");
-                dogData = items.find(item => item.name === "dog")
+                for(let index in items){
+                    let itemData = items[index],
+                        item = itemData.item;
 
-                if(fenceData !== undefined){
-                    fence = fenceData.item;
-                    fence.style.left = fenceData.position.x;
-                    fence.setAttribute('z', fenceData.position.z);
-                    setPosition(fence);
+                    item.style.left = itemData.position.x;
+                    item.setAttribute('z', itemData.position.z);
+                    setPosition(item);
+
+                    if(item.name === "dog"){
+                        holdables.push(item);
+                        initialiseDog;
+                    }
                 }
 
-                if(mailboxData !== undefined){
-                    mailbox = mailboxData.item;
-                    mailbox.style.left = mailboxData.position.x;
-                    mailbox.setAttribute('z', mailboxData.position.z);
-                    setPosition(mailbox);
-                }
 
-                if(dogData !== undefined){
-                    dog = dogData.item;
-                    dog.style.left = dogData.position.x;
-                    dog.setAttribute('z', dogData.position.z);
-                    setPosition(dog);
-                    holdables.push(dog);
-                    initialiseDog(); // starts wagging behaviour
-                }
+                // mailboxData = items.find(item => item.name === "mailbox");
+                // fenceData = items.find(item => item.name === "fence");
+                // dogData = items.find(item => item.name === "dog")
+
+                // if(fenceData !== undefined){
+                //     fence = fenceData.item;
+                //     fence.style.left = fenceData.position.x;
+                //     fence.setAttribute('z', fenceData.position.z);
+                //     setPosition(fence);
+                // }
+
+                // if(mailboxData !== undefined){
+                //     mailbox = mailboxData.item;
+                //     mailbox.style.left = mailboxData.position.x;
+                //     mailbox.setAttribute('z', mailboxData.position.z);
+                //     setPosition(mailbox);
+                // }
+
+                // if(dogData !== undefined){
+                //     dog = dogData.item;
+                //     dog.style.left = dogData.position.x;
+                //     dog.setAttribute('z', dogData.position.z);
+                //     setPosition(dog);
+                //     holdables.push(dog);
+                //     initialiseDog(); // starts wagging behaviour
+                // }
                 
 
             }).catch(error => {
@@ -154,4 +188,3 @@ if(path.indexOf('/level/') !== -1){
 //         isHeld: false,
 //     },
 // ]
-

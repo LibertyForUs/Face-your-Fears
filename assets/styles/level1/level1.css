@@ -1,4 +1,4 @@
-#mailbox {
+.mailbox {
     background: url(/images/postbox.png);
     width: 52px;
     height: 100px;
@@ -9,7 +9,7 @@
     position: fixed;
 }
 
-#fence {
+.fence {
     background: url(/images/fence.png);
     width: 5000px;
     height: 204;
