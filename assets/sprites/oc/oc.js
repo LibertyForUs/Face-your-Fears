@@ -294,8 +294,9 @@ function ocMoveOut(event){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch') ){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
+    let fence = items.find(item => item.name === "fence");
     
-    var ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom));
+    var ceiling = (fence === undefined ? 550 : parseInt(fence.item.style.bottom));
     var upKeyPressed = true;
     function moveOcUp(){
       if(parseInt(oc.style.bottom) < ceiling){
