@@ -56,11 +56,6 @@ function ocFaceRight(){
 }
 
 function ocReach(targetX, targetY){
-  
-  // Matching the reach animation's arm with the carried object. Temporary fix - need to match Oc's animation frame dimensions
-  // if(oc.classList.contains('oc-carrying')){
-  //   dog.style.bottom = parseInt(dog.style.bottom) + 100;
-  // }
 
   oc.classList.add("oc-stretch");
   oc.classList.remove('walk-movement');
@@ -173,7 +168,7 @@ function ocReach(targetX, targetY){
         heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         endTransition();
         holdItem(heldItem);
-        items.filter(item => item.name === heldItem.id)[0].isHeld = true;
+        items.find(element => element.item === heldItem).isHeld = true;
       }else{
         window.setTimeout(shrink,50);
       }
@@ -221,21 +216,21 @@ function ocReach(targetX, targetY){
         if(parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom)){
           // Umbrella animation, if the putDown object is our beloved dog
           if(putDown.classList.contains('dog')){
-            dog.classList.add('dog-umbrella');
-            dog.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
+            putDown.classList.add('dog-umbrella');
+            putDown.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
             let umbrellaFloatSpeed = 4,
                 umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
 
             function dogFloatsDown(){
-              if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
-                dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+              if( parseInt(putDown.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+                putDown.style.bottom = parseInt(putDown.style.bottom) - umbrellaFloatSpeed;
                 requestAnimationFrame(dogFloatsDown);
               }else{
-                dog.style.bottom = oc.style.bottom;
-                dog.classList.remove('dog-umbrella');
+                putDown.style.bottom = oc.style.bottom;
+                putDown.classList.remove('dog-umbrella');
 
-                dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
+                putDown.style.transform = putDown.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
               }
             }
             
@@ -248,11 +243,11 @@ function ocReach(targetX, targetY){
 
         console.log("Left style", putDown.style.left);
         // Updating item position in items[]. Used for parrallax positioning
-        items.filter(item => item.name === putDown.id)[0].position = {
+        items.find(element => element.item === putDown).position = {
           x: parseInt(putDown.style.left) - landXPosition, 
           z: putDown.getAttribute('z')
         }
-        items.filter(item => item.name === putDown.id)[0].isHeld = false;
+        items.find(element => element.item === putDown).isHeld = false;
 
       }
 

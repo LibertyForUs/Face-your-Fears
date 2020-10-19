@@ -1,5 +1,5 @@
 var objectX,
-	objectY
+	objectY;
 
 function dogWatch(object){
 	if(!object) return
@@ -11,44 +11,44 @@ function dogWatch(object){
 }
 
 
-function dogIsNearObject(){
-	const dogXloc = dogX(),
-		  dogYloc = dogY();
+function dogIsNearObject(dog){
+	const dogXloc = dogX(dog),
+		  dogYloc = dogY(dog);
 	const isNear = Math.abs(objectX - dogXloc) < 500 && Math.abs(objectY - dogYloc) < 500;
 	return isNear;
 }
 
-function dogIsReallyNearObject(){
-	const dogXloc = dogX(),
-		  dogYloc = dogY();
+function dogIsReallyNearObject(dog){
+	const dogXloc = dogX(dog),
+		  dogYloc = dogY(dog);
 	const isNear = Math.abs(objectX - dogXloc) < 200 && Math.abs(objectY - dogYloc) < 200;
 	return isNear;
 }
 
-function dogIsReallyReallyNearObject(){
-	const dogXloc = dogX(),
-		  dogYloc = dogY();
+function dogIsReallyReallyNearObject(dog){
+	const dogXloc = dogX(dog),
+		  dogYloc = dogY(dog);
 	const isNear = Math.abs(objectX - dogXloc) < 100 && Math.abs(objectY - dogYloc) < 100;
 	return isNear;
 }
 
-function zDistance(){
+function zDistance(dog){
 	return Math.abs(parseInt(dog.getAttribute('z')) - parseInt(oc.getAttribute('z')));
 }
 
-function dogX(){
+function dogX(dog){
 	if(!dog) return
 	var style = window.getComputedStyle(dog, null);
 	return parseInt(style.left,10);
 }
 
-function dogY(){
+function dogY(dog){
 	if(!dog) return
 	var style = window.getComputedStyle(dog, null);
 	return parseInt(style.bottom,10);
 }
 
-function switchWag(newWag){
+function switchWag(dog, newWag){
 
 	newWag == "dog-wag" ? null : dog.classList.remove('dog-wag');
 	newWag == "dog-wag-fast" ? null : dog.classList.remove('dog-wag-fast');
@@ -58,21 +58,28 @@ function switchWag(newWag){
 
 // Waiting for dog data to load. And ensuring that the current map has the dog
 function initialiseDog(){
-	var timer = setInterval(function() {
-		
-		if(dogIsReallyReallyNearObject()){
-		switchWag('dog-wag-very-fast');
-		}
-		else if(dogIsReallyNearObject()){
-			switchWag('dog-wag-fast');
-		}
-		else if(dogIsNearObject()){
-			switchWag('dog-wag');
-		}
-		else {
-			switchWag()
-		}
-	}, 100);
+	let dogs = document.querySelectorAll('.dog');
+	debugger;
+	if(dogs.length){
+		var timer = setInterval(function() {
+			debugger;
+			dogs.forEach((dog) => {
+				
+				if(dogIsReallyReallyNearObject(dog)){
+					switchWag(dog, 'dog-wag-very-fast');
+				}
+				else if(dogIsReallyNearObject(dog)){
+					switchWag(dog, 'dog-wag-fast');
+				}
+				else if(dogIsNearObject(dog)){
+					switchWag(dog, 'dog-wag');
+				}
+				else {
+					switchWag(dog);
+				}
+			})		
+		}, 100);
+	}
 
 	var oc = document.getElementById("oc");
 	dogWatch(oc);

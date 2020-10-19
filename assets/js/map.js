@@ -2,9 +2,8 @@
 let path = window.location.pathname,
     currentLevel = null,
     itemTypes = [], // Stores every @symbol in a map file
-    items = [],     // Stores every instance - a map can have multiple instances of an item-type
-    mailboxData, fenceData, dogData, mailbox, fence, dog;
-
+    items = [];     // Stores every instance - a map can have multiple instances of an item-type
+let dog;
 // Creates and appends a new DOM element in the .above-ground plane, and returns it
 function createDOMElement(name){
     let item = document.createElement('div');
@@ -95,7 +94,7 @@ if(path.indexOf('/level/') !== -1){
                             if(mapLines[i][j] !== " "){
                                 let symbol = mapLines[i][j],
                                     symbolElement = JSON.parse( JSON.stringify( itemTypes.find(item => item.symbol === symbol))); // non-destructively duplicating item from itemTypes
-                                debugger;
+
                                 symbolElement.position = {
                                     x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
                                     z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
@@ -116,9 +115,11 @@ if(path.indexOf('/level/') !== -1){
                     item.setAttribute('z', itemData.position.z);
                     setPosition(item);
 
-                    if(item.name === "dog"){
+                    debugger;
+                    if(itemData.name === "dog"){                        
+                        dog = document.querySelector('.dog');
                         holdables.push(item);
-                        initialiseDog;
+                        initialiseDog();
                     }
                 }
 
