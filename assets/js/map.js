@@ -94,19 +94,14 @@ if(path.indexOf('/level/') !== -1){
 
                             if(mapLines[i][j] !== " "){
                                 let symbol = mapLines[i][j],
-                                    symbolElement = itemTypes.find(item => item.symbol === symbol);
-                                    debugger;
-                                
-                                    // Ensuring that a position attribute isn't already present on the symbol itself
-                                    if(!symbolElement.hasOwnProperty('position')){
-                                        symbolElement.position = {
-                                            x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
-                                            z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
-                                        }
-                                        symbolElement.item = createDOMElement(symbolElement.name);
-                                        items.push(symbolElement);
-                                        debugger;
-                                    }
+                                    symbolElement = JSON.parse( JSON.stringify( itemTypes.find(item => item.symbol === symbol))); // non-destructively duplicating item from itemTypes
+                                debugger;
+                                symbolElement.position = {
+                                    x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
+                                    z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
+                                }
+                                symbolElement.item = createDOMElement(symbolElement.name);
+                                items.push(symbolElement);
                             }
                         }
                     }
