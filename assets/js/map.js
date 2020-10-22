@@ -115,7 +115,6 @@ if(path.indexOf('/level/') !== -1){
                     item.setAttribute('z', itemData.position.z);
                     setPosition(item);
 
-                    debugger;
                     if(itemData.name === "dog"){                        
                         dog = document.querySelector('.dog');
                         holdables.push(item);

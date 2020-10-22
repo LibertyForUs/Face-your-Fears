@@ -59,10 +59,10 @@ function switchWag(dog, newWag){
 // Waiting for dog data to load. And ensuring that the current map has the dog
 function initialiseDog(){
 	let dogs = document.querySelectorAll('.dog');
-	debugger;
+
 	if(dogs.length){
 		var timer = setInterval(function() {
-			debugger;
+
 			dogs.forEach((dog) => {
 				
 				if(dogIsReallyReallyNearObject(dog)){
