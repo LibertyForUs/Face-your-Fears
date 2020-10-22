@@ -1,5 +1,6 @@
 // Loading in map files & parsing items
 let path = window.location.pathname,
+    numLevels = 2,  // Used to determine whether moving to the right edge loads a new level
     currentLevel = null,
     itemTypes = [], // Stores every @symbol in a map file
     items = [];     // Stores every instance - a map can have multiple instances of an item-type
@@ -13,7 +14,7 @@ function createDOMElement(name){
 
 // Checking that we have a map
 if(path.indexOf('/level/') !== -1){
-    currentLevel = Number( path.substring(path.indexOf('/level/') + 7) );
+    currentLevel = Number( path.substring(path.indexOf('/level/') + 7) );   // extracting the level number, 7 skips the '/level/' part of the pathstring
     
     if(currentLevel > 0){ // sanity check, edgecase where /level/ doesn't have a number in the URL
         fetch(`/maps/level ${currentLevel}.map`)

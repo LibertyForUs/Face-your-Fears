@@ -371,7 +371,10 @@ var timer = setInterval(function() {
     const landLeft = parseInt(land.style.left);
 
     // Ensuring that Oc is within the bounds of the _world_
-    if(newLeft > ocLeftOffset && newLeft < (land.clientWidth - ocLeftOffset - oc.clientWidth)){
+    let isOcAtLeftEdge = (newLeft <= ocLeftOffset),
+        isOcAtRightEdge = (newLeft >= (land.clientWidth - ocLeftOffset - oc.clientWidth) ); 
+
+    if(!isOcAtLeftEdge && !isOcAtRightEdge){
 
       // Moving Oc, on the left and rightmost areas of #land
       if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
@@ -406,7 +409,25 @@ var timer = setInterval(function() {
       }
 
     }else{
+      debugger;
       oc.classList.remove('moving');
+      
+      // Updating levels when Oc moves to the screen edge
+      if(currentLevel > 0){ // sanity check, ensuring we have levels. Invalid currentLevel values become '0'
+        
+        let targetLevel = currentLevel;
+        
+        if(isOcAtLeftEdge){
+          targetLevel--;
+        }else if(isOcAtRightEdge){
+          targetLevel++;
+        }
+        
+        if(targetLevel > 0 && targetLevel <= numLevels){
+          window.location = `/level/${targetLevel}`;
+        }
+
+      }
     }
 
   }
