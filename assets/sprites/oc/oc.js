@@ -122,7 +122,7 @@ function ocReach(targetX, targetY){
   var pickUp, putDown;
   holdables.map(e => {
     if (!!heldItem){
-      putDown = e;
+      putDown = heldItem;
       oc.classList.remove('oc-carrying');
       heldItem = null;
     }else if(intersects(targetX,targetY,e)){
