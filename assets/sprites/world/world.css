@@ -122,5 +122,8 @@ html, body {
   transform: scaleX(-1);
 }
 
-
-
+/* Common styles for all programatically-added objects */
+.above-ground > .oc ~ div {
+	background-repeat: no-repeat;
+	position: fixed;
+}

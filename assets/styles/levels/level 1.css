@@ -1,13 +1,13 @@
-.mailbox {
+/* .mailbox {
     background: url(/images/postbox.png);
     width: 52px;
     height: 100px;
-    /* transform: rotateX(-15deg) translateY(-15px); */
-    /* transform-origin: bottom center; */
-    /* z-index: 50; */
+    transform: rotateX(-15deg) translateY(-15px);
+    transform-origin: bottom center;
+    z-index: 50;
     background-repeat: no-repeat;
     position: fixed;
-}
+} */
 
 .fence {
     background: url(/images/fence.png);
@@ -16,7 +16,7 @@
     /* transform: rotateX(-15deg) translateY(-15px); */
     /* transform-origin: bottom center; */
     z-index: 50;
-    background-repeat: repeat-x;
+    background-repeat: repeat-x !important;
     position: fixed;
     background-size: contain;
 }

@@ -5,9 +5,11 @@
   width: 158px; 
   height: 85px;
   z-index: 50;
-  background: url(/sprites/dog/dog-sprite.png);  
   background-repeat: no-repeat;
-  
+}
+
+.dog.dog-wag, .dog.dog-wag-fast, .dog.dog-wag-very-fast {
+  background: url(/sprites/dog/dog-sprite.png);
 }
 
 @keyframes dog-wag {
@@ -16,14 +18,17 @@
 
 .dog-wag {
     animation: dog-wag 0.5s steps(3) infinite;
+    background-size: auto;
 }
 
 .dog-wag-fast {
     animation: dog-wag 0.25s steps(3) infinite;
+    background-size: auto;
 }
 
 .dog-wag-very-fast {
     animation: dog-wag 0.125s steps(3) infinite;
+    background-size: auto;
 }
 
 .dog-umbrella {
@@ -34,8 +39,8 @@
 
 /* Stationary dog, no animation applies here */
 .dog:not(.dog-wag):not(.dog-wag-fast):not(.dog-wag-very-fast):not(.dog-umbrella) {
-  background: url(/sprites/dog/dog-stationary.png);
-  background-size: contain;
+  /* background: url(/sprites/dog/dog-stationary.png); */
+  /* background-size: contain; */
   width: 158px;
   height: 85px;
 }

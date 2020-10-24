@@ -1,9 +1,10 @@
 // Loading in map files & parsing items
 let path = window.location.pathname,
-    numLevels = 2,  // Used to determine whether moving to the right edge loads a new level
+    numLevels = 2,    // Used to determine whether moving to the right edge loads a new level
     currentLevel = null,
-    itemTypes = [], // Stores every @symbol in a map file
-    items = [];     // Stores every instance - a map can have multiple instances of an item-type
+    itemTypes = [],   // Stores every @symbol in a map file
+    items = [],       // Stores every instance - a map can have multiple instances of an item-type
+    styleString = ''; // Setting item styles in a <style> element, rather than on DOM elements. DOM element styles aren't maintained after spatial.js positioning
 let dog;
 // Creates and appends a new DOM element in the .above-ground plane, and returns it
 function createDOMElement(name){
@@ -32,14 +33,19 @@ if(path.indexOf('/level/') !== -1){
                     // The @ symbol defines elements on the map
                     if(lines[i][0] === '@'){
                         let attributesArr = lines[i].split(' ');
-                        let itemName = attributesArr.shift().substr(1);// removing the @ symbol, retrieving item name
-                        let element = attributesArr.reduce((array, current) => {
+                        let itemName = attributesArr.shift().substr(1);// removing the @ symbol, retrieving object name
+                        let element = attributesArr.reduce((array, current) => { // parsing key-value pairs for the current @object
                             var [key, value] = [...current.split(':')];
+
+                            // For attributes that don't have a key:value, we use them as boolean flags & set as true, when present
+                            if(value === undefined)
+                                value = true;
+
                             // Converting values to boolean, if they're "true" or "false"
                             value = (value === "true" || value === "false" ? 
                                 (value === "true" ? true : false) : 
-                                value 
-                                ) 
+                                value ) 
+                            
                             return {...array, // previous values, spread into this object
                                 [key]: value //[key] ensures we pass the value stored in the key variable, rather than setting the word "key" itself as key
                             }}, {})
@@ -50,6 +56,20 @@ if(path.indexOf('/level/') !== -1){
                         // item.classList.add(element.name);
                         // document.querySelector('.above-ground').appendChild(item);
                         // element.item = document.querySelector(`#${itemName}`);
+
+                        // set to true when the object is held
+                        if(typeof element.isHeld === undefined)
+                            element.isHeld = false; 
+
+                        // Set to false for elements that have background parallax. The further in the Z index that they are, the slower they move
+                        if(typeof element.fixed === undefined)
+                            element.fixed = true;   
+
+                        // Automatically setting a background image for this element, if it's not being set in css
+                        if(!element.css){
+                            styleString += `.${element.name}{ background-image: url(/sprites/${element.name}/${element.name}.png); width:${element.width}; height:${element.height}; }`;
+                            // element.item.dataset.backgroundImage = `url(/sprites/${element.name}/${element.name}.png);`;
+                        }
 
                         // If this element has a position value coded in, we read it (otherwise we calculate position based on map)
                         if( element.hasOwnProperty('position') ){
@@ -69,6 +89,20 @@ if(path.indexOf('/level/') !== -1){
                         itemTypes.push(element);        
                     }
                 }
+
+                // Writing styleString into a <style> element. These set background-images for items, rather than writing styles on DOM objects (get wiped by spatial.js positioning)
+                let style = document.createElement('style'),
+                    ref = document.querySelector('head > link');
+                style.innerHTML = styleString;
+                ref.parentNode.insertBefore(style, ref); // Adding <style> before the first <script> tag
+
+                // Loading the map's CSS files
+                style = document.createElement('link');
+                ref = document.querySelector('head > link:last-of-type');
+                style.setAttribute('rel', 'stylesheet');
+                style.setAttribute('href', `/styles/levels/level ${currentLevel}.css`);
+                ref.parentNode.insertBefore(style, ref);
+                
 
                 // determining object placement based on map symbols
                 let mapPlacementIndex = lines.indexOf('/=='), // placement tiles start with the line /==
@@ -122,6 +156,7 @@ if(path.indexOf('/level/') !== -1){
                         initialiseDog();
                     }
                 }
+
 
 
                 // mailboxData = items.find(item => item.name === "mailbox");

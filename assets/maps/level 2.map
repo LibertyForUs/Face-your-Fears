@@ -1,12 +1,8 @@
 # Level 2 map
 
 #Symbols
-@dog symbol:& fixed:true isHeld:false
-@mailbox symbol:= fixed:true isHeld:false
-
-#@mailbox symbol:= fixed:true position:{x:1500,z:5.5} isHeld:false
-#@dog symbol:& fixed:true position:{x:2000,z:4} isHeld:false
-
+@dog symbol:& width:158 height:85
+@mailbox symbol:= position:{x:1500,z:5.5} width:52 height:100
 
 # Map placement of symbols. At the moment, comments (#) aren't valid within the placement region
 /==
