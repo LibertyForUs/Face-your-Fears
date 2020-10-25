@@ -56,11 +56,6 @@ function ocFaceRight(){
 }
 
 function ocReach(targetX, targetY){
-  
-  // Matching the reach animation's arm with the carried object. Temporary fix - need to match Oc's animation frame dimensions
-  // if(oc.classList.contains('oc-carrying')){
-  //   dog.style.bottom = parseInt(dog.style.bottom) + 100;
-  // }
 
   oc.classList.add("oc-stretch");
   oc.classList.remove('walk-movement');
@@ -127,7 +122,7 @@ function ocReach(targetX, targetY){
   var pickUp, putDown;
   holdables.map(e => {
     if (!!heldItem){
-      putDown = e;
+      putDown = heldItem;
       oc.classList.remove('oc-carrying');
       heldItem = null;
     }else if(intersects(targetX,targetY,e)){
@@ -173,7 +168,7 @@ function ocReach(targetX, targetY){
         heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         endTransition();
         holdItem(heldItem);
-        items.filter(item => item.name === heldItem.id)[0].isHeld = true;
+        items.find(element => element.item === heldItem).isHeld = true;
       }else{
         window.setTimeout(shrink,50);
       }
@@ -221,21 +216,21 @@ function ocReach(targetX, targetY){
         if(parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom)){
           // Umbrella animation, if the putDown object is our beloved dog
           if(putDown.classList.contains('dog')){
-            dog.classList.add('dog-umbrella');
-            dog.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
+            putDown.classList.add('dog-umbrella');
+            putDown.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
             let umbrellaFloatSpeed = 4,
                 umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
 
             function dogFloatsDown(){
-              if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
-                dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+              if( parseInt(putDown.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+                putDown.style.bottom = parseInt(putDown.style.bottom) - umbrellaFloatSpeed;
                 requestAnimationFrame(dogFloatsDown);
               }else{
-                dog.style.bottom = oc.style.bottom;
-                dog.classList.remove('dog-umbrella');
+                putDown.style.bottom = oc.style.bottom;
+                putDown.classList.remove('dog-umbrella');
 
-                dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
+                putDown.style.transform = putDown.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
               }
             }
             
@@ -248,11 +243,11 @@ function ocReach(targetX, targetY){
 
         console.log("Left style", putDown.style.left);
         // Updating item position in items[]. Used for parrallax positioning
-        items.filter(item => item.name === putDown.id)[0].position = {
+        items.find(element => element.item === putDown).position = {
           x: parseInt(putDown.style.left) - landXPosition, 
           z: putDown.getAttribute('z')
         }
-        items.filter(item => item.name === putDown.id)[0].isHeld = false;
+        items.find(element => element.item === putDown).isHeld = false;
 
       }
 
@@ -296,13 +291,15 @@ function ocMoveRight(oc){
 function ocMoveOut(event){
   if(event.repeat) return;// prevent repeat events, movement occurs until key is lifted
 
-  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch') ){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
+    let fence = items.find(item => item.name === "fence");
     
+    var ceiling = (fence === undefined ? 550 : parseInt(fence.item.style.bottom));
     var upKeyPressed = true;
     function moveOcUp(){
-      if(parseInt(oc.style.bottom) < parseInt(fence.style.bottom)){
+      if(parseInt(oc.style.bottom) < ceiling){
         let zVal = Number(oc.getAttribute('z')),
             updatedZ = zVal + (normalOCSpeed * 0.015);
 
@@ -374,7 +371,10 @@ var timer = setInterval(function() {
     const landLeft = parseInt(land.style.left);
 
     // Ensuring that Oc is within the bounds of the _world_
-    if(newLeft > ocLeftOffset && newLeft < (land.clientWidth - ocLeftOffset - oc.clientWidth)){
+    let isOcAtLeftEdge = (newLeft <= ocLeftOffset),
+        isOcAtRightEdge = (newLeft >= (land.clientWidth - ocLeftOffset - oc.clientWidth) ); 
+
+    if(!isOcAtLeftEdge && !isOcAtRightEdge){
 
       // Moving Oc, on the left and rightmost areas of #land
       if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
@@ -393,12 +393,10 @@ var timer = setInterval(function() {
         items.forEach(object => {
           if(!object.isHeld){
             // Fixed position objects (like the fence) don't have parrallax movement
+            
             if(object.fixed){
               object.item.style.left = object.position.x + landXPosition;
             }else{ 
-              
-              debugger;
-
               let objZPosRatio = 1 - (Number(object.item.getAttribute('z')) / 9);
               object.item.style.left = object.position.x + landXPosition - ((parallaxOffset * landMovementRatio) * objZPosRatio);
             }
@@ -411,7 +409,25 @@ var timer = setInterval(function() {
       }
 
     }else{
+      debugger;
       oc.classList.remove('moving');
+      
+      // Updating levels when Oc moves to the screen edge
+      if(currentLevel > 0){ // sanity check, ensuring we have levels. Invalid currentLevel values become '0'
+        
+        let targetLevel = currentLevel;
+        
+        if(isOcAtLeftEdge){
+          targetLevel--;
+        }else if(isOcAtRightEdge){
+          targetLevel++;
+        }
+        
+        if(targetLevel > 0 && targetLevel <= numLevels){
+          window.location = `/level/${targetLevel}`;
+        }
+
+      }
     }
 
   }
