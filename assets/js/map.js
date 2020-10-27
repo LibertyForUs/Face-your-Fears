@@ -57,12 +57,16 @@ if(path.indexOf('/level/') !== -1){
                         // document.querySelector('.above-ground').appendChild(item);
                         // element.item = document.querySelector(`#${itemName}`);
 
-                        // set to true when the object is held
-                        if(typeof element.isHeld === undefined)
+                        // Set to true when the object is held
+                        if(element.isHeld === undefined)
                             element.isHeld = false; 
+                        
+                        // Set to false when an item does not collide
+                        if(element.collides === undefined)
+                            element.collides = true;
 
                         // Set to false for elements that have background parallax. The further in the Z index that they are, the slower they move
-                        if(typeof element.fixed === undefined)
+                        if(element.fixed === undefined)
                             element.fixed = true;   
 
                         // Automatically setting a background image for this element, if it's not being set in css

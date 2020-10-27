@@ -241,7 +241,6 @@ function ocReach(targetX, targetY){
           } 
         }
 
-        console.log("Left style", putDown.style.left);
         // Updating item position in items[]. Used for parrallax positioning
         items.find(element => element.item === putDown).position = {
           x: parseInt(putDown.style.left) - landXPosition, 
@@ -253,7 +252,6 @@ function ocReach(targetX, targetY){
 
       window.setTimeout(shrink,200);
     }
-
   }
 
   // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
@@ -268,22 +266,23 @@ function ocReach(targetX, targetY){
 } // ocReach() ENDs
 
 
-function ocMoveLeft(oc){
+function ocMoveLeft(event){
+  if(event.repeat) return; // prevent repeat events, movement occurs until key is lifted
+
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){ 
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-left', 'moving');
-    setPosition(oc); // sets z-position & CSS transform
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10) * -1);
   }
 }
 
-function ocMoveRight(oc){
+function ocMoveRight(event){
+  if(event.repeat) return; 
+
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-right', 'moving');
-    setPosition(oc);
     oc.setAttribute("dx", parseInt(oc.getAttribute("speed"),10));
-    // var left = parseInt(oc.style.left,10);
   }
 }
 
@@ -294,34 +293,7 @@ function ocMoveOut(event){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch') ){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
-    let fence = items.find(item => item.name === "fence");
-    
-    var ceiling = (fence === undefined ? 550 : parseInt(fence.item.style.bottom));
-    var upKeyPressed = true;
-    function moveOcUp(){
-      if(parseInt(oc.style.bottom) < ceiling){
-        let zVal = Number(oc.getAttribute('z')),
-            updatedZ = zVal + (normalOCSpeed * 0.015);
-
-        oc.setAttribute('z', Math.min( updatedZ, maxZ));
-        setPosition(oc);
-
-        if(upKeyPressed){
-          window.requestAnimationFrame(moveOcUp);
-        }
-      }
-    }
-
-    window.requestAnimationFrame(moveOcUp);
-    window.addEventListener('keyup', keyUpHandler);
-
-    function keyUpHandler(event) {
-      if( ['w', 'ArrowUp'].includes( event.key) ){
-        upKeyPressed = false;
-        window.removeEventListener('keyup', keyUpHandler);
-      }
-    }
-
+    oc.setAttribute("dz", parseInt(oc.getAttribute("speed"),10) * 0.015);
   }
 }
 
@@ -332,49 +304,83 @@ function ocMoveIn(event){
   if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-forward', 'moving');
-    
-    var downKeyPressed = true;
-    function moveOcUp(){
-      let zVal = Number(oc.getAttribute('z')),
-          updatedZ = zVal - (normalOCSpeed * 0.015);
-
-      oc.setAttribute('z', Math.max( updatedZ, 0));
-      setPosition(oc);
-      // if(oc.classList.contains('oc-carrying'))
-      //   setPosition(heldItem);
-      
-      if(downKeyPressed){
-        window.requestAnimationFrame(moveOcUp);
-      }
-    }
-
-    window.requestAnimationFrame(moveOcUp);
-    window.addEventListener('keyup', keyUpHandler);
-
-    function keyUpHandler(event) {
-      if( ['s', 'ArrowDown'].includes( event.key) ){
-        downKeyPressed = false;
-        window.removeEventListener('keyup', keyUpHandler);
-      }
-    }
-
+    oc.setAttribute("dz", parseInt(oc.getAttribute("speed"),10) * -0.015);
   }
 }
 
+//   let zVal = Number(oc.getAttribute('z')),
+    //       updatedZ = zVal - (normalOCSpeed * 0.015);
+
+    //   oc.setAttribute('z', Math.max( updatedZ, 0));
+    //   setPosition(oc);
+
+// Stopping movement beyond the fence & azimuth
+// let fence = items.find(item => item.name === "fence");
+    
+// var ceiling = (fence === undefined ? 550 : parseInt(fence.item.style.bottom));
+// var upKeyPressed = true;
+// function moveOcUp(){
+//   if(parseInt(oc.style.bottom) < ceiling){
 
 var timer = setInterval(function() {
   if(oc.classList.contains('moving')){
  
-    const dl = parseInt(oc.getAttribute("dx"),10);
-    const l = parseInt(oc.style.left, 10);
-    const newLeft = l + dl;
-    const landLeft = parseInt(land.style.left);
+    const dl = Number(oc.getAttribute("dx")),
+          dz = Number(oc.getAttribute('dz')),
+          l = parseInt(oc.style.left, 10),  //parseInt removes (px), but Number() gives us decimal, needed for minute Z movement
+          z = Number(oc.getAttribute('z')),
+          newLeft = l + dl,
+          newZ = z + dz,
+          landLeft = parseInt(land.style.left);
+
+
+    oc.setAttribute('z', 
+      Math.min(maxZ, 
+                Math.max(newZ, 0)
+              ));
+    setPosition(oc);
 
     // Ensuring that Oc is within the bounds of the _world_
     let isOcAtLeftEdge = (newLeft <= ocLeftOffset),
         isOcAtRightEdge = (newLeft >= (land.clientWidth - ocLeftOffset - oc.clientWidth) ); 
-
+    
+    debugger;
     if(!isOcAtLeftEdge && !isOcAtRightEdge){
+
+      // let colliding = false;
+      // // Detecting if we're about to collide with an object
+      // for(let i = 0; i < items.length; i++){
+      //   if(items[i].collides){
+      //     let item = items[i],
+      //         itemElement = item.item,
+      //         // ocLeft = Number(oc.style.left),
+      //         itemLeft = Number(itemElement.style.left),
+      //         ocRect = oc.getBoundingClientRect(),
+      //         itemRect = itemElement.getBoundingClientRect(),
+      //         verticalSpacing = 100;
+              
+
+      //     // if( !(
+      //     //   ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || 
+      //     //   ( ())
+      //     // )
+          
+
+      //     if(item.name === "dog"){
+      //       if(isColliding(oc, itemElement)){
+      //         debugger;
+      //         colliding = true;
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
+
+      // if(colliding){
+      //   debugger;
+      //   return;
+      // }
+      // debugger;
 
       // Moving Oc, on the left and rightmost areas of #land
       if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
@@ -409,10 +415,9 @@ var timer = setInterval(function() {
       }
 
     }else{
-      debugger;
-      oc.classList.remove('moving');
-      
       // Updating levels when Oc moves to the screen edge
+      oc.classList.remove('moving');
+
       if(currentLevel > 0){ // sanity check, ensuring we have levels. Invalid currentLevel values become '0'
         
         let targetLevel = currentLevel;
