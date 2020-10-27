@@ -18,7 +18,7 @@ var transformDefaults = {
 	scale: 1,
 }
 
-// Detecting object collision
+// Collision detection
 function isColliding(a, b){
 	let aRect = a.getBoundingClientRect(),
 		bRect = b.getBoundingClientRect();
@@ -28,7 +28,7 @@ function isColliding(a, b){
         (aRect.top > (bRect.top + bRect.height)) ||
         ((aRect.left + aRect.width) < bRect.left) ||
         (aRect.left > (bRect.left + bRect.width))
-	);
+	);// if any of these ^ are true, we're not having a collision.
 }
 function intersects(x,y,element){
 	pos = getPosition(element);

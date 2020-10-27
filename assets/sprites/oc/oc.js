@@ -333,7 +333,59 @@ var timer = setInterval(function() {
           newZ = z + dz,
           landLeft = parseInt(land.style.left);
 
+      // Detecting for collisions, before any movement in the X or Z axes
+      let colliding = false;
+      
+      for(let i = 0; i < items.length; i++){
+        if(items[i].collides){
+          let item = items[i],
+              itemElement = item.item,
+              itemZ = parseInt(itemElement.getAttribute('z'), 10),
+              itemLeft =parseInt(itemElement.style.left, 10),
+              ocRect = oc.getBoundingClientRect(),
+              itemRect = itemElement.getBoundingClientRect(),
+              verticalSpacing = 100;
+          
+          // if( !(
+          //   ( Math.abs(newZ - itemZ) > 1) ||
+          //   // ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || //Oc is above this item
+          //   // ( (ocRect.bottom - verticalSpacing) > (itemRect.bottom) ) || // Oc is below this item
+          //   ( (newLeft + ocRect.width) < itemRect.left ) || // Oc is to the left
+          //   ( (newLeft >  (itemRect.left + itemRect.width) ) )// Oc is to the right
+          //   )
+          // ){
+          //   colliding = false;
+          // }else{
+          //   colliding = true;
+          // }
 
+          if( !(
+            ( Math.abs(newZ - itemZ) > 1) ||
+            ( (newLeft + ocRect.width) < itemLeft ) || 
+            ( (newLeft >  (itemLeft + itemRect.width) ) )
+            )
+          ){
+            debugger;
+            colliding = true;
+          }
+          
+
+          // if(item.name === "dog"){
+          //   if(isColliding(oc, itemElement)){
+          //     debugger;
+          //     colliding = true;
+          //     break;
+          //   }
+          // }
+        }
+      }
+
+      if(colliding){
+        return;
+      }
+
+
+    // Z-axis movement
     oc.setAttribute('z', 
       Math.min(maxZ, 
                 Math.max(newZ, 0)
@@ -344,43 +396,7 @@ var timer = setInterval(function() {
     let isOcAtLeftEdge = (newLeft <= ocLeftOffset),
         isOcAtRightEdge = (newLeft >= (land.clientWidth - ocLeftOffset - oc.clientWidth) ); 
     
-    debugger;
     if(!isOcAtLeftEdge && !isOcAtRightEdge){
-
-      // let colliding = false;
-      // // Detecting if we're about to collide with an object
-      // for(let i = 0; i < items.length; i++){
-      //   if(items[i].collides){
-      //     let item = items[i],
-      //         itemElement = item.item,
-      //         // ocLeft = Number(oc.style.left),
-      //         itemLeft = Number(itemElement.style.left),
-      //         ocRect = oc.getBoundingClientRect(),
-      //         itemRect = itemElement.getBoundingClientRect(),
-      //         verticalSpacing = 100;
-              
-
-      //     // if( !(
-      //     //   ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || 
-      //     //   ( ())
-      //     // )
-          
-
-      //     if(item.name === "dog"){
-      //       if(isColliding(oc, itemElement)){
-      //         debugger;
-      //         colliding = true;
-      //         break;
-      //       }
-      //     }
-      //   }
-      // }
-
-      // if(colliding){
-      //   debugger;
-      //   return;
-      // }
-      // debugger;
 
       // Moving Oc, on the left and rightmost areas of #land
       if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
