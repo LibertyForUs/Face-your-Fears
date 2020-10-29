@@ -6,6 +6,7 @@ var oc = document.getElementById("oc"),
     landXPosition = 0,
     parallaxOffset = 700;
 
+
 const normalOCSpeed = 3,
       ocLeftOffset = 783,   // Qasim: Oc at left:0 doesn't align with the left of the screen (I don't know why, yet - will look into it further). This is their left offset
       landLeftOffset = 740,
@@ -328,69 +329,73 @@ var timer = setInterval(function() {
     const dl = Number(oc.getAttribute("dx")),
           dz = Number(oc.getAttribute('dz')),
           l = parseInt(oc.style.left, 10),  //parseInt removes (px), but Number() gives us decimal, needed for minute Z movement
+          ocBottom = parseInt(oc.style.bottom, 10),
           z = Number(oc.getAttribute('z')),
           newLeft = l + dl,
           newZ = z + dz,
           landLeft = parseInt(land.style.left);
 
-      // Detecting for collisions, before any movement in the X or Z axes
-      let colliding = false;
-      
-      for(let i = 0; i < items.length; i++){
-        if(items[i].collides){
-          let item = items[i],
-              itemElement = item.item,
-              itemZ = parseInt(itemElement.getAttribute('z'), 10),
-              itemLeft =parseInt(itemElement.style.left, 10),
-              ocRect = oc.getBoundingClientRect(),
-              itemRect = itemElement.getBoundingClientRect(),
-              verticalSpacing = 100;
-          
-          // if( !(
-          //   ( Math.abs(newZ - itemZ) > 1) ||
-          //   // ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || //Oc is above this item
-          //   // ( (ocRect.bottom - verticalSpacing) > (itemRect.bottom) ) || // Oc is below this item
-          //   ( (newLeft + ocRect.width) < itemRect.left ) || // Oc is to the left
-          //   ( (newLeft >  (itemRect.left + itemRect.width) ) )// Oc is to the right
-          //   )
-          // ){
-          //   colliding = false;
-          // }else{
-          //   colliding = true;
-          // }
+    // Detecting for collisions, before any movement in the X or Z axes
+    let colliding = false;
+    
+    for(let i = 0; i < items.length; i++){
+      if(items[i].collides && items[i].isHeld === false){
+        var item = items[i],
+            itemElement = item.item,
+            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 1,
+            itemLeft =parseInt(itemElement.style.left, 10),
+            ocRect = oc.getBoundingClientRect(),
+            itemRect = itemElement.getBoundingClientRect();
+        
+        // if( !(
+        //   ( Math.abs(newZ - itemZ) > 1) ||
+        //   // ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || //Oc is above this item
+        //   // ( (ocRect.bottom - verticalSpacing) > (itemRect.bottom) ) || // Oc is below this item
+        //   ( (newLeft + ocRect.width) < itemRect.left ) || // Oc is to the left
+        //   ( (newLeft >  (itemRect.left + itemRect.width) ) )// Oc is to the right
+        //   )
+        // ){
+        //   colliding = false;
+        // }else{
+        //   colliding = true;
+        // }
 
-          if( !(
-            ( Math.abs(newZ - itemZ) > 1) ||
-            ( (newLeft + ocRect.width) < itemLeft ) || 
-            ( (newLeft >  (itemLeft + itemRect.width) ) )
-            )
-          ){
-            debugger;
-            colliding = true;
-          }
-          
-
-          // if(item.name === "dog"){
-          //   if(isColliding(oc, itemElement)){
-          //     debugger;
-          //     colliding = true;
-          //     break;
-          //   }
-          // }
+        if( !(
+          ( Math.abs(newZ - itemZ) > 0.7) ||  // Z-index, up and down movement
+          ( (newLeft + ocRect.width) < itemLeft ) || // Oc is to the left
+          ( (newLeft >  (itemLeft + itemRect.width) ) ) // Oc is to the right
+          )
+        ){
+          debugger;
+          colliding = true;
         }
+        
+
+        // if(item.name === "dog"){
+        //   if(isColliding(oc, itemElement)){
+        //     debugger;
+        //     colliding = true;
+        //     break;
+        //   }
+        // }
       }
+    }
 
-      if(colliding){
-        return;
-      }
+    if(colliding){
+      oc.classList.remove('moving');
+      return;
+    }
 
-
-    // Z-axis movement
-    oc.setAttribute('z', 
+    // Z-axis movement, restricting movement below the fence, and horizon
+    let ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom) + 50);
+    debugger;
+    if(!(ocBottom >= ceiling && dz > 0)){
+      oc.setAttribute('z', 
       Math.min(maxZ, 
                 Math.max(newZ, 0)
               ));
-    setPosition(oc);
+      setPosition(oc); 
+    }
 
     // Ensuring that Oc is within the bounds of the _world_
     let isOcAtLeftEdge = (newLeft <= ocLeftOffset),
@@ -456,6 +461,7 @@ var timer = setInterval(function() {
 
 // ($0.clientWidth - ($0.clientWidth * 0.3)) / 2 
 // Math.round(($0.offsetWidth - $0.getBoundingClientRect().width) / 2)
+// Positions an item next to Oc, depending on Oc's position/direction/orientation
 function holdItem(item){
   const ocRect = oc.getBoundingClientRect(),
         itemRect = item.getBoundingClientRect(),
@@ -480,8 +486,7 @@ function holdItem(item){
     // item.style.left = ocLeft - scaledItemSpacing;
   }else if(oc.classList.contains('oc-forward')){
     item.style.left = ocCenter;
-    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(25px)'; // Renders carried object in front of Oc
-    // debugger;
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(35px)'; // Renders carried object in front of Oc
   }
   
 }

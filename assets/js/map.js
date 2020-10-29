@@ -5,7 +5,7 @@ let path = window.location.pathname,
     itemTypes = [],   // Stores every @symbol in a map file
     items = [],       // Stores every instance - a map can have multiple instances of an item-type
     styleString = ''; // Setting item styles in a <style> element, rather than on DOM elements. DOM element styles aren't maintained after spatial.js positioning
-let dog;
+let dog, fence;
 // Creates and appends a new DOM element in the .above-ground plane, and returns it
 function createDOMElement(name){
     let item = document.createElement('div');
@@ -158,6 +158,10 @@ if(path.indexOf('/level/') !== -1){
                         dog = document.querySelector('.dog');
                         holdables.push(item);
                         initialiseDog();
+                    }
+
+                    if(itemData.name === "fence"){
+                        fence = item;
                     }
                 }
 
