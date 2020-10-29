@@ -342,7 +342,7 @@ var timer = setInterval(function() {
       if(items[i].collides && items[i].isHeld === false){
         var item = items[i],
             itemElement = item.item,
-            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 1,
+            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 0.7,
             itemLeft =parseInt(itemElement.style.left, 10),
             ocRect = oc.getBoundingClientRect(),
             itemRect = itemElement.getBoundingClientRect();
