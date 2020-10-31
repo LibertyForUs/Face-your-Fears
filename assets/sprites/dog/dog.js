@@ -64,18 +64,23 @@ function initialiseDog(){
 		var timer = setInterval(function() {
 
 			dogs.forEach((dog) => {
-				
-				if(dogIsReallyReallyNearObject(dog)){
-					switchWag(dog, 'dog-wag-very-fast');
-				}
-				else if(dogIsReallyNearObject(dog)){
-					switchWag(dog, 'dog-wag-fast');
-				}
-				else if(dogIsNearObject(dog)){
-					switchWag(dog, 'dog-wag');
-				}
-				else {
-					switchWag(dog);
+
+				if(!dog.classList.contains('dog-umbrella')){
+
+					if(dogIsReallyReallyNearObject(dog)){
+						switchWag(dog, 'dog-wag-very-fast');
+					}
+					else if(dogIsReallyNearObject(dog)){
+						switchWag(dog, 'dog-wag-fast');
+					}
+					else if(dogIsNearObject(dog)){
+						switchWag(dog, 'dog-wag');
+					}
+					else {
+						switchWag(dog);
+					}
+				}else{
+					dog.classList.remove('dog-wag', 'dog-wag-very-fast','dog-wag-fast');
 				}
 			})		
 		}, 100);

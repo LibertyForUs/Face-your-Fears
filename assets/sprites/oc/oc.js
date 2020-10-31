@@ -228,6 +228,7 @@ function ocReach(targetX, targetY){
                 putDown.style.bottom = parseInt(putDown.style.bottom) - umbrellaFloatSpeed;
                 requestAnimationFrame(dogFloatsDown);
               }else{
+                // asdf
                 putDown.style.bottom = oc.style.bottom;
                 putDown.classList.remove('dog-umbrella');
 
@@ -342,24 +343,12 @@ var timer = setInterval(function() {
       if(items[i].collides && items[i].isHeld === false){
         var item = items[i],
             itemElement = item.item,
-            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 0.7,
+            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 0.9,
             itemLeft =parseInt(itemElement.style.left, 10),
             ocRect = oc.getBoundingClientRect(),
             itemRect = itemElement.getBoundingClientRect();
-        
-        // if( !(
-        //   ( Math.abs(newZ - itemZ) > 1) ||
-        //   // ( (ocRect.bottom - verticalSpacing) < (itemRect.bottom - verticalSpacing) ) || //Oc is above this item
-        //   // ( (ocRect.bottom - verticalSpacing) > (itemRect.bottom) ) || // Oc is below this item
-        //   ( (newLeft + ocRect.width) < itemRect.left ) || // Oc is to the left
-        //   ( (newLeft >  (itemRect.left + itemRect.width) ) )// Oc is to the right
-        //   )
-        // ){
-        //   colliding = false;
-        // }else{
-        //   colliding = true;
-        // }
 
+        // if any of the nested conditions are true, we're not having a collision
         if( !(
           ( Math.abs(newZ - itemZ) > 0.7) ||  // Z-index, up and down movement
           ( (newLeft + ocRect.width) < itemLeft ) || // Oc is to the left
@@ -388,7 +377,6 @@ var timer = setInterval(function() {
 
     // Z-axis movement, restricting movement below the fence, and horizon
     let ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom) + 50);
-    debugger;
     if(!(ocBottom >= ceiling && dz > 0)){
       oc.setAttribute('z', 
       Math.min(maxZ, 
