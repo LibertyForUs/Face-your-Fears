@@ -4,7 +4,8 @@ var oc = document.getElementById("oc"),
     foreground = document.querySelector('#lawn'),
     midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
     landXPosition = 0,
-    parallaxOffset = 700;
+    parallaxOffset = 700,
+    heldItem = null;
 
 
 const normalOCSpeed = 3,
@@ -228,7 +229,6 @@ function ocReach(targetX, targetY){
                 putDown.style.bottom = parseInt(putDown.style.bottom) - umbrellaFloatSpeed;
                 requestAnimationFrame(dogFloatsDown);
               }else{
-                // asdf
                 putDown.style.bottom = oc.style.bottom;
                 putDown.classList.remove('dog-umbrella');
 
@@ -331,28 +331,42 @@ var timer = setInterval(function() {
           dz = Number(oc.getAttribute('dz')),
           l = parseInt(oc.style.left, 10),  //parseInt removes (px), but Number() gives us decimal, needed for minute Z movement
           ocBottom = parseInt(oc.style.bottom, 10),
+          ocRect = oc.getBoundingClientRect(),
+          isCarrying = oc.classList.contains('oc-carrying'),
           z = Number(oc.getAttribute('z')),
           newLeft = l + dl,
-          newZ = z + dz,
           landLeft = parseInt(land.style.left);
 
     // Detecting for collisions, before any movement in the X or Z axes
-    let colliding = false;
+    var colliding = false,
+        carriedItemRect,
+        carriedItemLeft,
+        newZ = z + dz;
+
+    
+    // Adjusted values for the carried object, if Oc is carrying
+    if(isCarrying){
+      carriedItemRect = heldItem.getBoundingClientRect(),
+      carriedItemLeft = parseInt(heldItem.style.left, 10) + dl;
+      newZ = Number(heldItem.getAttribute('z')) + dz;
+    }else{
+      carriedItemRect = ocRect,
+      carriedItemLeft = newLeft;
+    }
     
     for(let i = 0; i < items.length; i++){
       if(items[i].collides && items[i].isHeld === false){
         var item = items[i],
             itemElement = item.item,
-            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 0.9,
+            itemZ = parseInt(itemElement.getAttribute('z'), 10) + 1,
             itemLeft =parseInt(itemElement.style.left, 10),
-            ocRect = oc.getBoundingClientRect(),
             itemRect = itemElement.getBoundingClientRect();
+        
 
-        // if any of the nested conditions are true, we're not having a collision
         if( !(
           ( Math.abs(newZ - itemZ) > 0.7) ||  // Z-index, up and down movement
-          ( (newLeft + ocRect.width) < itemLeft ) || // Oc is to the left
-          ( (newLeft >  (itemLeft + itemRect.width) ) ) // Oc is to the right
+          ( (carriedItemLeft + carriedItemRect.width) < itemLeft ) || // Oc is to the left
+          ( (carriedItemLeft >  (itemLeft + itemRect.width) ) ) // Oc is to the right
           )
         ){
           debugger;
@@ -370,6 +384,11 @@ var timer = setInterval(function() {
       }
     }
 
+    // Position the held item before collision return. Bugfix for Oc returning without positioning carried obj, when a collision occurs
+    if(!!heldItem){
+      holdItem(heldItem);
+    }
+
     if(colliding){
       oc.classList.remove('moving');
       return;
@@ -377,6 +396,7 @@ var timer = setInterval(function() {
 
     // Z-axis movement, restricting movement below the fence, and horizon
     let ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom) + 50);
+
     if(!(ocBottom >= ceiling && dz > 0)){
       oc.setAttribute('z', 
       Math.min(maxZ, 
@@ -417,10 +437,6 @@ var timer = setInterval(function() {
             }
           }
         })
-      }
-
-      if(!!heldItem){
-        holdItem(heldItem);
       }
 
     }else{
@@ -467,8 +483,10 @@ function holdItem(item){
   
   if(oc.classList.contains('oc-left')){
     item.style.left = ocLeft + scaledOCSpacing - (itemRect.width / 2) - scaledItemSpacing;
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(30px)'; // Renders carried object in front of background items
   }else if(oc.classList.contains('oc-right')){
     item.style.left = ocScaledLeft + oc.clientWidth - scaledItemSpacing;
+    item.style.transform = item.style.transform.split(' translateZ')[0] + ' translateZ(30px)'; // Renders carried object in front of background items
   }else if(oc.classList.contains('oc-back')){
     item.style.left = ocCenter;
     // item.style.left = ocLeft - scaledItemSpacing;
