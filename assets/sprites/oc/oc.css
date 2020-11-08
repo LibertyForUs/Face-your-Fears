@@ -191,6 +191,10 @@
   animation: walkback-key 1.31s steps(1) infinite;
 }
 
+.oc-back:not(.moving) {
+  background-position: 225px;
+}
+
 .oc-stretch {
   width: 74px; 
   height: 210px;

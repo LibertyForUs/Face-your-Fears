@@ -90,11 +90,11 @@ document.addEventListener('keydown', function(event) {
 	switch (event.key) {
 		case "ArrowLeft":
 		case "a":
-			ocMoveLeft(oc);
+			ocMoveLeft(event);
 		break;
 		case "ArrowRight":
 		case "d":
-			ocMoveRight(oc);
+			ocMoveRight(event);
 		break;
 		case "ArrowDown":
 		case "s":

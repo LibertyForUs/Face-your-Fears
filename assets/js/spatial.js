@@ -18,6 +18,18 @@ var transformDefaults = {
 	scale: 1,
 }
 
+// Collision detection
+function isColliding(a, b){
+	let aRect = a.getBoundingClientRect(),
+		bRect = b.getBoundingClientRect();
+
+	return !(
+		((aRect.top + aRect.height) < (bRect.top)) ||
+        (aRect.top > (bRect.top + bRect.height)) ||
+        ((aRect.left + aRect.width) < bRect.left) ||
+        (aRect.left > (bRect.left + bRect.width))
+	);// if any of these ^ are true, we're not having a collision.
+}
 function intersects(x,y,element){
 	pos = getPosition(element);
 	l = pos.left;
@@ -43,7 +55,7 @@ function getPosition(element) {
   }
 }
 
-// Sets an object's position in a 3D cartesian plane, reading it's z attribute
+// Sets an object's position in a 3D cartesian plane, reading it's z attribute (scales them & places them between the azimuth and the foreground)
 function setPosition(element){
 	let z = Number(element.getAttribute('z')),
 		percentage = z / maxZ;
@@ -95,7 +107,6 @@ function moveElement(element, angle, distance, directionX, directionY, disableZM
 	}
 	
   }
-
 }
 
 function safeDegree(angle){
