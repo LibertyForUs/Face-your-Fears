@@ -114,6 +114,7 @@ if(path.indexOf('/level/') !== -1){
                     mapLines,               // Array of all placement tiles
                     mapWidth,               // Map dimensions
                     mapHeight,
+                    tileWidth,              // The width occupied by each tile element. Used for contiguous, stretched elements like the fence
                     stageWidth = 1900,
                     stageHeight = 10;
 
@@ -123,6 +124,7 @@ if(path.indexOf('/level/') !== -1){
                     mapLines = lines.slice(mapPlacementIndex  + 1, mapPlacementEndIndex);
                     mapWidth = mapLines[0].length;
                     mapHeight = mapLines.length;
+                    tileWidth = stageWidth / mapWidth;
 
                     // Runs for every line of map data
                     for(let i = 0; i < mapLines.length; i++){
@@ -131,14 +133,37 @@ if(path.indexOf('/level/') !== -1){
                         for(let j = 0; j < mapLines[i].length; j++){
 
                             if(mapLines[i][j] !== " "){
-                                let symbol = mapLines[i][j],
+                                const symbol = mapLines[i][j],
                                     symbolElement = JSON.parse( JSON.stringify( itemTypes.find(item => item.symbol === symbol))); // non-destructively duplicating item from itemTypes
 
                                 symbolElement.position = {
                                     x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
                                     z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
                                 }
+
+                                // For items like the fence, that have contiguous series of symbols, and stretch across
+                                if(symbolElement.stretches && mapLines[i][j+1] === symbol){
+                                    var startIndex = j,
+                                        stopIndex = 0;
+
+                                    for(let k = j; k < mapWidth; k++){
+                                        if(mapLines[i][k] !== symbol){
+                                            stopIndex = k;
+                                            j = k; // Jumping the loop, to skip all the characters in this series
+                                            break;
+                                        }
+                                    }
+                                    // Setting this item's width
+                                    symbolElement.width = tileWidth * (stopIndex - startIndex);
+                                }
+
                                 symbolElement.item = createDOMElement(symbolElement.name);
+                                
+                                // For items like the fence, their width is set by the number of symbols in their series. That width is set here
+                                if(!!symbolElement.width)
+                                    symbolElement.item.style.width = symbolElement.item.dataset.width = symbolElement.width;
+                                    symbolElement.item.style.overflow = "hidden";
+                                
                                 items.push(symbolElement);
                             }
                         }

@@ -18,5 +18,5 @@
     z-index: 50;
     background-repeat: repeat-x !important;
     position: fixed;
-    background-size: contain;
+    background-size: auto;
 }
