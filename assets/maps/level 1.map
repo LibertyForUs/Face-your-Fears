@@ -9,8 +9,10 @@
 #Symbols
 @dog symbol:& width:158 height:85
 @mailbox symbol:= width:52 height:100
+@tall_tree symbol:T width:1138 height:1832
 @fence symbol:* fixed:true collides:false stretches css
 #@fence symbol:* fixed:true position:{x:-200,z:5.06} collides:false css
+
 
 
 # Map placement of symbols. At the moment, comments (#) aren't valid within the placement region
@@ -18,15 +20,15 @@
                                                                                         
 
                                                                                     
-
+                                   
 
 ***************************
                                 
 *********** *****  ***************************************************************** 
                                 =
-                                    
+                                   
 
-
+                         
               &                                      &                            
-
+                                                           T
 \==
