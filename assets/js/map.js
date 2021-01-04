@@ -116,9 +116,10 @@ if(path.indexOf('/level/') !== -1){
                     mapHeight,
                     tileWidth,              // The width occupied by each tile element. Used for contiguous, stretched elements like the fence
                     stageWidth = 1900,
-                    stageHeight = 10;
+                    stageHeight = 10,
+                    baseZIndex = 20;    //z-index values start from here
 
-                // Sanity check
+                // Sanity check, making sure we have a map-placing region on this map. Objects can also be placed using position attributes on symbols (i.e. no map region needed)
                 if( !!mapPlacementIndex ){
                     mapPlacementEndIndex = lines.indexOf('\==');    // the last placement line's index
                     mapLines = lines.slice(mapPlacementIndex  + 1, mapPlacementEndIndex);
@@ -140,6 +141,8 @@ if(path.indexOf('/level/') !== -1){
                                     x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
                                     z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
                                 }
+
+                                symbolElement.zIndex = baseZIndex + i;
 
                                 // For items like the fence, that have contiguous series of symbols, and stretch across
                                 if(symbolElement.stretches && mapLines[i][j+1] === symbol){
@@ -164,6 +167,10 @@ if(path.indexOf('/level/') !== -1){
                                     symbolElement.item.style.width = symbolElement.item.dataset.width = symbolElement.width;
                                     symbolElement.item.style.overflow = "hidden";
                                 
+                                
+                                symbolElement.item.style.zIndex = symbolElement.zIndex;
+                                
+                                // debugger;
                                 items.push(symbolElement);
                             }
                         }

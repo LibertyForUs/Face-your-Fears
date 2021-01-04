@@ -90,7 +90,7 @@ html, body {
 }
 
 .above {
-  transform: rotateX(20deg);
+  transform: rotateX(0deg);
   transition: all var(--transitionSpeed);
 
 

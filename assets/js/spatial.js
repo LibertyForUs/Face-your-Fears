@@ -11,11 +11,12 @@ const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this mu
 
 // storing CSS transforms (so they can be toggled individually in JS)
 var transformDefaults = {
-	rotateX: "-15deg",
+	rotateX: "0deg",
 	translateY: "0px",
 	translateZ: "15px",
 	scaleX: 1,
 	scale: 1,
+	zIndex: 15
 }
 
 // Collision detection
