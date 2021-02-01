@@ -81,13 +81,11 @@ html, body {
 	position: relative;
 }
 
-
-
-
 .below { 
   transform: rotateX(88deg);
   transition: all var(--transitionSpeed);
 }
+
 
 .above {
   transform: rotateX(0deg);
@@ -97,6 +95,9 @@ html, body {
 }
 .stay-above{
 	transform: rotateX(-88deg) !important;
+}
+
+.plate.shifting .stay-above {
 	transition:  var(--transitionSpeed);
 }
 
@@ -123,7 +124,22 @@ html, body {
 }
 
 /* Common styles for all programatically-added objects */
-.above-ground > .oc ~ div {
+.above-ground > div:not(.land):not(.oc) {
 	background-repeat: no-repeat;
 	position: fixed;
+}
+
+.below-ground {
+	transform: rotateX(-88deg) translateY(300px);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0px;
+	background-color: #444;
+}
+
+.below-ground > * {
+	position: fixed;
+	bottom: calc(100vh / 4);
 }
