@@ -79,8 +79,11 @@ function setPosition(element){
 		transformDefaults.scale = scale;
 		element.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(${transformDefaults.translateZ})`
 	}
-
-	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
+	if(element.parentElement.classList.contains('above-ground')){
+		element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
+	}else{
+		element.style.bottom = 'calc(100vh / 4';
+	}
 	element.style.filter = `invert(${maxFilter * percentage}%)`;
 }
 
