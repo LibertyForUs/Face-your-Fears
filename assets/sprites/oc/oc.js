@@ -369,7 +369,6 @@ var timer = setInterval(function() {
           ( (carriedItemLeft >  (itemLeft + itemRect.width) ) ) // Oc is to the right
           )
         ){
-          debugger;
           colliding = true;
         }
         

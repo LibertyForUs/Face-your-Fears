@@ -7,10 +7,13 @@ let path = window.location.pathname,
     styleString = ''; // Setting item styles in a <style> element, rather than on DOM elements. DOM element styles aren't maintained after spatial.js positioning
 let dog, fence;
 // Creates and appends a new DOM element in the .above-ground plane, and returns it
-function createDOMElement(name){
+function createDOMElement(name, aboveGround){
+    container = (!!aboveGround ? document.querySelector('.above-ground') :
+                                document.querySelector('.below-ground'));
+        
     let item = document.createElement('div');
     item.classList.add(name);
-    return document.querySelector('.above-ground').appendChild(item);
+    return container.appendChild(item);
 }
 
 // Checking that we have a map
@@ -87,7 +90,7 @@ if(path.indexOf('/level/') !== -1){
                                     },{}
                                 );
                             // Adding element to the list of rendered on-screen items
-                            element.item = createDOMElement(element.name);
+                            // element.item = createDOMElement(element.name);
                             items.push(element);
                         }
                         itemTypes.push(element);        
@@ -111,35 +114,45 @@ if(path.indexOf('/level/') !== -1){
                 // determining object placement based on map symbols
                 let mapPlacementIndex = lines.indexOf('/=='), // placement tiles start with the line /==
                     mapPlacementEndIndex,   // index of the termination of placement symbols
+                    undergroundDivider,
+                    aboveGroundHeight,
+                    isAboveGround = true,
                     mapLines,               // Array of all placement tiles
                     mapWidth,               // Map dimensions
                     mapHeight,
+                    sectionHeight,
                     tileWidth,              // The width occupied by each tile element. Used for contiguous, stretched elements like the fence
                     stageWidth = 1900,
-                    stageHeight = 10;
+                    stageHeight = 10,
+                    baseZIndex = 20;    //z-index values start from here
 
-                // Sanity check
+                // Sanity check, making sure we have a map-placing region on this map. Objects can also be placed using position attributes on symbols (i.e. no map region needed)
                 if( !!mapPlacementIndex ){
                     mapPlacementEndIndex = lines.indexOf('\==');    // the last placement line's index
                     mapLines = lines.slice(mapPlacementIndex  + 1, mapPlacementEndIndex);
+                    undergroundDivider = mapLines.indexOf('----'),
                     mapWidth = mapLines[0].length;
-                    mapHeight = mapLines.length;
+                    mapHeight = (undergroundDivider !== -1 ? undergroundDivider : mapLines.length);
                     tileWidth = stageWidth / mapWidth;
 
                     // Runs for every line of map data
                     for(let i = 0; i < mapLines.length; i++){
-                        
+                        // Bool for whether this element renders above or below ground
+                        isAboveGround = (undergroundDivider !== -1 ? 
+                            i < undergroundDivider : 
+                            true);
+
                         // Running for each character in a line
                         for(let j = 0; j < mapLines[i].length; j++){
 
-                            if(mapLines[i][j] !== " "){
+                            // Skipping map parsing for any divider lines (above-ground & below-ground), and empty spaces
+                            if(mapLines[i].substr(0, 4) !== '----' && mapLines[i][j] !== ' '){
                                 const symbol = mapLines[i][j],
                                     symbolElement = JSON.parse( JSON.stringify( itemTypes.find(item => item.symbol === symbol))); // non-destructively duplicating item from itemTypes
+                                    symbolElement.aboveGround = isAboveGround;
 
-                                symbolElement.position = {
-                                    x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
-                                    z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
-                                }
+                                
+                                symbolElement.item = createDOMElement(symbolElement.name, isAboveGround);
 
                                 // For items like the fence, that have contiguous series of symbols, and stretch across
                                 if(symbolElement.stretches && mapLines[i][j+1] === symbol){
@@ -149,22 +162,37 @@ if(path.indexOf('/level/') !== -1){
                                     for(let k = j; k < mapWidth; k++){
                                         if(mapLines[i][k] !== symbol){
                                             stopIndex = k;
-                                            j = k; // Jumping the loop, to skip all the characters in this series
+                                            j = k; // Jumping the loop, to skip the rest of the characters in this series
                                             break;
                                         }
                                     }
-                                    // Setting this item's width
+                                    // Setting this item's width property
                                     symbolElement.width = tileWidth * (stopIndex - startIndex);
-                                }
 
-                                symbolElement.item = createDOMElement(symbolElement.name);
-                                
-                                // For items like the fence, their width is set by the number of symbols in their series. That width is set here
-                                if(!!symbolElement.width)
+                                    // For items like the fence, their width is set by the number of symbols in their series. That width is set here
                                     symbolElement.item.style.width = symbolElement.item.dataset.width = symbolElement.width;
                                     symbolElement.item.style.overflow = "hidden";
+                                }
+
+                                if(isAboveGround){
+                                    symbolElement.position = {
+                                        x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
+                                        z: stageHeight * ((mapHeight - i) / mapHeight)  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
+                                    }
+
+                                }else{
+                                    // No height, or z-index for underground objects
+                                    symbolElement.position = {
+                                        x: 800 + (stageWidth * (j / mapWidth)), // setting a min x of 800, bugfix for css perspective warping making x:0 hidden offstage to the left
+                                        z: 1  // inverting the z, so 0 is at the bottom (subtracting i from mapHeight)
+                                    }
+                                }
+
+                                symbolElement.zIndex = baseZIndex + i;  // Bugfix for tree being chopped. Items have Z values depending on their row
+                                symbolElement.item.style.zIndex = symbolElement.zIndex;
                                 
                                 items.push(symbolElement);
+                                debugger;
                             }
                         }
                     }

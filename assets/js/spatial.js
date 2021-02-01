@@ -11,11 +11,12 @@ const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this mu
 
 // storing CSS transforms (so they can be toggled individually in JS)
 var transformDefaults = {
-	rotateX: "-15deg",
+	rotateX: "0deg",
 	translateY: "0px",
 	translateZ: "15px",
 	scaleX: 1,
 	scale: 1,
+	zIndex: 15
 }
 
 // Collision detection
@@ -78,8 +79,11 @@ function setPosition(element){
 		transformDefaults.scale = scale;
 		element.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(${transformDefaults.translateZ})`
 	}
-
-	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
+	if(element.parentElement.classList.contains('above-ground')){
+		element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
+	}else{
+		element.style.bottom = 'calc(100vh / 4';
+	}
 	element.style.filter = `invert(${maxFilter * percentage}%)`;
 }
 
