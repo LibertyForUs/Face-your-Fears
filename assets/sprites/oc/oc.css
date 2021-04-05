@@ -19,11 +19,11 @@
 
 @keyframes stretch-key {
   from { background-position: 0px }
-  to { background-position: -848px}
+  to { background-position: -592px}
 }
 
 @keyframes reverse-stretch-key {
-  100% { background-position: 848px}
+  100% { background-position: 592px}
 }
 
 @keyframes carrying-key {
@@ -191,10 +191,15 @@
   animation: walkback-key 1.31s steps(1) infinite;
 }
 
+.oc-back:not(.moving) {
+  background-position: 225px;
+}
+
 .oc-stretch {
-  width: 106px; 
-  height: 301px;
-  background: url(/sprites/oc/oc-stretch-body.png); 
+  width: 74px; 
+  height: 210px;
+  margin-left: 13px;
+  background: url("/sprites/oc/oc-stretch-body copy.png"); 
   animation-fill-mode: forwards;
   animation: stretch-key 0.8s steps(8);
 }
@@ -204,10 +209,11 @@
 }
 
 .oc-reverse-stretch {
-  width: 106px; 
-  height: 301px;
-  background: url(/sprites/oc/oc-stretch-body.png); 
-  animation: reverse-stretch-key 0.4s steps(8);
+  width: 74px;
+  height: 210px;
+  margin-left: 13px;
+  background: url("/sprites/oc/oc-stretch-body copy.png"); 
+  animation: reverse-stretch-key 0.8s steps(8);
 
 }
 
@@ -235,11 +241,11 @@
 .oc-arms-grow {
   background-color: #0C0C0C;
   position: fixed;
-  top: 115px;
-  left: 52px;
+  top: 80px;
+  left: 33px;
   width: 10px;
   height: 10px;
-
+  border-radius: 5px;
   transform-origin: center left;
 }
 
