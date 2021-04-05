@@ -1,13 +1,23 @@
-const normalOCSpeed = 3;
+var oc = document.getElementById("oc"),
+    land = document.getElementById("land"),
+    background = document.querySelector('.background'),
+    foreground = document.querySelector('#lawn'),
+    midwayPoint = window.innerWidth / 2, // Used to determine whether Oc or the background, should move. 1942;
+    landXPosition = 0,
+    parallaxOffset = 700;
+
+const normalOCSpeed = 3,
+      ocLeftOffset = 783,   // Qasim: Oc at left:0 doesn't align with the left of the screen (I don't know why, yet - will look into it further). This is their left offset
+      landLeftOffset = 740,
+      maxLandLeft = -(land.clientWidth - window.innerWidth - landLeftOffset),
+      landTraverseDistance = landLeftOffset - maxLandLeft,
+      ocWidth = oc.clientWidth;   // Initial Oc width
 
 // for future "shift mode" for running
 //const fastOCSpeed = 9;
 
-
-var oc = document.getElementById("oc");
-
 oc.style.left = '1200px';
-
+land.style.left = `${landLeftOffset}px`;
 oc.classList.add('oc-right');
 
 function createAttribute(element, name, value){
@@ -67,7 +77,7 @@ function ocReach(targetX, targetY){
   //arms.classList.add("triangle-right");
   arms.style.width = armScaledWidth;
   // arms.style.left = oc.clientWidth / 2;
-  // arms.style.bottom = oc.getBoundingClientRect().height / 2;
+  // arms.style.bottom = oc.getBoundingClientRect().height  * .62;
   oc.appendChild(arms);
 
   function endTransition(){
@@ -163,6 +173,7 @@ function ocReach(targetX, targetY){
         heldItem.style.bottom = Number(oc.style.bottom.substr(0, oc.style.bottom.length - 2)) + (oc.clientHeight / 2) - (heldItem.clientHeight / 2);
         endTransition();
         holdItem(heldItem);
+        items.filter(item => item.name === heldItem.id)[0].isHeld = true;
       }else{
         window.setTimeout(shrink,50);
       }
@@ -206,33 +217,43 @@ function ocReach(targetX, targetY){
       window.setTimeout(grow,50);
     }else {
       // If an item is dropped in the sky, it's set down on the horizon instead
-      if(!!putDown && parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom) ){
-        
-        // Umbrella animation, if the putDown object is our beloved dog
-        if(putDown.classList.contains('dog')){
-          dog.classList.add('dog-umbrella');
-          let umbrellaFloatSpeed = 4,
-              umbrellaCloseDistance = 10; // dog umbrella animation changes 
+      if(!!putDown){
+        if(parseInt(putDown.style.bottom, 10) > parseInt(oc.style.bottom)){
+          // Umbrella animation, if the putDown object is our beloved dog
+          if(putDown.classList.contains('dog')){
+            dog.classList.add('dog-umbrella');
+            dog.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(50px)`;
+            let umbrellaFloatSpeed = 4,
+                umbrellaCloseDistance = 10; // dog umbrella animation changes 
 
 
-          function dogFloatsDown(){
-            if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
-              dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
-              requestAnimationFrame(dogFloatsDown);
-            }else{
-              dog.style.bottom = oc.style.bottom;
-              dog.classList.remove('dog-umbrella');
+            function dogFloatsDown(){
+              if( parseInt(dog.style.bottom) + umbrellaFloatSpeed > parseInt(oc.style.bottom) + umbrellaCloseDistance ){
+                dog.style.bottom = parseInt(dog.style.bottom) - umbrellaFloatSpeed;
+                requestAnimationFrame(dogFloatsDown);
+              }else{
+                dog.style.bottom = oc.style.bottom;
+                dog.classList.remove('dog-umbrella');
 
-              dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(5px)'; // Altering the Z translation, to render tufts of grass in the foreground
+                dog.style.transform = dog.style.transform.split(' translateZ')[0] + ' translateZ(1px)'; // Altering the Z translation, to render tufts of grass in the foreground
+              }
             }
-          }
-          
-          dogFloatsDown();
+            
+            dogFloatsDown();
 
-        }else{
-          setPosition(putDown);
+          }else{
+            setPosition(putDown);
+          } 
         }
-        
+
+        console.log("Left style", putDown.style.left);
+        // Updating item position in items[]. Used for parrallax positioning
+        items.filter(item => item.name === putDown.id)[0].position = {
+          x: parseInt(putDown.style.left) - landXPosition, 
+          z: putDown.getAttribute('z')
+        }
+        items.filter(item => item.name === putDown.id)[0].isHeld = false;
+
       }
 
       window.setTimeout(shrink,200);
@@ -242,8 +263,8 @@ function ocReach(targetX, targetY){
 
   // putDown object gets aligned with Oc's arms - arms are taller for the reach animation
   if(!!putDown){
-    putDown.style.left = oc.style.left;
-    putDown.style.bottom = parseInt(oc.style.bottom) + oc.getBoundingClientRect().height / 2;
+    putDown.style.left = parseInt(oc.style.left) - (putDown.getBoundingClientRect().width / 2);
+    putDown.style.bottom = parseInt(oc.style.bottom) + (oc.getBoundingClientRect().height / 2);
   }
   
   grow();
@@ -275,20 +296,23 @@ function ocMoveRight(oc){
 function ocMoveOut(event){
   if(event.repeat) return;// prevent repeat events, movement occurs until key is lifted
 
-  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch')){
+  if(!oc.classList.contains('oc-stretch') && !oc.classList.contains('oc-reverse-stretch') ){
     oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
     oc.classList.add('oc-back', 'moving');
     
+    var ceiling = (fence === undefined ? 550 : parseInt(fence.style.bottom));
     var upKeyPressed = true;
     function moveOcUp(){
-      let zVal = Number(oc.getAttribute('z')),
-          updatedZ = zVal + (normalOCSpeed * 0.015);
+      if(parseInt(oc.style.bottom) < ceiling){
+        let zVal = Number(oc.getAttribute('z')),
+            updatedZ = zVal + (normalOCSpeed * 0.015);
 
-      oc.setAttribute('z', Math.min( updatedZ, maxZ));
-      setPosition(oc);
+        oc.setAttribute('z', Math.min( updatedZ, maxZ));
+        setPosition(oc);
 
-      if(upKeyPressed){
-        window.requestAnimationFrame(moveOcUp);
+        if(upKeyPressed){
+          window.requestAnimationFrame(moveOcUp);
+        }
       }
     }
 
@@ -347,17 +371,48 @@ var timer = setInterval(function() {
  
     const dl = parseInt(oc.getAttribute("dx"),10);
     const l = parseInt(oc.style.left, 10);
-    const newLeft = safeX( l + dl );
-    oc.style.left = newLeft; //+ "px";
+    const newLeft = l + dl;
+    const landLeft = parseInt(land.style.left);
 
-    if(!!heldItem){
-      holdItem(heldItem);
+    // Ensuring that Oc is within the bounds of the _world_
+    if(newLeft > ocLeftOffset && newLeft < (land.clientWidth - ocLeftOffset - oc.clientWidth)){
+
+      // Moving Oc, on the left and rightmost areas of #land
+      if( (landLeft >= landLeftOffset && (newLeft - ocLeftOffset + oc.clientWidth) < midwayPoint) || 
+          (landLeft <= -(land.clientWidth - window.innerWidth - landLeftOffset) && ((newLeft - ocLeftOffset + oc.clientWidth) > midwayPoint)) ){
+      // if( () || (parseInt(land.style.left) <= ) ){
+        oc.style.left = newLeft; //+ "px";
+      }else{
+        // Moving the background
+        const landMovementRatio = -(parseInt(land.style.left) - landLeftOffset) / landTraverseDistance;
+
+        landXPosition += (dl * -1);
+        land.style.left = landLeftOffset + landXPosition;
+        // foreground.style.left = landXPosition;
+        background.style.left = (parallaxOffset * landMovementRatio);
+
+        items.forEach(object => {
+          if(!object.isHeld){
+            // Fixed position objects (like the fence) don't have parrallax movement
+            
+            if(object.fixed){
+              object.item.style.left = object.position.x + landXPosition;
+            }else{ 
+              let objZPosRatio = 1 - (Number(object.item.getAttribute('z')) / 9);
+              object.item.style.left = object.position.x + landXPosition - ((parallaxOffset * landMovementRatio) * objZPosRatio);
+            }
+          }
+        })
+      }
+
+      if(!!heldItem){
+        holdItem(heldItem);
+      }
+
+    }else{
+      oc.classList.remove('moving');
     }
-  
-  // clear the timer at 400px to stop the animation
-  // if ( oc.style.left > getWidth() ) {
-  //   clearInterval( timer );
-  // }
+
   }
 }, 20);
 
