@@ -9,15 +9,28 @@ const scaleDownFactor = 0.3, // At maximum Z-distance, objects shrink to this mu
 	  scaleDifferential = 1 - scaleDownFactor, // The scaling difference Oc undergoes
 	  maxZ = 9; //Z values range from 0 - maxZ
 
-// storing Oc's CSS transforms (so they can be toggled in JS)
-var ocTransform = {
-	rotateX: "-15deg",
+// storing CSS transforms (so they can be toggled individually in JS)
+var transformDefaults = {
+	rotateX: "0deg",
 	translateY: "0px",
-	translateZ: "5px",
+	translateZ: "15px",
 	scaleX: 1,
 	scale: 1,
+	zIndex: 15
 }
 
+// Collision detection
+function isColliding(a, b){
+	let aRect = a.getBoundingClientRect(),
+		bRect = b.getBoundingClientRect();
+
+	return !(
+		((aRect.top + aRect.height) < (bRect.top)) ||
+        (aRect.top > (bRect.top + bRect.height)) ||
+        ((aRect.left + aRect.width) < bRect.left) ||
+        (aRect.left > (bRect.left + bRect.width))
+	);// if any of these ^ are true, we're not having a collision.
+}
 function intersects(x,y,element){
 	pos = getPosition(element);
 	l = pos.left;
@@ -43,7 +56,7 @@ function getPosition(element) {
   }
 }
 
-// Sets an object's position in a 3D cartesian plane, reading it's z attribute
+// Sets an object's position in a 3D cartesian plane, reading it's z attribute (scales them & places them between the azimuth and the foreground)
 function setPosition(element){
 	let z = Number(element.getAttribute('z')),
 		percentage = z / maxZ;
@@ -53,26 +66,30 @@ function setPosition(element){
 
 		// Having Oc face the right way
 		if(oc.classList.contains('oc-left')){
-			ocTransform.scaleX = -1;
+			transformDefaults.scaleX = -1;
 		}else{
-			ocTransform.scaleX = 1;
+			transformDefaults.scaleX = 1;
 		}
 
-		ocTransform.scale = scale;
-		oc.style.transform = `scale(${ocTransform.scale}) scaleX(${ocTransform.scaleX}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`;
+		transformDefaults.scale = scale;
+		oc.style.transform = `scale(${transformDefaults.scale}) scaleX(${transformDefaults.scaleX}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(${transformDefaults.translateZ})`;
 		oc.style.top = 'auto';
 	}else{
-		ocTransform.scale = scale;
-		element.style.transform = `scale(${ocTransform.scale}) rotateX(${ocTransform.rotateX}) translateY(${ocTransform.translateY}) translateZ(${ocTransform.translateZ})`
-	}
 
-	element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.9));
+		transformDefaults.scale = scale;
+		element.style.transform = `scale(${transformDefaults.scale}) rotateX(${transformDefaults.rotateX}) translateY(${transformDefaults.translateY}) translateZ(${transformDefaults.translateZ})`
+	}
+	if(element.parentElement.classList.contains('above-ground')){
+		element.style.bottom = (percentage * (document.querySelector('#land').clientHeight * 0.85));
+	}else{
+		element.style.bottom = 'calc(100vh / 4';
+	}
 	element.style.filter = `invert(${maxFilter * percentage}%)`;
 }
 
 function safeX(x) {  
 	var w = window.width - 10000; //2800
-    var leftEdge = 950
+    var leftEdge = 783
 
     return x < leftEdge ? leftEdge : x > w ? w : x;
 }
@@ -94,7 +111,6 @@ function moveElement(element, angle, distance, directionX, directionY, disableZM
 	}
 	
   }
-
 }
 
 function safeDegree(angle){

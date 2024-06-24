@@ -1,0 +1,69 @@
+body {
+    background-image: url("/images/menu/Background_for_title_screen.png");
+    background-size: cover;
+}
+
+.top {/* max-height: 200px; */}
+
+.top > img {
+    max-height: 200px;
+    position: absolute;
+    left: 50%;
+    top: calc(25% - 100px);
+    transform: translateX(-50%);
+}
+
+.top > img.confirmation {
+    max-height: 250px;
+}
+
+.bottom {
+    position: absolute;
+    left: 50%;
+    top: 50vh;
+    transform: translateX(-50%);
+    max-width: 300px;
+    margin-top: 30px;
+}
+
+.bottom > img {
+    position: absolute;
+    max-width: 300px;
+    top: -40px;
+}
+
+.bottom.menu > a {
+    z-index: 10;
+    /* filter: contrast(0.5); */
+    clear: both;
+}
+
+.bottom > a > img {
+    max-width: 73%;
+    display: block;
+    margin: 2px auto;
+    filter: contrast(0.7);
+    transition: 0.2s linear all;
+}
+
+.bottom.menu > a:hover > img {
+    transform: scale(1.1);
+    filter: invert(1);
+}
+
+.bottom.confirmation {
+
+}
+
+.bottom.confirmation > a {
+    display: table-cell;
+    margin: 0 150px;
+}
+
+.bottom.confirmation > a:hover > img {
+    transform: scale(1.1);
+}
+
+.dn {
+    display: none;
+}

@@ -16,12 +16,12 @@ window.addEventListener('mousedown', e => {
   if(x < getPosition(oc).left){
 	oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
 	oc.classList.add('oc-left');
-	ocTransform.scaleX = -1;
+	transformDefaults.scaleX = -1;
 	
   }else if(x > getPosition(oc).left + oc.clientWidth){
 	oc.classList.remove('oc-left', 'oc-right', 'oc-forward', 'oc-back');
 	oc.classList.add('oc-right');
-	ocTransform.scaleX = 1;
+	transformDefaults.scaleX = 1;
   }
   setPosition(oc);
   ocReach(x,y);
@@ -90,11 +90,11 @@ document.addEventListener('keydown', function(event) {
 	switch (event.key) {
 		case "ArrowLeft":
 		case "a":
-			ocMoveLeft(oc);
+			ocMoveLeft(event);
 		break;
 		case "ArrowRight":
 		case "d":
-			ocMoveRight(oc);
+			ocMoveRight(event);
 		break;
 		case "ArrowDown":
 		case "s":

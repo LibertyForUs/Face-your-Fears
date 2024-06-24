@@ -1,0 +1,40 @@
+# This is a map for Face-your-fears
+# The aim is to have a really simple map format, that lets us place objects
+# and define behaviour for each level, without needing to hardcode it in. 
+# Comments begin with a # character.
+# Symbols are defined with an @ sign, and can specify their own characters
+# These symbols can either be placed on the map section, or by directly specifying a position:{x,y} value
+
+
+#Symbols
+@dog symbol:& width:158 height:85
+@mailbox symbol:= width:52 height:100
+@tall_tree symbol:T width:1138 height:1832
+@fence symbol:* fixed:true collides:false stretches css
+#@fence symbol:* fixed:true position:{x:-200,z:5.06} collides:false css
+
+
+
+# Map placement of symbols. At the moment, comments (#) aren't valid within the placement region
+/==
+                                                                                        
+
+                                                                                    
+                                   
+
+***************************
+                                
+*********** *****  ***************************************************************** 
+                                =
+
+
+
+
+
+                  
+                         
+              &                             &                                     
+                    T                                       
+----
+            =  =                                      =
+\==

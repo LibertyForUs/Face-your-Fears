@@ -1,0 +1,22 @@
+/* .mailbox {
+    background: url(/images/postbox.png);
+    width: 52px;
+    height: 100px;
+    transform: rotateX(-15deg) translateY(-15px);
+    transform-origin: bottom center;
+    z-index: 50;
+    background-repeat: no-repeat;
+    position: fixed;
+} */
+
+.fence {
+    background: url(/images/fence.png);
+    width: 5000px;
+    height: 204;
+    /* transform: rotateX(-15deg) translateY(-15px); */
+    /* transform-origin: bottom center; */
+    z-index: 50;
+    background-repeat: repeat-x;
+    position: fixed;
+    background-size: contain;
+}

@@ -2,12 +2,15 @@
 
 .lawn-default {
   position: absolute;
+  bottom: 0;;
   width: 100%;
-  height: 400px;
+  height: 354px;
   overflow: hidden;
   /*top: 440;*/
+  background: url(/sprites/lawn/foreground.png) left top;
+  background-size: cover;
+  filter: brightness(3.5);
 }
-
 
 
 .grass-strip {
@@ -23,4 +26,23 @@
   z-index: 21;
   opacity: 0.4;
   background: url(/sprites/lawn/grass/grass-strip.png) left top no-repeat;  
+}
+
+.land > .background {
+  position: relative;
+  bottom: 0px;
+  height: 246px;
+  overflow: hidden;
+  width: 100%;
+  background: url(/sprites/lawn/background.png) left top;
+  background-size: cover;
+  filter: brightness(3.5);
+}
+
+.fence.stay-above {
+  transform: rotateX(-88deg) scale(0.5) translateX(-200px) translateZ(-15px) translateY(-85px) !important;
+}
+
+.mailbox.stay-above {
+  transform: rotateX(-88deg) translateY(-40px) scale(0.8) !important;
 }
